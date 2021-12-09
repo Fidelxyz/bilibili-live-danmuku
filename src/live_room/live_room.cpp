@@ -9,11 +9,11 @@
 #include <QObject>
 #include <QString>
 
-#include "danmu.h"
+#include "protocal.h"
 
 LiveRoom::LiveRoom(const int roomID) {
     this->roomID = roomID;
-    Danmu *danmu = new Danmu(roomID, getInfo());
+    Protocal *protocal = new Protocal(roomID, getInfo());
 }
 
 LiveRoom::~LiveRoom() {}
@@ -34,6 +34,6 @@ QJsonObject LiveRoom::getInfo() {
     QByteArray responseByte = reply->readAll();
     qDebug() << responseByte;
 
-    QJsonObject jsonObject = QJsonDocument::fromJson(responseByte).object();
-    return jsonObject;
+    QJsonObject jsonObj = QJsonDocument::fromJson(responseByte).object();
+    return jsonObj;
 }

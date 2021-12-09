@@ -6,12 +6,12 @@
             "command": "qmake",
             "args": [
                 "-o",
-                "../build/Makefile",
+                "./build/Makefile",
                 "CONFIG += debug",
                 "CONFIG += console",
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}/"
             },
             "problemMatcher": [],
             "group": "build",
@@ -23,10 +23,10 @@
             "command": "qmake",
             "args": [
                 "-o",
-                "../build/Makefile"
+                "./build/Makefile"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}/"
             },
             "problemMatcher": [],
             "group": "build",
@@ -74,6 +74,34 @@
         },
         {
             "type": "shell",
+            "label": "Qt deploy (release)",
+            "command": "windeployqt",
+            "args": [
+                "${workspaceFolder}/build/release/${workspaceRootFolderName}.exe"
+            ],
+            "problemMatcher": [],
+            "group": "build",
+            "detail": "Qt 部署 (release)",
+            "dependsOn": [
+                "Qt build release"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Qt deploy (debug)",
+            "command": "windeployqt",
+            "args": [
+                "${workspaceFolder}/build/debug/${workspaceRootFolderName}.exe"
+            ],
+            "problemMatcher": [],
+            "group": "build",
+            "detail": "Qt 部署 (debug)",
+            "dependsOn": [
+                "Qt build debug"
+            ]
+        },
+        {
+            "type": "shell",
             "label": "Qt build and run release",
             "command": "${workspaceFolder}/build/release/${workspaceRootFolderName}.exe",
             "args": [],
@@ -99,7 +127,7 @@
             "dependsOn": [
                 "Qt build debug"
             ]
-        },
+        }
     ],
     "version": "2.0.0"
 }

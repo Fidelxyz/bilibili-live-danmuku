@@ -72,7 +72,9 @@
 			"qstringliteral": "cpp",
 			"qjsonarray": "cpp",
 			"qnetworkaccessmanager": "cpp",
-			"qwebsocket": "cpp"
+			"qwebsocket": "cpp",
+			"qbytearray": "cpp",
+			"qstring": "cpp"
 		}
 	}
 }

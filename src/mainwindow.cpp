@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "live_room/danmu.h"
 #include "live_room/live_room.h"
 #include "ui_mainwindow.h"
 

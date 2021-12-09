@@ -19,3 +19,19 @@ QByteArray int32ToBytes(uint32_t data) {
     bytes.append(data & 0xFF);
     return bytes;
 }
+
+uint16_t bytesToInt16(QByteArray bytes) {
+    uint16_t data = 0;
+    data |= bytes[0] << 8;
+    data |= bytes[1];
+    return data;
+}
+
+uint32_t bytesToInt32(QByteArray bytes) {
+    uint32_t data = 0;
+    data |= ((uint8_t)bytes[0]) << 24;
+    data |= ((uint8_t)bytes[1]) << 16;
+    data |= ((uint8_t)bytes[2]) << 8;
+    data |= ((uint8_t)bytes[3]);
+    return data;
+}

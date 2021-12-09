@@ -1,22 +1,25 @@
 #ifndef DANMU_H
 #define DANMU_H
 
-#include <QObject>
-#include <QWebSocket>
+#include <QWidget>
 
-#include "network.h"
+QT_BEGIN_NAMESPACE
+namespace Ui {
+class Danmu;
+}
+QT_END_NAMESPACE
 
-class Danmu : public QObject {
+class Danmu : public QWidget {
     Q_OBJECT
+
    public:
-    Danmu(const int roomID, const QJsonObject &liveRoomInfo);
+    Danmu(QWidget *parent = nullptr);
     ~Danmu();
 
-   private slots:
-    void slotRecvBinaryMsg(QByteArray msg);
+   private:
+    Ui::Danmu *ui;
 
-   public:
-    QWebSocket *ws;
+   private slots:
 };
 
 #endif

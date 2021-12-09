@@ -22,4 +22,5 @@ class MainWindow : public QMainWindow {
    public slots:
     void click_btn_ConnectLiveRoom();
 };
-#endif  // MAINWINDOW_H
+
+#endif
