@@ -1,12 +1,8 @@
 #include "protocal.h"
 
-#include <QByteArray>
 #include <QEventLoop>
-#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QString>
-#include <QTimer>
 
 #include "utils/byte_convert.h"
 #include "utils/decompress.h"
@@ -23,6 +19,18 @@
 #define WS_VERSION_OFFSET 6
 #define WS_OPERATION_OFFSET 8
 #define WS_SEQUENCE_OFFSET 12
+
+#define CMD_MAP(CMD) std::make_pair(QString(#CMD), CMD)
+const QHash<QString, enum Protocal::CMD> Protocal::cmdMap =
+    QHash<QString, enum CMD>(
+        (std::initializer_list<std::pair<QString, enum CMD>>){
+            CMD_MAP(LIVE), CMD_MAP(PREPARING), CMD_MAP(DANMU_MSG),
+            CMD_MAP(SEND_GIFT), CMD_MAP(COMBO_SEND), CMD_MAP(GIFT_TOP),
+            CMD_MAP(WELCOME), CMD_MAP(WELCOME_GUARD), CMD_MAP(ENTRY_EFFECT),
+            CMD_MAP(GUARD_BUY), CMD_MAP(SUPER_CHAT_MESSAGE),
+            CMD_MAP(SUPER_CHAT_MESSAGE_JP), CMD_MAP(INTERACT_WORD),
+            CMD_MAP(WARNING), CMD_MAP(CUT_OFF)});
+#undef CMD_MAP
 
 QByteArray genHead(int datalength, int opeation, int sequence) {
     QByteArray buffer = QByteArray();
@@ -42,12 +50,9 @@ bool checkHello(QByteArray data) {
     return valData == data;
 }
 
-Protocal::Protocal(const int roomID, const QJsonObject &liveRoomInfo) {
+Protocal::Protocal(const int &roomID, const QJsonObject &liveRoomInfo) {
     QJsonObject liveRoomInfoData = liveRoomInfo["data"].toObject();
-    QString url = liveRoomInfoData["host_list"]
-                      .toArray()[0]
-                      .toObject()["host"]
-                      .toString();
+    QString url = liveRoomInfoData["host_list"][0]["host"].toString();
     QString token = liveRoomInfoData["token"].toString();
 
     url.prepend("wss://").append("/sub");
@@ -79,7 +84,7 @@ Protocal::Protocal(const int roomID, const QJsonObject &liveRoomInfo) {
     QEventLoop eventLoop;
     QObject::connect(ws, SIGNAL(connected()), &eventLoop, SLOT(quit()));
     eventLoop.exec();
-    qDebug() << "WS connected";
+    qDebug("WS connected");
     ws->sendBinaryMessage(data);
     qDebug() << "send: " << data;
 
@@ -97,12 +102,12 @@ Protocal::~Protocal() {
     delete ws;
 }
 
-void Protocal::slotRecvData(QByteArray data) {
+void Protocal::slotRecvData(const QByteArray &data) {
     qDebug() << "-------------------------------";
     qDebug() << "receive message: " << data;
 
     if (data.length() <= WS_PACKAGE_HEADER_TOTAL_LENGTH) {
-        qWarning() << "Package is broken.";
+        qWarning("Package is broken.");
         return;
     }
 
@@ -118,7 +123,7 @@ void Protocal::slotRecvData(QByteArray data) {
     qDebug() << "datalength =" << data.length() << ", packLen =" << packLen;
 
     if (data.length() < packLen) {
-        qWarning() << "Package is broken.";
+        qWarning("Package is broken.");
         return;
     }
 
@@ -126,13 +131,13 @@ void Protocal::slotRecvData(QByteArray data) {
     switch (ver) {
         case DEFLATE:
             if (!decompressDeflate(data.mid(headLen), pack)) {
-                qWarning() << "Decompression (deflate) failed.";
+                qWarning("Decompression (deflate) failed.");
                 return;
             }
             break;
         case BROTLI:
             if (!decompressBrotli(data.mid(headLen), pack)) {
-                qWarning() << "Decompression (brotli) failed.";
+                qWarning("Decompression (brotli) failed.");
                 return;
             }
             break;
@@ -144,16 +149,16 @@ void Protocal::slotRecvData(QByteArray data) {
         head = pack.left(WS_PACKAGE_HEADER_TOTAL_LENGTH);
 
         int packLen = bytesToInt32(head.mid(WS_PACKAGE_OFFSET, 4));
-        int headLen = bytesToInt16(head.mid(WS_HEADER_OFFSET, 2));
+        // int headLen = bytesToInt16(head.mid(WS_HEADER_OFFSET, 2));
         // int ver = bytesToInt16(head.mid(WS_VERSION_OFFSET, 2));
         int type = bytesToInt32(head.mid(WS_OPERATION_OFFSET, 4));
         // int seque = bytesToInt32(head.mid(WS_SEQUENCE_OFFSET, 4));
 
         if (pack.length() < packLen) {
-            qWarning() << "Package is broken.";
+            qWarning("Package is broken.");
         }
 
-        int payloadLen = packLen - headLen;
+        // int payloadLen = packLen - headLen;
 
         QByteArray msg = pack.left(packLen).mid(WS_PACKAGE_HEADER_TOTAL_LENGTH);
         switch (type) {
@@ -182,10 +187,55 @@ void Protocal::slotSendHeartbeat() {
 }
 
 void Protocal::recvHeartbeatReply(const QByteArray &msg) {
+    qDebug() << "Update viewers count:" << bytesToInt32(msg.left(4));
     emit updateViewersCount(bytesToInt32(msg.left(4)));
 }
 
 void Protocal::recvMsg(const QJsonObject &msg) {
     QString cmd = msg["cmd"].toString();
-    // TODO
+    switch (cmdMap[cmd]) {
+        case LIVE:
+            break;
+        case PREPARING:
+            break;
+        case DANMU_MSG: {
+            QJsonValue info = msg["info"];
+            QString text = info[1].toString();
+            int uid = info[2][0].toInt();
+            QString username = info[2][1].toString();
+            bool isAdmin = info[2][2].toString() == "1";
+            bool isVIP = info[2][3].toString() == "1";
+            int userGuardLevel = info[7].toInt();
+            emit recvDanmu(uid, username, text, isAdmin, isVIP, userGuardLevel);
+            qDebug() << "Emit recvDanmu: " << uid << username << text << isAdmin
+                     << isVIP << userGuardLevel;
+            break;
+        }
+        case SEND_GIFT:
+            break;
+        case COMBO_SEND:
+            break;
+        case GIFT_TOP:
+            break;
+        case WELCOME:
+            break;
+        case WELCOME_GUARD:
+            break;
+        case ENTRY_EFFECT:
+            break;
+        case GUARD_BUY:
+            break;
+        case SUPER_CHAT_MESSAGE:
+            break;
+        case SUPER_CHAT_MESSAGE_JP:
+            break;
+        case INTERACT_WORD:
+            break;
+        case WARNING:
+            break;
+        case CUT_OFF:
+            break;
+        case UNKNOWN:
+            break;
+    }
 }

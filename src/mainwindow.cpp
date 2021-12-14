@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "live_room/live_room.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,9 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
             SLOT(click_btn_ConnectLiveRoom()));
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+    delete ui;
+    delete liveRoom;
+}
 
 void MainWindow::click_btn_ConnectLiveRoom() {
     ui->textBrowser->setText("Clicked!");
-    LiveRoom *liveRoom = new LiveRoom(ui->input_LiveRoomID->text().toInt());
+    liveRoom = new LiveRoom(ui->input_LiveRoomID->text().toInt());
 }

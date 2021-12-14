@@ -16,7 +16,7 @@ bool decompressDeflate(const QByteArray &data, QByteArray &result) {
     do {
         decodedSize <<= 1;
         result.resize(decodedSize);
-        int status = uncompress((Bytef *)result.data(), (uLongf *)&decodedSize,
+        status = uncompress((Bytef *)result.data(), (uLongf *)&decodedSize,
                                 (const Bytef *)data.constData(), encodedSize);
     } while (status == Z_BUF_ERROR);
 

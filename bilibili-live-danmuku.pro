@@ -16,7 +16,8 @@ INCLUDEPATH += \
     $$PWD/3rdparty/include
 
 SOURCES += \
-    src/live_room/danmu.cpp \
+    src/live_room/danmu_display.cpp \
+    src/live_room/danmu_loader.cpp \
     src/live_room/live_room.cpp \
     src/live_room/protocal.cpp \
     src/utils/byte_convert.cpp \
@@ -27,7 +28,8 @@ SOURCES += \
 HEADERS += \
     3rdparty/include/brotli/decode.h \
     3rdparty/include/zlib/zlib.h \
-    src/live_room/danmu.h \
+    src/live_room/danmu_display.h \
+    src/live_room/danmu_loader.h \
     src/live_room/live_room.h \
     src/live_room/protocal.h \
     src/utils/byte_convert.h \
@@ -36,11 +38,14 @@ HEADERS += \
 
 FORMS += \
     src/ui/mainwindow.ui \
-    src/ui/danmu.ui
+    src/ui/danmu_display.ui
 
 LIBS += \
     -L$$PWD/3rdparty/bin/brotli -llibbrotlidec \
     -L$$PWD/3rdparty/bin/zlib -llibzlib
+
+RESOURCES += \
+    src/stylesheet/stylesheet.qrc
 
 TRANSLATIONS += \
     src/bilibili-live-danmuku_zh_CN.ts

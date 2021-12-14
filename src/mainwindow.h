@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "live_room/live_room.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -13,14 +15,15 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
    public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
-
-   private:
-    Ui::MainWindow *ui;
 
    public slots:
     void click_btn_ConnectLiveRoom();
+
+   private:
+    Ui::MainWindow* ui;
+    LiveRoom* liveRoom;
 };
 
 #endif

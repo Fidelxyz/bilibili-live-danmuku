@@ -1,2 +1,0 @@
-{"uid":366644820,"roomid":14003442,"protover":3,"platform":"web","type":2,"key":"uH5_qFZloqjzPeowK8bZCLEpjCsm3Zx-kqLDihKxg2v-nGC6YkPacB3W1eZGs6uioYXpG7sDDbnDHG_51J7QNT5hkUhHq264ZqnisTh7CTIxIuHObAwlY7dtP5pDGsB_3Bf8yFs_jYOcQ1ajOvy_hJMp"}
-{"key":"IV7DlA8oCdey3iuY-vDA-FcBj4Wb3CGlJPpu9lQ2_UKmkjiypgwE3-rWZlgf_q1KSOF9KV-5sUi13cQaItRswevBE1qQQYD0EwGg4ZZRi0D67b51dOAOF6en3PDhRF31fek7Z7zWiKy7tNfLNw==","platform":"web","protover":3,"roomid":14003442,"type":"2","uid":0}"

@@ -5,18 +5,17 @@
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QObject>
-#include <QString>
-
-#include "protocal.h"
 
 LiveRoom::LiveRoom(const int roomID) {
     this->roomID = roomID;
-    Protocal *protocal = new Protocal(roomID, getInfo());
+    protocal = new Protocal(roomID, getInfo());
+    initDisplay();
 }
 
-LiveRoom::~LiveRoom() {}
+LiveRoom::~LiveRoom() {
+    delete protocal;
+    delete display;
+}
 
 QJsonObject LiveRoom::getInfo() {
     QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager();
@@ -36,4 +35,17 @@ QJsonObject LiveRoom::getInfo() {
 
     QJsonObject jsonObj = QJsonDocument::fromJson(responseByte).object();
     return jsonObj;
+}
+
+void LiveRoom::initDisplay() {
+    display = new DanmuDisplay();
+    connect(protocal,
+            SIGNAL(recvDanmu(const int &, const QString &, const QString &,
+                             const bool &, const bool &, const int &)),
+            display,
+            SLOT(slotRecvDanmu(const int &, const QString &, const QString &,
+                               const bool &, const bool &, const int &)));
+    connect(protocal, SIGNAL(updateViewersCount(const int &)), display,
+            SLOT(slotUpdateViewersCount(const int &)));
+    display->show();
 }
