@@ -5,73 +5,70 @@ DanmuLoader::DanmuLoader(QListWidget *list) {
     scrollBar = list->verticalScrollBar();
     listViewHeight = list->height();
     loadingItemTotalHeight = 0;
+    loadedItemTotalHeight = listViewHeight;
     scrollingSpeed = 0;
     sleepIntervalMs = 0;
 }
 
 DanmuLoader::~DanmuLoader() {
-    updateMutex.lock();
     requestInterruption();
+    updateMutex.lock();
     updateCondition.wakeAll();
     updateMutex.unlock();
     wait();
 }
 
 void DanmuLoader::run() {
-    updateMutex.lock();
+    QMutexLocker updateLocker(&updateMutex);
     while (!isInterruptionRequested()) {
-        while (!loadingItemQueue.empty()) {
+        while (true) {
+            QMutexLocker loopLocker(&loopMutex);
+            if (loadingItemQueue.empty()) {
+                break;
+            }
             int scrollBarPos = scrollBar->value();
             scrollBarPos += loadingItemTotalHeight * scrollingSpeed;
-            // qDebug() << "Scroll to position: " << scrollBarPos;
-            scrollBar->setValue(scrollBarPos);
 
             // OUT
-            int removeCount = 0;
-            for (int i = 0;; i++) {
-                QRect region = list->visualItemRect(
-                    list->item(i));  // visualItemRect warn ?
-                int height = region.height();
-                if (region.top() + height <= 0) {
-                    qDebug() << "Delete: " << i;
-                    removeCount++;
-                    scrollBarPos -= height;
+            while (true) {
+                int itemHeight = list->item(0)->sizeHint().height();
+                if (itemHeight + list->item(1)->sizeHint().height() <
+                    scrollBarPos) {
+                    scrollBarPos -= itemHeight;
+                    loadedItemTotalHeight -= itemHeight;
+                    QListWidgetItem *item = list->takeItem(0);
+                    delete list->itemWidget(item);
+                    delete item;
                 } else {
                     break;
                 }
             }
-
-            if (removeCount > 0) {
-                for (; removeCount; removeCount--) {
-                    QListWidgetItem *item = list->takeItem(0);
-                    list->removeItemWidget(item);
-                    delete item;
-                }
-                // qDebug() << "Scroll to position: " << scrollBarPos;
-                scrollBar->setValue(scrollBarPos);
-            }
+            scrollBar->setValue(scrollBarPos);
 
             // IN
             while (!loadingItemQueue.empty()) {
-                QRect region = list->visualItemRect(loadingItemQueue.front());
-                int height = region.height();
-                if (region.top() + height <= listViewHeight) {
+                int itemHeight = loadingItemQueue.front()->sizeHint().height();
+                if (loadedItemTotalHeight + itemHeight <=
+                    scrollBarPos + listViewHeight) {
                     loadingItemQueue.pop();
-                    loadingItemTotalHeight -= height;
+                    loadingItemTotalHeight -= itemHeight;
+                    loadedItemTotalHeight += itemHeight;
                 } else {
                     break;
                 }
             }
+            loopLocker.unlock();
             msleep(sleepIntervalMs);
         }
         updateCondition.wait(&updateMutex);
     }
-    updateMutex.unlock();
 }
 
 void DanmuLoader::loadItem(QListWidgetItem *item) {
+    loopMutex.lock();
     loadingItemQueue.push(item);
     loadingItemTotalHeight += item->sizeHint().height();
+    loopMutex.unlock();
     updateCondition.wakeAll();
 }
 

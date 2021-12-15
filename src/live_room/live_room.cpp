@@ -8,13 +8,20 @@
 
 LiveRoom::LiveRoom(const int roomID) {
     this->roomID = roomID;
-    protocal = new Protocal(roomID, getInfo());
+    protocal = new Protocal();
+    protocal->moveToThread(&protocalThread);
+    connect(
+        this, SIGNAL(startProtocalConnection(const int &, const QJsonObject &)),
+        protocal, SLOT(slotStartConnection(const int &, const QJsonObject &)));
+    protocalThread.start();
+    emit startProtocalConnection(roomID, getInfo());
     initDisplay();
 }
 
 LiveRoom::~LiveRoom() {
     delete protocal;
-    delete display;
+    protocalThread.quit();
+    delete danmuDisplay;
 }
 
 QJsonObject LiveRoom::getInfo() {
@@ -38,14 +45,14 @@ QJsonObject LiveRoom::getInfo() {
 }
 
 void LiveRoom::initDisplay() {
-    display = new DanmuDisplay();
+    danmuDisplay = new DanmuDisplay();
     connect(protocal,
             SIGNAL(recvDanmu(const int &, const QString &, const QString &,
                              const bool &, const bool &, const int &)),
-            display,
+            danmuDisplay,
             SLOT(slotRecvDanmu(const int &, const QString &, const QString &,
                                const bool &, const bool &, const int &)));
-    connect(protocal, SIGNAL(updateViewersCount(const int &)), display,
+    connect(protocal, SIGNAL(updateViewersCount(const int &)), danmuDisplay,
             SLOT(slotUpdateViewersCount(const int &)));
-    display->show();
+    danmuDisplay->show();
 }

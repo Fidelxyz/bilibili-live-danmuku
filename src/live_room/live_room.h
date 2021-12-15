@@ -1,6 +1,9 @@
 #ifndef LIVE_ROOM_H
 #define LIVE_ROOM_H
 
+#include <QObject>
+#include <QThread>
+
 #include "danmu_display.h"
 #include "protocal.h"
 
@@ -15,11 +18,16 @@ class LiveRoom : public QObject {
     QJsonObject getInfo();
     void initDisplay();
 
+   signals:
+    void startProtocalConnection(const int& roomID,
+                                 const QJsonObject& liveRoomInfo);
+
    private:
     int roomID;
 
     Protocal* protocal;
-    DanmuDisplay* display;
+    QThread protocalThread;
+    DanmuDisplay* danmuDisplay;
 };
 
 #endif

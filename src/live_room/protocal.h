@@ -1,26 +1,32 @@
 #ifndef DANMU_H
 #define DANMU_H
 
-#include <QWebSocket>
 #include <QTimer>
+#include <QWebSocket>
 
 QByteArray genHead(int datalength, int opeation, int sequence);
 
 class Protocal : public QObject {
     Q_OBJECT
+
    public:
-    Protocal(const int &roomID, const QJsonObject &liveRoomInfo);
     ~Protocal();
+
+   private:
+    void recvHeartbeatReply(const QByteArray &msg);
+    void recvMsg(const QJsonObject &msg);
 
    signals:
     void updateViewersCount(const int &viewersCount);
     void recvDanmu(const int &uid, const QString &username, const QString &text,
                    const bool &isAdmin, const bool &isVIP,
                    const int &userGuardLevel);
+    void stopConnection();
 
-   private:
-    void recvHeartbeatReply(const QByteArray &msg);
-    void recvMsg(const QJsonObject &msg);
+   public slots:
+    void slotStartConnection(const int &roomID,
+                             const QJsonObject &liveRoomInfo);
+    void slotStopConnection();
 
    private slots:
     void slotSendHeartbeat();

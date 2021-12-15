@@ -50,7 +50,8 @@ bool checkHello(QByteArray data) {
     return valData == data;
 }
 
-Protocal::Protocal(const int &roomID, const QJsonObject &liveRoomInfo) {
+void Protocal::slotStartConnection(const int &roomID,
+                                   const QJsonObject &liveRoomInfo) {
     QJsonObject liveRoomInfoData = liveRoomInfo["data"].toObject();
     QString url = liveRoomInfoData["host_list"][0]["host"].toString();
     QString token = liveRoomInfoData["token"].toString();
@@ -90,13 +91,18 @@ Protocal::Protocal(const int &roomID, const QJsonObject &liveRoomInfo) {
 
     connect(ws, SIGNAL(binaryMessageReceived(QByteArray)), this,
             SLOT(slotRecvData(QByteArray)));
+    connect(this, SIGNAL(stopConnection()), this, SLOT(slotStopConnection()),
+            Qt::BlockingQueuedConnection);
 
     heartBeatTimer = new QTimer(this);
     connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(slotSendHeartbeat()));
     heartBeatTimer->start(30000);  // 30s
 }
 
-Protocal::~Protocal() {
+Protocal::~Protocal() { emit stopConnection(); }
+
+void Protocal::slotStopConnection() {
+    qDebug("slotStopConnection");
     delete heartBeatTimer;
     ws->close();
     delete ws;

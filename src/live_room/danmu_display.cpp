@@ -12,7 +12,7 @@ DanmuDisplay::DanmuDisplay(QWidget *parent)
     // Window
     // 无边框窗口
     setWindowFlags(Qt::FramelessWindowHint);
-    // 使弹幕列表忽略鼠标事件
+    // 忽略鼠标事件
     ui->list_danmuDisplay->setAttribute(Qt::WA_TransparentForMouseEvents);
     isMouseLeftPressed = false;
 
@@ -31,8 +31,8 @@ DanmuDisplay::DanmuDisplay(QWidget *parent)
 }
 
 DanmuDisplay::~DanmuDisplay() {
-    delete ui;
     delete danmuLoader;
+    delete ui;
 }
 
 // Mouse event

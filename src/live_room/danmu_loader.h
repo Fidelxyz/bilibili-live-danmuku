@@ -25,6 +25,7 @@ class DanmuLoader : public QThread {
    private:
     std::queue<QListWidgetItem *> loadingItemQueue;  // item, height
     int loadingItemTotalHeight;
+    int loadedItemTotalHeight;
     int listViewHeight;
     float scrollingSpeed;
     unsigned long sleepIntervalMs;
@@ -32,6 +33,7 @@ class DanmuLoader : public QThread {
     QListWidget *list;
     QScrollBar *scrollBar;
     QMutex updateMutex;
+    QMutex loopMutex;
     QWaitCondition updateCondition;
 };
 
