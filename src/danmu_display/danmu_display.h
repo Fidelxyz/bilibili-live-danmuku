@@ -23,20 +23,42 @@ class DanmuDisplay : public QWidget {
                        const QString &text, const bool &isAdmin,
                        const bool &isVIP, const int &userGuardLevel);
     void slotUpdateViewersCount(const int &viewersCount);
-    void slotRecvDanmuDebug();
+    void slotUpdateFollowersCount(const int &followersCount);
+
+    void slotGetWindowConfig(int *width, int *height, int *opacity);
+    void slotGetFontConfig(int *fontSize);
+    void slotGetColorConfig(QColor *mainColor, QColor *usernameColor, QColor *contentColor,
+                            QColor *backgroundColor);
+
+    void slotSetWindowConfig(const int &width, const int &height,
+                             const int &opacity);
+    void slotSetFontConfig(const int &fontSize);
+    void slotSetColorConfig(const QColor &mainColor, const QColor &usernameColor,
+                            const QColor &contentColor,
+                            const QColor &backgroundColor);
 
    private:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
+    void reload();
+    void setMainStyle();
+
    private:
     Ui::DanmuDisplay *ui;
     DanmuLoader *danmuLoader;
 
-    // Position
+    // window position
     bool isMouseLeftPressed;
     QPoint mouseDragPosition;
+
+    // style
+    int fontSize;
+    QString mainColor;
+    QString usernameColor;
+    QString contentColor;
+    QString backgroundColor;
 };
 
 #endif

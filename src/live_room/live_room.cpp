@@ -1,58 +1,69 @@
 #include "live_room.h"
 
-#include <QEventLoop>
-#include <QJsonDocument>
 #include <QJsonObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+
+#include "utils/network.h"
 
 LiveRoom::LiveRoom(const int roomID) {
     this->roomID = roomID;
     protocal = new Protocal();
     protocal->moveToThread(&protocalThread);
-    connect(
-        this, SIGNAL(startProtocalConnection(const int &, const QJsonObject &)),
-        protocal, SLOT(slotStartConnection(const int &, const QJsonObject &)));
     protocalThread.start();
-    emit startProtocalConnection(roomID, getInfo());
-    initDisplay();
+    QMetaObject::invokeMethod(protocal, "slotStartConnection",
+                              Q_ARG(const int &, roomID),
+                              Q_ARG(const QJsonObject &, requestDanmuInfo()));
+
+    uid = requestUid();
+
+    slotUpdateFollowersCount();
+    updateFollowersCountTimer = new QTimer(this);
+    connect(updateFollowersCountTimer, SIGNAL(timeout()), this,
+            SLOT(slotUpdateFollowersCount()));
+    updateFollowersCountTimer->start(30000);  // 30s
 }
 
 LiveRoom::~LiveRoom() {
-    delete protocal;
+    QMetaObject::invokeMethod(protocal, "slotStopConnection",
+                              (Qt::ConnectionType)Qt::BlockingQueuedConnection);
     protocalThread.quit();
-    delete danmuDisplay;
+    protocalThread.wait();
+    delete protocal;
 }
 
-QJsonObject LiveRoom::getInfo() {
-    QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager();
-    QString url = QString(
-                      "https://api.live.bilibili.com/xlive/web-room/v1/index/"
-                      "getDanmuInfo?type=0&;id=%1")
-                      .arg(roomID);
-    QNetworkRequest request;
-    request.setUrl(url);
-
-    QEventLoop eventLoop;
-    QNetworkReply *reply = networkAccessManager->get(request);
-    connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
-    eventLoop.exec();
-    QByteArray responseByte = reply->readAll();
-    qDebug() << responseByte;
-
-    QJsonObject jsonObj = QJsonDocument::fromJson(responseByte).object();
-    return jsonObj;
+QJsonObject LiveRoom::requestDanmuInfo() {
+    QJsonObject response = requestJsonResponse(
+        QString("https://api.live.bilibili.com/xlive/web-room/v1/index/"
+                "getDanmuInfo?id=%1")
+            .arg(roomID));
+    if (response["code"].toInt() != 0) {
+        qWarning("Error occured in requestDanmuInfo.");
+    }
+    return response;
 }
 
-void LiveRoom::initDisplay() {
-    danmuDisplay = new DanmuDisplay();
-    connect(protocal,
-            SIGNAL(recvDanmu(const int &, const QString &, const QString &,
-                             const bool &, const bool &, const int &)),
-            danmuDisplay,
-            SLOT(slotRecvDanmu(const int &, const QString &, const QString &,
-                               const bool &, const bool &, const int &)));
-    connect(protocal, SIGNAL(updateViewersCount(const int &)), danmuDisplay,
-            SLOT(slotUpdateViewersCount(const int &)));
-    danmuDisplay->show();
+int LiveRoom::requestUid() {
+    QJsonObject response = requestJsonResponse(
+        QString("https://api.live.bilibili.com/xlive/web-room/v2/index/"
+                "getRoomPlayInfo?room_id=%1&protocol=0,1&format=0,1,2&"
+                "codec=0,"
+                "1&qn=0&platform=web&ptype=8")
+            .arg(roomID));
+    if (response["code"].toInt() != 0) {
+        qWarning("Error occured in requestUid.");
+        return 0;
+    }
+    return response["data"].toObject()["uid"].toInt();
+}
+
+void LiveRoom::slotUpdateFollowersCount() {
+    QJsonObject response = requestJsonResponse(
+        QString("https://api.bilibili.com/x/relation/stat?vmid=%1&jsonp=jsonp")
+            .arg(uid));
+    if (response["code"].toInt() != 0) {
+        qWarning("Error occured in slotUpdateFollowersCount.");
+        return;
+    }
+    qDebug() << "slotUpdateFollowersCount:"
+             << response["data"].toObject()["follower"].toInt();
+    emit updateFollowersCount(response["data"].toObject()["follower"].toInt());
 }

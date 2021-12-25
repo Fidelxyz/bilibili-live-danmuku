@@ -16,29 +16,34 @@ INCLUDEPATH += \
     $$PWD/3rdparty/include
 
 SOURCES += \
-    src/live_room/danmu_display.cpp \
-    src/live_room/danmu_loader.cpp \
+    src/danmu_display/danmu_display.cpp \
+    src/danmu_display/danmu_loader.cpp \
+    src/danmu_display/danmu_panel.cpp \
     src/live_room/live_room.cpp \
     src/live_room/protocal.cpp \
     src/utils/byte_convert.cpp \
     src/utils/decompress.cpp \
+    src/utils/network.cpp \
     src/main.cpp \
     src/mainwindow.cpp
     
 HEADERS += \
     3rdparty/include/brotli/decode.h \
     3rdparty/include/zlib/zlib.h \
-    src/live_room/danmu_display.h \
-    src/live_room/danmu_loader.h \
+    src/danmu_display/danmu_display.h \
+    src/danmu_display/danmu_loader.h \
+    src/danmu_display/danmu_panel.h \
     src/live_room/live_room.h \
     src/live_room/protocal.h \
     src/utils/byte_convert.h \
     src/utils/decompress.h \
+    src/utils/network.h \
     src/mainwindow.h
 
 FORMS += \
-    src/ui/mainwindow.ui \
-    src/ui/danmu_display.ui
+    src/ui/danmu_display.ui \
+    src/ui/danmu_panel.ui \
+    src/ui/mainwindow.ui
 
 LIBS += \
     -L$$PWD/3rdparty/bin/brotli -llibbrotlidec \
@@ -56,13 +61,3 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-# For debug
-#搜寻该路径底下的文件，举例Src Src2 Src3... 后续有需要可以添加更多
-#SourceDir = $$PWD/3rdparty/brotli
-
-#递归搜寻所有.cpp .h .ui文件
-#for(var, SourceDir) {
-#    SOURCES += $$files($$join(var, , , /*.c), true)
-#    HEADERS += $$files($$join(var, , , /*.h), true)
-#}

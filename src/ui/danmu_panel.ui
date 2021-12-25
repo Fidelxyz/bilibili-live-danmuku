@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DanmuPanel</class>
+ <widget class="QWidget" name="DanmuPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>363</width>
+    <height>399</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>DanmuPanel</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>311</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="layout_displayPanel">
+    <item row="2" column="2">
+     <widget class="QSpinBox" name="spin_windowHeight">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>9999</number>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="2">
+     <widget class="QPushButton" name="btn_contentColor">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="prompt_usernameColor">
+      <property name="text">
+       <string>用户名颜色</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="prompt_windowHeight">
+      <property name="text">
+       <string>高度</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2">
+     <widget class="QPushButton" name="btn_usernameColor">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="prompt_contentColor">
+      <property name="text">
+       <string>弹幕内容颜色</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QSlider" name="slider_opacity">
+      <property name="minimum">
+       <number>0</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="3">
+     <widget class="QLabel" name="prompt_fontOptions">
+      <property name="text">
+       <string>字体选项</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="3">
+     <widget class="QLabel" name="prompt_windowOptions">
+      <property name="text">
+       <string>窗口选项</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QSpinBox" name="spin_windowWidth">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>9999</number>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="2">
+     <widget class="QPushButton" name="btn_apply">
+      <property name="text">
+       <string>Apply</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="prompt_fontSize">
+      <property name="text">
+       <string>字体大小</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="prompt_backgroundColor">
+      <property name="text">
+       <string>背景颜色</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="3">
+     <widget class="QLabel" name="prompt_colorOptions">
+      <property name="text">
+       <string>配色选项</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QSlider" name="slider_windowWidth">
+      <property name="minimum">
+       <number>20</number>
+      </property>
+      <property name="maximum">
+       <number>1000</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QSlider" name="slider_fontSize">
+      <property name="minimum">
+       <number>5</number>
+      </property>
+      <property name="maximum">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="QPushButton" name="btn_mainColor">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="prompt_mainColor">
+      <property name="text">
+       <string>基本颜色</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="prompt_opacity">
+      <property name="text">
+       <string>不透明度</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QSpinBox" name="spin_fontSize">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>999</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="prompt_windowWidth">
+      <property name="text">
+       <string>宽度</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QSpinBox" name="spin_opacity">
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="minimum">
+       <number>0</number>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="2">
+     <widget class="QPushButton" name="btn_backgroundColor">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QSlider" name="slider_windowHeight">
+      <property name="minimum">
+       <number>50</number>
+      </property>
+      <property name="maximum">
+       <number>1000</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="btn_testDanmu">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>360</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>测试弹幕</string>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>slider_windowWidth</tabstop>
+  <tabstop>spin_windowWidth</tabstop>
+  <tabstop>slider_windowHeight</tabstop>
+  <tabstop>spin_windowHeight</tabstop>
+  <tabstop>slider_fontSize</tabstop>
+  <tabstop>spin_fontSize</tabstop>
+  <tabstop>btn_usernameColor</tabstop>
+  <tabstop>btn_contentColor</tabstop>
+  <tabstop>btn_apply</tabstop>
+  <tabstop>btn_testDanmu</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>slider_windowHeight</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_windowHeight</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>83</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_windowHeight</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_windowHeight</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_windowWidth</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_windowWidth</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>57</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_windowWidth</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_windowWidth</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_fontSize</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_fontSize</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>329</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_fontSize</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_fontSize</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>162</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>248</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_opacity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_opacity</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>191</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>291</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_opacity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_opacity</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>100</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>197</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -10,7 +10,7 @@ class Protocal : public QObject {
     Q_OBJECT
 
    public:
-    ~Protocal();
+    Protocal();
 
    private:
     void recvHeartbeatReply(const QByteArray &msg);
@@ -21,7 +21,6 @@ class Protocal : public QObject {
     void recvDanmu(const int &uid, const QString &username, const QString &text,
                    const bool &isAdmin, const bool &isVIP,
                    const int &userGuardLevel);
-    void stopConnection();
 
    public slots:
     void slotStartConnection(const int &roomID,
@@ -55,7 +54,6 @@ class Protocal : public QObject {
         INTERACT_WORD,
         WARNING,
         CUT_OFF
-
     };
 
     static const QHash<QString, enum CMD> cmdMap;

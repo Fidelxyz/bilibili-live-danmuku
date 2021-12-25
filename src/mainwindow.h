@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "danmu_display/danmu_display.h"
+#include "danmu_display/danmu_panel.h"
 #include "live_room/live_room.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,11 +21,15 @@ class MainWindow : public QMainWindow {
     ~MainWindow();
 
    public slots:
-    void click_btn_ConnectLiveRoom();
+    void slotStartLiveRoom();
+    void slotStartDanmuDisplay();
+    void slotStartDanmuPanel();
 
    private:
     Ui::MainWindow* ui;
     LiveRoom* liveRoom;
+    DanmuDisplay* danmuDisplay;
+    DanmuPanel* danmuPanel;
 };
 
 #endif

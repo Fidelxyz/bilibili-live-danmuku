@@ -20,13 +20,15 @@ class DanmuLoader : public QThread {
     void run() override;
 
    public slots:
-    void setScrollingSpeed(const float &speed, const int &fps);
+    void slotReload();
+    void slotSetScrollingSpeed(const float &speed, const int &fps);
 
    private:
     std::queue<QListWidgetItem *> loadingItemQueue;  // item, height
     int loadingItemTotalHeight;
     int loadedItemTotalHeight;
     int listViewHeight;
+    float scrollBarPos;
     float scrollingSpeed;
     unsigned long sleepIntervalMs;
 

@@ -90,19 +90,21 @@ void Protocal::slotStartConnection(const int &roomID,
     qDebug() << "send: " << data;
 
     connect(ws, SIGNAL(binaryMessageReceived(QByteArray)), this,
-            SLOT(slotRecvData(QByteArray)));
-    connect(this, SIGNAL(stopConnection()), this, SLOT(slotStopConnection()),
-            Qt::BlockingQueuedConnection);
+            SLOT(slotRecvData(QByteArray)), Qt::QueuedConnection);
 
     heartBeatTimer = new QTimer(this);
     connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(slotSendHeartbeat()));
     heartBeatTimer->start(30000);  // 30s
 }
 
-Protocal::~Protocal() { emit stopConnection(); }
+Protocal::Protocal() {
+    ws = nullptr;
+    heartBeatTimer = nullptr;
+}
 
 void Protocal::slotStopConnection() {
     qDebug("slotStopConnection");
+    heartBeatTimer->stop();
     delete heartBeatTimer;
     ws->close();
     delete ws;
@@ -193,7 +195,7 @@ void Protocal::slotSendHeartbeat() {
 }
 
 void Protocal::recvHeartbeatReply(const QByteArray &msg) {
-    qDebug() << "Update viewers count:" << bytesToInt32(msg.left(4));
+    qDebug() << "Update viewers count (protocal):" << bytesToInt32(msg.left(4));
     emit updateViewersCount(bytesToInt32(msg.left(4)));
 }
 

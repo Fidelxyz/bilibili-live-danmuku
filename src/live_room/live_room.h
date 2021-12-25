@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QThread>
 
-#include "danmu_display.h"
 #include "protocal.h"
 
 class LiveRoom : public QObject {
@@ -15,19 +14,23 @@ class LiveRoom : public QObject {
     ~LiveRoom();
 
    private:
-    QJsonObject getInfo();
-    void initDisplay();
+    QJsonObject requestDanmuInfo();
+    int requestUid();
 
    signals:
-    void startProtocalConnection(const int& roomID,
-                                 const QJsonObject& liveRoomInfo);
+    void updateFollowersCount(const int& followersCount);
+
+   public slots:
+    void slotUpdateFollowersCount();
+
+   public:
+    Protocal* protocal;
 
    private:
     int roomID;
-
-    Protocal* protocal;
+    int uid;
     QThread protocalThread;
-    DanmuDisplay* danmuDisplay;
+    QTimer* updateFollowersCountTimer;
 };
 
 #endif

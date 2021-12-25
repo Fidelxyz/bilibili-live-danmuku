@@ -6,39 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>456</width>
-    <height>402</height>
+    <width>455</width>
+    <height>256</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="widget_LiveRoom" native="true">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="widget_liveRoom" native="true">
     <property name="geometry">
      <rect>
       <x>30</x>
       <y>20</y>
-      <width>451</width>
-      <height>341</height>
+      <width>351</width>
+      <height>71</height>
      </rect>
     </property>
-    <widget class="QTextBrowser" name="textBrowser">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>351</width>
-       <height>231</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="input_LiveRoomID">
+    <widget class="QLineEdit" name="input_liveRoomID">
      <property name="geometry">
       <rect>
        <x>40</x>
        <y>30</y>
-       <width>113</width>
+       <width>121</width>
        <height>21</height>
       </rect>
      </property>
@@ -46,17 +39,53 @@
       <string>14003442</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btn_ConnectLiveRoom">
+    <widget class="QPushButton" name="btn_startLiveRoom">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>180</x>
        <y>30</y>
-       <width>151</width>
+       <width>131</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
       <string>Connect Live Room</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_danmuDisplay" native="true">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>351</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <widget class="QPushButton" name="btn_startDanmuPanel">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>20</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Panel</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_startDanmuDisplay">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>20</y>
+       <width>121</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Danmu Display</string>
      </property>
     </widget>
    </widget>
@@ -66,7 +95,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>456</width>
+     <width>455</width>
      <height>22</height>
     </rect>
    </property>

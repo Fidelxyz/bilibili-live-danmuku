@@ -1,5 +1,5 @@
-#ifndef UNCOMPRESS_H
-#define UNCOMPRESS_H
+#ifndef DECOMPRESS_H
+#define DECOMPRESS_H
 
 #include <QByteArray>
 

@@ -1,16 +1,3 @@
-#DanmuDisplay {
-    background-color: black;
-}
-
-#btn_debug {
-    color: white;
-}
-
 #list_danmuDisplay {
     background-color: transparent;
-}
-
-QLabel {
-    color: white;
-    font-size: 15px;
 }
