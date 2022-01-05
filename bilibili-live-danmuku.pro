@@ -16,33 +16,40 @@ INCLUDEPATH += \
     $$PWD/3rdparty/include
 
 SOURCES += \
-    src/danmu_display/danmu_display.cpp \
-    src/danmu_display/danmu_loader.cpp \
-    src/danmu_display/danmu_panel.cpp \
-    src/live_room/live_room.cpp \
-    src/live_room/protocal.cpp \
+    src/modules/danmu_display/danmu_config.cpp \
+    src/modules/danmu_display/danmu_display.cpp \
+    src/modules/danmu_display/danmu_loader.cpp \
+    src/modules/danmu_display/danmu_panel.cpp \
+    src/modules/danmu_display/danmu_window.cpp \
+    src/modules/live_room/live_room.cpp \
+    src/modules/live_room/protocal.cpp \
     src/utils/byte_convert.cpp \
     src/utils/decompress.cpp \
     src/utils/network.cpp \
     src/main.cpp \
-    src/mainwindow.cpp
+    src/mainwindow.cpp \
+    src/module.cpp
     
 HEADERS += \
     3rdparty/include/brotli/decode.h \
     3rdparty/include/zlib/zlib.h \
-    src/danmu_display/danmu_display.h \
-    src/danmu_display/danmu_loader.h \
-    src/danmu_display/danmu_panel.h \
-    src/live_room/live_room.h \
-    src/live_room/protocal.h \
+    src/modules/danmu_display/danmu_config.h \
+    src/modules/danmu_display/danmu_display.h \
+    src/modules/danmu_display/danmu_loader.h \
+    src/modules/danmu_display/danmu_panel.h \
+    src/modules/danmu_display/danmu_window.h \
+    src/modules/live_room/live_room.h \
+    src/modules/live_room/protocal.h \
     src/utils/byte_convert.h \
     src/utils/decompress.h \
     src/utils/network.h \
-    src/mainwindow.h
+    src/global.h \
+    src/mainwindow.h \
+    src/module.h
 
 FORMS += \
-    src/ui/danmu_display.ui \
-    src/ui/danmu_panel.ui \
+    src/modules/danmu_display/ui/danmu_panel.ui \
+    src/modules/danmu_display/ui/danmu_window.ui \
     src/ui/mainwindow.ui
 
 LIBS += \

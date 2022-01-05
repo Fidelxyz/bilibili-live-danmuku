@@ -2,88 +2,33 @@
 
 #include <vector>
 
+#include "modules/danmu_display/danmu_display.h"
+#include "modules/live_room/live_room.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    liveRoom = nullptr;
-    danmuDisplay = nullptr;
-    danmuPanel = nullptr;
+    layout_modules = new QVBoxLayout(ui->centralWidget);
 
-    connect(ui->btn_startLiveRoom, SIGNAL(clicked()), this,
-            SLOT(slotStartLiveRoom()));
-    connect(ui->btn_startDanmuDisplay, SIGNAL(clicked()), this,
-            SLOT(slotStartDanmuDisplay()));
-    connect(ui->btn_startDanmuPanel, SIGNAL(clicked()), this,
-            SLOT(slotStartDanmuPanel()));
+    addModule(new LiveRoom(this));
+    addModule(new DanmuDisplay(this));
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
-    delete liveRoom;
-    delete danmuDisplay;
-}
+MainWindow::~MainWindow() {}
 
-void MainWindow::slotStartLiveRoom() {
-    liveRoom = new LiveRoom(ui->input_liveRoomID->text().toInt());
-}
-
-void MainWindow::slotStartDanmuDisplay() {
-    if (liveRoom == nullptr || danmuDisplay != nullptr) {
-        return;
+Module *MainWindow::getModule(const QString &name) const {
+    auto iter = modules.find(name);
+    if (iter == modules.end()) {
+        return nullptr;
     }
-    danmuDisplay = new DanmuDisplay();
-    connect(liveRoom, SIGNAL(updateFollowersCount(const int &)), danmuDisplay,
-            SLOT(slotUpdateFollowersCount(const int &)));
-    connect(liveRoom->protocal,
-            SIGNAL(recvDanmu(const int &, const QString &, const QString &,
-                             const bool &, const bool &, const int &)),
-            danmuDisplay,
-            SLOT(slotRecvDanmu(const int &, const QString &, const QString &,
-                               const bool &, const bool &, const int &)));
-    connect(liveRoom->protocal, SIGNAL(updateViewersCount(const int &)),
-            danmuDisplay, SLOT(slotUpdateViewersCount(const int &)));
-
-    QMetaObject::invokeMethod(liveRoom, "slotUpdateFollowersCount");
+    return iter->second;
 }
 
-void MainWindow::slotStartDanmuPanel() {
-    if (liveRoom == nullptr || danmuDisplay == nullptr ||
-        danmuPanel != nullptr) {
-        return;
-    }
-    danmuPanel = new DanmuPanel();
-    connect(danmuPanel, SIGNAL(getWindowConfig(int *, int *, int *)),
-            danmuDisplay, SLOT(slotGetWindowConfig(int *, int *, int *)));
-    connect(danmuPanel, SIGNAL(getFontConfig(int *)), danmuDisplay,
-            SLOT(slotGetFontConfig(int *)));
-    connect(danmuPanel,
-            SIGNAL(getColorConfig(QColor *, QColor *, QColor *, QColor *)),
-            danmuDisplay,
-            SLOT(slotGetColorConfig(QColor *, QColor *, QColor *, QColor *)));
-
-    connect(danmuPanel,
-            SIGNAL(setWindowConfig(const int &, const int &, const int &)),
-            danmuDisplay,
-            SLOT(slotSetWindowConfig(const int &, const int &, const int &)));
-    connect(danmuPanel, SIGNAL(setFontConfig(const int &)), danmuDisplay,
-            SLOT(slotSetFontConfig(const int &)));
-    connect(danmuPanel,
-            SIGNAL(setColorConfig(const QColor &, const QColor &,
-                                  const QColor &, const QColor &)),
-            danmuDisplay,
-            SLOT(slotSetColorConfig(const QColor &, const QColor &,
-                                    const QColor &, const QColor &)));
-
-    connect(danmuPanel,
-            SIGNAL(testDanmu(const int &, const QString &, const QString &,
-                             const bool &, const bool &, const int &)),
-            danmuDisplay,
-            SLOT(slotRecvDanmu(const int &, const QString &, const QString &,
-                               const bool &, const bool &, const int &)));
-    QMetaObject::invokeMethod(danmuPanel, "slotGetConfig");
+void MainWindow::addModule(Module *module) {
+    modules.insert(std::make_pair(module->moduleMetadata.name, module));
+    layout_modules->addWidget(module->getWidget());
 }
 
 /*

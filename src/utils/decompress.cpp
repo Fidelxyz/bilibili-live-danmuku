@@ -1,54 +1,33 @@
 #include "decompress.h"
 
-#include <brotli/decode.h>
-#include <zlib/zlib.h>
-
-#include <QByteArray>
 #include <QDebug>
-#include <exception>
-#include <vector>
 
-// HAVE NOT TEST YET
+#include "brotli/decode.h"
+#include "zlib/zlib.h"
+
+// HAVE NOT TESTED YET
 bool decompressDeflate(const QByteArray &data, QByteArray &result) {
     size_t encodedSize = data.size();
     size_t decodedSize = encodedSize;
+
+    qDebug() << "Start to decompress data:" << data;
+
     int status;
     do {
         decodedSize <<= 1;
         result.resize(decodedSize);
         status = uncompress((Bytef *)result.data(), (uLongf *)&decodedSize,
-                                (const Bytef *)data.constData(), encodedSize);
+                            (const Bytef *)data.constData(), encodedSize);
     } while (status == Z_BUF_ERROR);
 
     if (status == Z_OK) {
-        qDebug() << "Uncompressed length: " << decodedSize;
+        qDebug() << "Decompressed length:" << decodedSize;
+        qDebug() << "Decompressed data:" << result;
         return true;
     }
+    // Error
     return false;
 }
-
-// bool decompressDeflate(const QByteArray &data, QByteArray &result) {
-//     size_t bufSize = data.size() << 1;
-//     while (true) {
-//         std::vector<uint8_t> buf(bufSize);
-//         // uLongf uncompressLen = buffer.size();
-//         uLongf uncompressLen = 0;
-//         int status = uncompress(
-//             buf.data(), &uncompressLen,
-//             reinterpret_cast<const Bytef *>(data.constData()), data.size());
-//         if (status == Z_OK) {
-//             result = QByteArray(reinterpret_cast<const char *>(buf.data()),
-//                                 buf.size());
-//             qDebug() << "Uncompressed length: " << uncompressLen;
-//             return true;
-//         }
-//         if (status == Z_BUF_ERROR) {
-//             bufSize <<= 1;
-//             continue;
-//         }
-//         return false;  // Other error
-//     }
-// }
 
 bool decompressBrotli(const QByteArray &data, QByteArray &result) {
     BrotliDecoderState *s = BrotliDecoderCreateInstance(NULL, NULL, NULL);
@@ -82,5 +61,6 @@ bool decompressBrotli(const QByteArray &data, QByteArray &result) {
         qDebug() << "Decompressed data:" << result;
         return true;
     }
+    // Error
     return false;
 }

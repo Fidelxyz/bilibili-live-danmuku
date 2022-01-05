@@ -4,8 +4,40 @@
 
 #include "utils/network.h"
 
-LiveRoom::LiveRoom(const int roomID) {
-    this->roomID = roomID;
+const ModuleMetadata LiveRoom::moduleMetadata = {"live_room", {}};
+
+LiveRoom::LiveRoom(QWidget *parent) : Module(parent) {
+    started = false;
+
+    // Control UI
+    QHBoxLayout *layout = new QHBoxLayout(widget);
+
+    input_roomID = new QLineEdit(widget);
+    input_roomID->setText("14003442");  // debug
+    layout->addWidget(input_roomID);
+
+    btn_start = new QPushButton("连接", widget);
+    connect(btn_start, SIGNAL(clicked()), this, SLOT(slotStart()));
+    layout->addWidget(btn_start);
+}
+
+LiveRoom::~LiveRoom() {
+    QMetaObject::invokeMethod(protocal, "slotStopConnection",
+                              (Qt::ConnectionType)Qt::BlockingQueuedConnection);
+    protocalThread.quit();
+    protocalThread.wait();
+    delete protocal;
+
+    delete input_roomID;
+    delete btn_start;
+}
+
+bool LiveRoom::isStarted() { return started; }
+
+void LiveRoom::slotStart() {
+    started = true;
+
+    roomID = input_roomID->text().toInt();
     protocal = new Protocal();
     protocal->moveToThread(&protocalThread);
     protocalThread.start();
@@ -20,14 +52,6 @@ LiveRoom::LiveRoom(const int roomID) {
     connect(updateFollowersCountTimer, SIGNAL(timeout()), this,
             SLOT(slotUpdateFollowersCount()));
     updateFollowersCountTimer->start(30000);  // 30s
-}
-
-LiveRoom::~LiveRoom() {
-    QMetaObject::invokeMethod(protocal, "slotStopConnection",
-                              (Qt::ConnectionType)Qt::BlockingQueuedConnection);
-    protocalThread.quit();
-    protocalThread.wait();
-    delete protocal;
 }
 
 QJsonObject LiveRoom::requestDanmuInfo() {
@@ -64,6 +88,6 @@ void LiveRoom::slotUpdateFollowersCount() {
         return;
     }
     qDebug() << "slotUpdateFollowersCount:"
-             << response["data"].toObject()["follower"].toInt();
-    emit updateFollowersCount(response["data"].toObject()["follower"].toInt());
+             << response["data"][(QString) "follower"].toInt();
+    emit updateFollowersCount(response["data"][(QString) "follower"].toInt());
 }

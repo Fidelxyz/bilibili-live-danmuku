@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "danmu_config.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class DanmuPanel;
@@ -13,20 +15,13 @@ class DanmuPanel : public QWidget {
     Q_OBJECT
 
    public:
-    DanmuPanel(QWidget *parent = nullptr);
+    DanmuPanel(DanmuConfig *config, QWidget *parent = nullptr);
     ~DanmuPanel();
 
+   private:
+    void loadConfig();
+
    signals:
-    void getWindowConfig(int *width, int *height, int *opacity);
-    void getFontConfig(int *fontSize);
-    void getColorConfig(QColor *mainColor, QColor *usernameColor,
-                        QColor *contentColor, QColor *backgroundColor);
-    void setWindowConfig(const int &width, const int &height,
-                         const int &opacity);
-    void setFontConfig(const int &fontSize);
-    void setColorConfig(const QColor &mainColor, const QColor &usernameColor,
-                        const QColor &contentColor,
-                        const QColor &backgroundColor);
     void testDanmu(const int &uid, const QString &username, const QString &text,
                    const bool &isAdmin, const bool &isVIP,
                    const int &userGuardLevel);
@@ -38,10 +33,12 @@ class DanmuPanel : public QWidget {
     void slotSetUsernameColor();
     void slotSetContentColor();
     void slotSetBackgroundColor();
-    void slotGetConfig();
 
    private:
     Ui::DanmuPanel *ui;
+
+    DanmuConfig *config;
+
     QColor mainColor;
     QColor usernameColor;
     QColor contentColor;

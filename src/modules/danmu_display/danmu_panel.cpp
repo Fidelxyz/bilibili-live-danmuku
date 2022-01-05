@@ -4,8 +4,8 @@
 
 #include "ui_danmu_panel.h"
 
-DanmuPanel::DanmuPanel(QWidget *parent)
-    : QWidget(parent), ui(new Ui::DanmuPanel) {
+DanmuPanel::DanmuPanel(DanmuConfig *config, QWidget *parent)
+    : QWidget(parent), ui(new Ui::DanmuPanel), config(config) {
     ui->setupUi(this);
 
     connect(ui->btn_mainColor, SIGNAL(clicked()), this,
@@ -21,24 +21,22 @@ DanmuPanel::DanmuPanel(QWidget *parent)
 
     connect(ui->btn_testDanmu, SIGNAL(clicked()), this, SLOT(slotTestDanmu()));
 
+    loadConfig();
+
     show();
 }
 
 DanmuPanel::~DanmuPanel() {}
 
-void DanmuPanel::slotGetConfig() {
-    int width = 0, height = 0, opacity = 0;
-    emit getWindowConfig(&width, &height, &opacity);
-    ui->spin_windowWidth->setValue(width);
-    ui->spin_windowHeight->setValue(height);
-    ui->spin_opacity->setValue(opacity);
-
-    int fontSize = 0;
-    emit getFontConfig(&fontSize);
-    ui->spin_fontSize->setValue(fontSize);
-
-    emit getColorConfig(&mainColor, &usernameColor, &contentColor,
-                        &backgroundColor);
+void DanmuPanel::loadConfig() {
+    ui->spin_windowWidth->setValue(config->windowWidth);
+    ui->spin_windowHeight->setValue(config->windowHeight);
+    ui->spin_opacity->setValue(config->opacity);
+    ui->spin_fontSize->setValue(config->fontSize);
+    mainColor = config->mainColor;
+    usernameColor = config->usernameColor;
+    contentColor = config->contentColor;
+    backgroundColor = config->backgroundColor;
 
 #define SET_BTN_STYLE_SHEET(NAME)  \
     ui->btn_##NAME->setStyleSheet( \
@@ -54,12 +52,16 @@ void DanmuPanel::slotGetConfig() {
 
 void DanmuPanel::slotApply() {
     qDebug("slotApply");
-    emit setWindowConfig(ui->spin_windowWidth->value(),
-                         ui->spin_windowHeight->value(),
-                         ui->spin_opacity->value());
-    emit setFontConfig(ui->spin_fontSize->value());
-    emit setColorConfig(mainColor, usernameColor, contentColor,
-                        backgroundColor);
+    config->windowWidth = ui->spin_windowWidth->value();
+    config->windowHeight = ui->spin_windowHeight->value();
+    config->opacity = ui->spin_opacity->value();
+    config->fontSize = ui->spin_fontSize->value();
+    config->mainColor = mainColor;
+    config->usernameColor = usernameColor;
+    config->contentColor = contentColor;
+    config->backgroundColor = backgroundColor;
+    config->apply();
+    config->save();
 }
 
 void DanmuPanel::slotTestDanmu() {

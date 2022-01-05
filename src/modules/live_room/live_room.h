@@ -1,17 +1,23 @@
 #ifndef LIVE_ROOM_H
 #define LIVE_ROOM_H
 
+#include <QHBoxLayout>
+#include <QLineEdit>
 #include <QObject>
+#include <QPushButton>
 #include <QThread>
 
+#include "module.h"
 #include "protocal.h"
 
-class LiveRoom : public QObject {
+class LiveRoom : public Module {
     Q_OBJECT
+    MODULE
 
    public:
-    LiveRoom(const int roomID);
+    LiveRoom(QWidget* parent);
     ~LiveRoom();
+    bool isStarted();
 
    private:
     QJsonObject requestDanmuInfo();
@@ -21,12 +27,18 @@ class LiveRoom : public QObject {
     void updateFollowersCount(const int& followersCount);
 
    public slots:
+    void slotStart();
     void slotUpdateFollowersCount();
 
    public:
     Protocal* protocal;
 
    private:
+    QLineEdit* input_roomID;
+    QPushButton* btn_start;
+
+    bool started;
+
     int roomID;
     int uid;
     QThread protocalThread;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DanmuDisplay</class>
- <widget class="QWidget" name="DanmuDisplay">
+ <class>DanmuWindow</class>
+ <widget class="QWidget" name="DanmuWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -39,7 +39,7 @@
      <number>10</number>
     </property>
     <item>
-     <widget class="QListWidget" name="list_danmuDisplay">
+     <widget class="QListWidget" name="list_danmu">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
       </property>

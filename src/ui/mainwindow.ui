@@ -6,96 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
-    <height>256</height>
+    <width>364</width>
+    <height>234</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="centralWidget">
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <widget class="QWidget" name="widget_liveRoom" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>351</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <widget class="QLineEdit" name="input_liveRoomID">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>30</y>
-       <width>121</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>14003442</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_startLiveRoom">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>30</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Connect Live Room</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="widget_danmuDisplay" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>120</y>
-      <width>351</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <widget class="QPushButton" name="btn_startDanmuPanel">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>20</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Panel</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_startDanmuDisplay">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>121</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Danmu Display</string>
-     </property>
-    </widget>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>455</width>
+     <width>364</width>
      <height>22</height>
     </rect>
    </property>

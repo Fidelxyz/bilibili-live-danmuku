@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QVBoxLayout>
+#include <unordered_map>
 
-#include "danmu_display/danmu_display.h"
-#include "danmu_display/danmu_panel.h"
-#include "live_room/live_room.h"
+#include "module.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,17 +19,13 @@ class MainWindow : public QMainWindow {
    public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
-
-   public slots:
-    void slotStartLiveRoom();
-    void slotStartDanmuDisplay();
-    void slotStartDanmuPanel();
+    Module* getModule(const QString& name) const;
+    void addModule(Module* module);
 
    private:
     Ui::MainWindow* ui;
-    LiveRoom* liveRoom;
-    DanmuDisplay* danmuDisplay;
-    DanmuPanel* danmuPanel;
+    QVBoxLayout* layout_modules;
+    std::unordered_map<QString, Module*> modules;
 };
 
 #endif
