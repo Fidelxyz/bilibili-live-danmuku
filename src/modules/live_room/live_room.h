@@ -15,20 +15,21 @@ class LiveRoom : public Module {
     MODULE
 
    public:
-    LiveRoom(QWidget* parent);
+    LiveRoom();
     ~LiveRoom();
-    bool isStarted();
 
    private:
     QJsonObject requestDanmuInfo();
     int requestUid();
+    void stop();
 
    signals:
-    void updateFollowersCount(const int& followersCount);
+    void followersCountUpdated(const int& followersCount);
 
    public slots:
-    void slotStart();
-    void slotUpdateFollowersCount();
+    void start();
+    bool isRunning();
+    void updateFollowersCount();
 
    public:
     Protocal* protocal;
@@ -37,12 +38,9 @@ class LiveRoom : public Module {
     QLineEdit* input_roomID;
     QPushButton* btn_start;
 
-    bool started;
-
     int roomID;
     int uid;
     QThread protocalThread;
-    QTimer* updateFollowersCountTimer;
 };
 
 #endif

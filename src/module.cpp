@@ -1,12 +1,25 @@
 #include "module.h"
 
-const ModuleMetadata Module::moduleMetadata = {"default_module_name", {}};
+#include <QDebug>
 
-Module::Module(QWidget *parent) : QObject((QObject *)parent) {
-    widget = new QWidget;
-    // TODO check dependency
+#include "mainwindow.h"
+
+MainWindow *Module::moduleManager = nullptr;
+
+Module::Module(const QString &name, const QList<QString> &dependencies)
+    : QObject(moduleManager) {
+    qDebug() << "Loading module:" << name;
+    moduleMetadata.name = name;
+    moduleMetadata.dependencies = dependencies;
+
+    widget = new QWidget(moduleManager);
+    // TODO check dependencies
 }
 
-Module::~Module() { delete widget; }
+Module::~Module() { qDebug() << "Unloading module:" << moduleMetadata.name; }
 
 QWidget *Module::getWidget() const { return widget; }
+
+Module *Module::getModule(const QString &name) {
+    return moduleManager->getModule(name);
+}

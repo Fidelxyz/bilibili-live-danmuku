@@ -4,10 +4,8 @@
 
 #include "utils/network.h"
 
-const ModuleMetadata LiveRoom::moduleMetadata = {"live_room", {}};
-
-LiveRoom::LiveRoom(QWidget *parent) : Module(parent) {
-    started = false;
+LiveRoom::LiveRoom() : Module("live_room") {
+    protocal = nullptr;
 
     // Control UI
     QHBoxLayout *layout = new QHBoxLayout(widget);
@@ -17,41 +15,49 @@ LiveRoom::LiveRoom(QWidget *parent) : Module(parent) {
     layout->addWidget(input_roomID);
 
     btn_start = new QPushButton("连接", widget);
-    connect(btn_start, SIGNAL(clicked()), this, SLOT(slotStart()));
+    connect(btn_start, SIGNAL(clicked()), this, SLOT(start()));
     layout->addWidget(btn_start);
 }
 
 LiveRoom::~LiveRoom() {
-    QMetaObject::invokeMethod(protocal, "slotStopConnection",
-                              (Qt::ConnectionType)Qt::BlockingQueuedConnection);
-    protocalThread.quit();
-    protocalThread.wait();
-    delete protocal;
-
-    delete input_roomID;
-    delete btn_start;
+    qDebug("Enter ~LiveRoom");
+    stop();
+    qDebug("Exit ~LiveRoom");
 }
 
-bool LiveRoom::isStarted() { return started; }
-
-void LiveRoom::slotStart() {
-    started = true;
+void LiveRoom::start() {
+    if (protocal != nullptr) {
+        stop();
+    }
 
     roomID = input_roomID->text().toInt();
     protocal = new Protocal();
     protocal->moveToThread(&protocalThread);
     protocalThread.start();
-    QMetaObject::invokeMethod(protocal, "slotStartConnection",
+    QMetaObject::invokeMethod(protocal, "startConnection",
                               Q_ARG(const int &, roomID),
                               Q_ARG(const QJsonObject &, requestDanmuInfo()));
 
     uid = requestUid();
+}
 
-    slotUpdateFollowersCount();
-    updateFollowersCountTimer = new QTimer(this);
-    connect(updateFollowersCountTimer, SIGNAL(timeout()), this,
-            SLOT(slotUpdateFollowersCount()));
-    updateFollowersCountTimer->start(30000);  // 30s
+bool LiveRoom::isRunning() {
+    qDebug() << "isRunning:" << (protocal != nullptr);
+    return protocal != nullptr;
+}
+
+void LiveRoom::stop() {
+    qDebug("Enter stop");
+    if (protocal == nullptr) {
+        qDebug("Exit stop: Protocal have not started.");
+        return;
+    }
+    QMetaObject::invokeMethod(protocal, "stopConnection",
+                              (Qt::ConnectionType)Qt::BlockingQueuedConnection);
+    protocalThread.quit();
+    protocalThread.wait();
+    delete protocal;
+    qDebug("Exit stop");
 }
 
 QJsonObject LiveRoom::requestDanmuInfo() {
@@ -79,15 +85,15 @@ int LiveRoom::requestUid() {
     return response["data"].toObject()["uid"].toInt();
 }
 
-void LiveRoom::slotUpdateFollowersCount() {
+void LiveRoom::updateFollowersCount() {
     QJsonObject response = requestJsonResponse(
         QString("https://api.bilibili.com/x/relation/stat?vmid=%1&jsonp=jsonp")
             .arg(uid));
     if (response["code"].toInt() != 0) {
-        qWarning("Error occured in slotUpdateFollowersCount.");
+        qWarning("Error occured in followersCountUpdated.");
         return;
     }
-    qDebug() << "slotUpdateFollowersCount:"
+    qDebug() << "followersCountUpdated:"
              << response["data"][(QString) "follower"].toInt();
-    emit updateFollowersCount(response["data"][(QString) "follower"].toInt());
+    emit followersCountUpdated(response["data"][(QString) "follower"].toInt());
 }

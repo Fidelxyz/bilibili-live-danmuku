@@ -4,6 +4,21 @@
 #include <QTimer>
 #include <QWebSocket>
 
+const int WS_OP_USER_AUTHENTICATION = 7;
+const int WS_HEADER_DEFAULT_SEQUENCE = 1;
+const int WS_PACKAGE_HEADER_TOTAL_LENGTH = 16;
+const int WS_HEADER_DEFAULT_VERSION = 1;
+const int WS_OP_CONNECT_SUCCESS = 8;
+const int WS_OP_HEARTBEAT = 2;
+// Header
+const int WS_PACKAGE_OFFSET = 0;
+const int WS_HEADER_OFFSET = 4;
+const int WS_VERSION_OFFSET = 6;
+const int WS_OPERATION_OFFSET = 8;
+const int WS_SEQUENCE_OFFSET = 12;
+
+const int WS_HEARTBEAT_INTERVAL_MS = 30000;
+
 QByteArray genHead(int datalength, int opeation, int sequence);
 
 class Protocal : public QObject {
@@ -23,13 +38,12 @@ class Protocal : public QObject {
                    const int &userGuardLevel);
 
    public slots:
-    void slotStartConnection(const int &roomID,
-                             const QJsonObject &liveRoomInfo);
-    void slotStopConnection();
+    void startConnection(const int &roomID, const QJsonObject &liveRoomInfo);
+    void stopConnection();
 
    private slots:
-    void slotSendHeartbeat();
-    void slotRecvData(const QByteArray &data);
+    void sendHeartbeat();
+    void recvData(const QByteArray &data);
 
    private:
     QWebSocket *ws;

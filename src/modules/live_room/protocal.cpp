@@ -7,19 +7,6 @@
 #include "utils/byte_convert.h"
 #include "utils/decompress.h"
 
-#define WS_OP_USER_AUTHENTICATION 7
-#define WS_HEADER_DEFAULT_SEQUENCE 1
-#define WS_PACKAGE_HEADER_TOTAL_LENGTH 16
-#define WS_HEADER_DEFAULT_VERSION 1
-#define WS_OP_CONNECT_SUCCESS 8
-#define WS_OP_HEARTBEAT 2
-// Header
-#define WS_PACKAGE_OFFSET 0
-#define WS_HEADER_OFFSET 4
-#define WS_VERSION_OFFSET 6
-#define WS_OPERATION_OFFSET 8
-#define WS_SEQUENCE_OFFSET 12
-
 #define CMD_MAP(CMD) std::make_pair(QString(#CMD), CMD)
 const QHash<QString, enum Protocal::CMD> Protocal::cmdMap =
     QHash<QString, enum CMD>(
@@ -50,8 +37,8 @@ bool checkHello(QByteArray data) {
     return valData == data;
 }
 
-void Protocal::slotStartConnection(const int &roomID,
-                                   const QJsonObject &liveRoomInfo) {
+void Protocal::startConnection(const int &roomID,
+                               const QJsonObject &liveRoomInfo) {
     QJsonObject liveRoomInfoData = liveRoomInfo["data"].toObject();
     QString url = liveRoomInfoData["host_list"][0]["host"].toString();
     QString token = liveRoomInfoData["token"].toString();
@@ -90,11 +77,11 @@ void Protocal::slotStartConnection(const int &roomID,
     qDebug() << "send: " << data;
 
     connect(ws, SIGNAL(binaryMessageReceived(QByteArray)), this,
-            SLOT(slotRecvData(QByteArray)), Qt::QueuedConnection);
+            SLOT(recvData(QByteArray)), Qt::QueuedConnection);
 
     heartBeatTimer = new QTimer(this);
-    connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(slotSendHeartbeat()));
-    heartBeatTimer->start(30000);  // 30s
+    connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(sendHeartbeat()));
+    heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
 
 Protocal::Protocal() {
@@ -102,15 +89,16 @@ Protocal::Protocal() {
     heartBeatTimer = nullptr;
 }
 
-void Protocal::slotStopConnection() {
-    qDebug("slotStopConnection");
+void Protocal::stopConnection() {
+    qDebug("Enter stopConnection");
     heartBeatTimer->stop();
     delete heartBeatTimer;
     ws->close();
     delete ws;
+    qDebug("Exit stopConnection");
 }
 
-void Protocal::slotRecvData(const QByteArray &data) {
+void Protocal::recvData(const QByteArray &data) {
     qDebug() << "-------------------------------";
     qDebug() << "receive message: " << data;
 
@@ -187,7 +175,7 @@ void Protocal::slotRecvData(const QByteArray &data) {
     }
 }
 
-void Protocal::slotSendHeartbeat() {
+void Protocal::sendHeartbeat() {
     QByteArray data("[object Object]");
     data.prepend(
         genHead(data.length(), WS_OP_HEARTBEAT, WS_HEADER_DEFAULT_SEQUENCE));

@@ -30,6 +30,8 @@ int main(int argc, char *argv[]) {
         qWarning("Failed to load QSS stylesheet (display.qss).");
     }
 
+    // a.setQuitOnLastWindowClosed(true);
+
     MainWindow w;
     w.show();
     return a.exec();

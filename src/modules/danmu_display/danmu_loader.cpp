@@ -19,7 +19,7 @@ DanmuLoader::~DanmuLoader() {
     wait();
 }
 
-void DanmuLoader::slotReload() {
+void DanmuLoader::reload() {
     QMutexLocker loopLocker(&loopMutex);
 
     // clear queue
@@ -87,7 +87,7 @@ void DanmuLoader::loadItem(QListWidgetItem *item) {
     updateCondition.wakeAll();
 }
 
-void DanmuLoader::slotSetScrollingSpeed(const float &speed, const int &fps) {
+void DanmuLoader::setScrollingSpeed(const float &speed, const int &fps) {
     scrollingSpeed = speed / fps;
     sleepIntervalMs = 1000 / fps;
 }

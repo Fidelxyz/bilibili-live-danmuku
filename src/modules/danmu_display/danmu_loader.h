@@ -20,8 +20,8 @@ class DanmuLoader : public QThread {
     void run() override;
 
    public slots:
-    void slotReload();
-    void slotSetScrollingSpeed(const float &speed, const int &fps);
+    void reload();
+    void setScrollingSpeed(const float &speed, const int &fps);
 
    private:
     std::queue<QListWidgetItem *> loadingItemQueue;  // item, height
