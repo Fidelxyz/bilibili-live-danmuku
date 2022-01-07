@@ -56,7 +56,7 @@ void LiveRoom::stop() {
                               (Qt::ConnectionType)Qt::BlockingQueuedConnection);
     protocalThread.quit();
     protocalThread.wait();
-    delete protocal;
+    protocal->deleteLater();
     qDebug("Exit stop");
 }
 

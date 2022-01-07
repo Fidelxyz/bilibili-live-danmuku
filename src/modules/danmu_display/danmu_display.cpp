@@ -5,9 +5,6 @@
 #include "ui_danmu_window.h"
 
 DanmuDisplay::DanmuDisplay() : Module("danmu_display") {
-    window = nullptr;
-    loader = nullptr;
-    panel = nullptr;
     config = nullptr;
 
     // Module UI
@@ -18,28 +15,34 @@ DanmuDisplay::DanmuDisplay() : Module("danmu_display") {
     layout->addWidget(btn_startDisplay);
 
     btn_startPanel = new QPushButton("配置", widget);
+    btn_startPanel->setEnabled(false);
     connect(btn_startPanel, SIGNAL(clicked()), this, SLOT(startPanel()));
     layout->addWidget(btn_startPanel);
 
-    btn_toggleOnTop = new QPushButton("窗口置顶", widget);
-    btn_toggleOnTop->setEnabled(false);
-    connect(btn_toggleOnTop, SIGNAL(clicked()), this, SLOT(toggleOnTop()));
-    layout->addWidget(btn_toggleOnTop);
+    btn_toggleLockPosition = new QPushButton("锁定窗口", widget);
+    btn_toggleLockPosition->setEnabled(false);
+    connect(btn_toggleLockPosition, SIGNAL(clicked()), this,
+            SLOT(toggleLockPosition()));
+    layout->addWidget(btn_toggleLockPosition);
 }
 
 DanmuDisplay::~DanmuDisplay() {
     qDebug("Enter ~DanmuDisplay");
-    delete loader;
-    delete window;
-    delete panel;
+    loader->deleteLater();
+    // object with attribute Qt::WA_DeleteOnClose does not need to be deleted
+    // manually
     qDebug("Exit ~DanmuDisplay");
 }
 
 // slots
 
 void DanmuDisplay::startDisplay() {
-    if (window != nullptr) {
-        window->show();
+    if (!window.isNull()) {
+        loader->deleteLater();
+        window->deleteLater();
+        btn_startPanel->setEnabled(false);
+        panel->deleteLater();
+        btn_toggleLockPosition->setEnabled(false);
         return;
     }
 
@@ -58,8 +61,10 @@ void DanmuDisplay::startDisplay() {
     config = new DanmuConfig(this);
     connect(config, SIGNAL(changed()), this, SLOT(applyConfig()));
 
-    btn_toggleOnTop->setEnabled(true);
-    setOnTop(config->onTop);
+    btn_toggleLockPosition->setEnabled(true);
+    setLockPosition(config->lockPosition);
+
+    btn_startPanel->setEnabled(true);
 
     // list
     // QListWidgetItem *blankItem = new QListWidgetItem(danmuList);
@@ -85,11 +90,11 @@ void DanmuDisplay::startDisplay() {
 }
 
 void DanmuDisplay::startPanel() {
-    if (window == nullptr) {
+    if (window.isNull()) {
         return;
     }
-    if (panel != nullptr) {
-        panel->show();
+    if (!panel.isNull()) {
+        panel->deleteLater();
         return;
     }
     panel = new DanmuPanel(config);
@@ -152,14 +157,13 @@ void DanmuDisplay::applyConfig() {
     QMetaObject::invokeMethod(loader, "reload");
 }
 
-void DanmuDisplay::toggleOnTop() {
-    config->onTop = !config->onTop;
+void DanmuDisplay::toggleLockPosition() {
+    config->lockPosition = !config->lockPosition;
     config->save();
-    setOnTop(config->onTop);
+    setLockPosition(config->lockPosition);
 }
 
-void DanmuDisplay::setOnTop(const bool &on) {
-    window->setWindowFlag(Qt::WindowStaysOnTopHint, on);
-    window->show();
-    btn_toggleOnTop->setText(on ? "窗口置顶 [ON]" : "窗口置顶 [OFF]");
+void DanmuDisplay::setLockPosition(const bool &on) {
+    window->setTransparentForMouseEvents(on);
+    btn_toggleLockPosition->setText(on ? "锁定窗口 [ON]" : "锁定窗口 [OFF]");
 }

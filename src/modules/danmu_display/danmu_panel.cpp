@@ -8,6 +8,8 @@ DanmuPanel::DanmuPanel(DanmuConfig *config, QWidget *parent)
     : QWidget(parent), ui(new Ui::DanmuPanel), config(config) {
     ui->setupUi(this);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     connect(ui->btn_mainColor, SIGNAL(clicked()), this,
             SLOT(slotSetMainColor()));
     connect(ui->btn_usernameColor, SIGNAL(clicked()), this,
@@ -26,7 +28,10 @@ DanmuPanel::DanmuPanel(DanmuConfig *config, QWidget *parent)
     show();
 }
 
-DanmuPanel::~DanmuPanel() {}
+DanmuPanel::~DanmuPanel() {
+    qDebug() << "Enter ~DanmuPanel";
+    qDebug() << "Exit ~DanmuPanel";
+}
 
 void DanmuPanel::loadConfig() {
     ui->spin_windowWidth->setValue(config->windowWidth);

@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QTimer>
+#include <QPointer>
 
 #include "danmu_config.h"
 #include "danmu_loader.h"
@@ -23,14 +24,14 @@ class DanmuDisplay : public Module {
     ~DanmuDisplay();
 
    private:
-    void setOnTop(const bool &on);
+    void setLockPosition(const bool &on);
 
    public slots:
     void startDisplay();
     void startPanel();
 
     void applyConfig();
-    void toggleOnTop();
+    void toggleLockPosition();
 
     void recvDanmu(const int &uid, const QString &username, const QString &text,
                    const bool &isAdmin, const bool &isVIP,
@@ -40,15 +41,15 @@ class DanmuDisplay : public Module {
 
    private:
     // submodule
-    DanmuWindow *window;
-    DanmuLoader *loader;
-    DanmuPanel *panel;
+    QPointer<DanmuWindow> window;
+    QPointer<DanmuLoader> loader;
+    QPointer<DanmuPanel> panel;
     DanmuConfig *config;
 
     // Module UI
     QPushButton *btn_startDisplay;
     QPushButton *btn_startPanel;
-    QPushButton *btn_toggleOnTop;
+    QPushButton *btn_toggleLockPosition;
 
     QListWidget *danmuList;
 

@@ -15,6 +15,7 @@ class DanmuWindow : public QWidget {
    public:
     DanmuWindow(QWidget *parent = nullptr);
     ~DanmuWindow();
+    void setTransparentForMouseEvents(const bool &on);
 
    private:
     void mousePressEvent(QMouseEvent *event) override;

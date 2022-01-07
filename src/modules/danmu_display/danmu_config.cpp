@@ -9,7 +9,7 @@ DanmuConfig::DanmuConfig(QObject *parent)
     windowWidth = settings.value("Window/WindowWidth", 400).toInt();
     windowHeight = settings.value("Window/WindowHeight", 800).toInt();
     opacity = settings.value("Window/OpacityPercentage", 70).toInt();
-    onTop = settings.value("Window/OnTop", false).toBool();
+    lockPosition = settings.value("Window/LockPosition", false).toBool();
     fontSize = settings.value("Font/FontSize", 15).toInt();
     mainColor = settings.value("Color/MainColor", "white").toString();
     usernameColor =
@@ -28,7 +28,7 @@ void DanmuConfig::save() {
     settings.setValue("Window/WindowWidth", windowWidth);
     settings.setValue("Window/WindowHeight", windowHeight);
     settings.setValue("Window/OpacityPercentage", opacity);
-    settings.setValue("Window/OnTop", onTop);
+    settings.setValue("Window/LockPosition", lockPosition);
     settings.setValue("Font/FontSize", fontSize);
     settings.setValue("Color/MainColor", mainColor.name());
     settings.setValue("Color/UsernameColor", usernameColor.name());

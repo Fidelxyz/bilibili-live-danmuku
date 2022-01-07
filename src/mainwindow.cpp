@@ -13,18 +13,21 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    qSetMessagePattern("%{if-category}%{category} | %{endif}%{type} | %{file}:%{line} | %{function} | %{message}");
+    qSetMessagePattern(
+        "%{if-category}%{category} | %{endif}%{type} | %{file}:%{line} | "
+        "%{function} | %{message}");
 
     layout_modules = new QVBoxLayout(ui->centralWidget);
 
     Module::moduleManager = this;
-
     addModule(new LiveRoom());
     addModule(new DanmuDisplay());
 }
 
 MainWindow::~MainWindow() {
-    qDebug("~MainWindow");
+    qDebug("Enter ~MainWindow");
+    delete ui;
+    qDebug("Exit ~MainWindow");
 }
 
 Module *MainWindow::getModule(const QString &name) const {

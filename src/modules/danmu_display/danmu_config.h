@@ -20,7 +20,7 @@ class DanmuConfig : public QObject {
     int windowWidth;
     int windowHeight;
     int opacity;
-    bool onTop;
+    bool lockPosition;
     int fontSize;
     QColor mainColor;
     QColor usernameColor;

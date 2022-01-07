@@ -92,9 +92,9 @@ Protocal::Protocal() {
 void Protocal::stopConnection() {
     qDebug("Enter stopConnection");
     heartBeatTimer->stop();
-    delete heartBeatTimer;
+    heartBeatTimer->deleteLater();
     ws->close();
-    delete ws;
+    ws->deleteLater();
     qDebug("Exit stopConnection");
 }
 
