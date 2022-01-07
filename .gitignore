@@ -3,7 +3,6 @@
 
 *~
 *.autosave
-*.a
 *.core
 *.moc
 *.o
@@ -68,7 +67,6 @@ Thumbs.db
 
 # Binaries
 # --------
-*.dll
 *.exe
 
 # VS Code

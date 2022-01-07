@@ -36,7 +36,7 @@
     <item row="9" column="2">
      <widget class="QPushButton" name="btn_contentColor">
       <property name="text">
-       <string/>
+       <string notr="true"/>
       </property>
      </widget>
     </item>
@@ -57,7 +57,7 @@
     <item row="8" column="2">
      <widget class="QPushButton" name="btn_usernameColor">
       <property name="text">
-       <string/>
+       <string notr="true"/>
       </property>
      </widget>
     </item>
@@ -162,7 +162,7 @@
     <item row="7" column="2">
      <widget class="QPushButton" name="btn_mainColor">
       <property name="text">
-       <string/>
+       <string notr="true"/>
       </property>
      </widget>
     </item>
@@ -213,7 +213,7 @@
     <item row="10" column="2">
      <widget class="QPushButton" name="btn_backgroundColor">
       <property name="text">
-       <string/>
+       <string notr="true"/>
       </property>
      </widget>
     </item>

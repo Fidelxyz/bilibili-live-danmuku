@@ -10,16 +10,16 @@ DanmuDisplay::DanmuDisplay() : Module("danmu_display") {
     // Module UI
     QHBoxLayout *layout = new QHBoxLayout(widget);
 
-    btn_startDisplay = new QPushButton("弹幕显示", widget);
+    btn_startDisplay = new QPushButton(tr("弹幕显示"), widget);
     connect(btn_startDisplay, SIGNAL(clicked()), this, SLOT(startDisplay()));
     layout->addWidget(btn_startDisplay);
 
-    btn_startPanel = new QPushButton("配置", widget);
+    btn_startPanel = new QPushButton(tr("配置"), widget);
     btn_startPanel->setEnabled(false);
     connect(btn_startPanel, SIGNAL(clicked()), this, SLOT(startPanel()));
     layout->addWidget(btn_startPanel);
 
-    btn_toggleLockPosition = new QPushButton("锁定窗口", widget);
+    btn_toggleLockPosition = new QPushButton(tr("锁定窗口"), widget);
     btn_toggleLockPosition->setEnabled(false);
     connect(btn_toggleLockPosition, SIGNAL(clicked()), this,
             SLOT(toggleLockPosition()));
@@ -66,11 +66,6 @@ void DanmuDisplay::startDisplay() {
 
     btn_startPanel->setEnabled(true);
 
-    // list
-    // QListWidgetItem *blankItem = new QListWidgetItem(danmuList);
-    // blankItem->setSizeHint(danmuList->size());
-    // danmuList->addItem(blankItem);
-
     // danmu loader
     loader = new DanmuLoader(danmuList);
     loader->setScrollingSpeed(2, 30);
@@ -113,7 +108,21 @@ void DanmuDisplay::recvDanmu(const int &uid, const QString &username,
     qDebug() << "Display: " << uid << username << text << isAdmin << isVIP
              << userGuardLevel;
 
-    QLabel *label = new QLabel(contentFormat.arg(username, text));
+    QString prefix = "";
+    QString suffix = "";
+
+    if (isVIP) {
+        suffix.append("<span style=\"color:yellow\">[VIP]</span>");
+    }
+
+    if (isAdmin) {
+        // suffix.append("<span
+        // style=\"padding-left:10px;padding-right:10px;border-radius:10px;background-color:yellow;\">房</span>");
+        suffix.append("<span style=\"color:yellow\">[房]</span>");
+    }
+
+    QLabel *label =
+        new QLabel(contentFormat.arg(prefix, username, suffix, text));
 
     label->setFixedWidth(danmuList->width());
     label->setWordWrap(true);
@@ -137,10 +146,10 @@ void DanmuDisplay::updateFollowersCount(const int &followersCount) {
 
 void DanmuDisplay::applyConfig() {
     contentFormat = QString(
-                        "<span style=\"color:%1\">%2</span>: <span "
-                        "style=\"color:%3\">%4</span>")
-                        .arg(config->usernameColor.name(), "%1",
-                             config->contentColor.name(), "%2");
+                        "%1<span style=\"color:%2\">%3</span>%4: <span "
+                        "style=\"color:%5\">%6</span>")
+                        .arg("%1", config->usernameColor.name(), "%2", "%3",
+                             config->contentColor.name(), "%4");
     window->setStyleSheet(
         QString(
             "#DanmuWindow{background-color:%1}QLabel{font-size:%2px;color:%3}")
@@ -149,12 +158,12 @@ void DanmuDisplay::applyConfig() {
     window->resize(config->windowWidth, config->windowHeight);
     window->setWindowOpacity((qreal)config->opacity / 100);
 
-    // reload
+    // load / reload danmuList
     danmuList->clear();
     QListWidgetItem *blankItem = new QListWidgetItem(danmuList);
     blankItem->setSizeHint(danmuList->size());
     danmuList->addItem(blankItem);
-    QMetaObject::invokeMethod(loader, "reload");
+    QMetaObject::invokeMethod(loader, "Load danmuList");
 }
 
 void DanmuDisplay::toggleLockPosition() {
@@ -165,5 +174,6 @@ void DanmuDisplay::toggleLockPosition() {
 
 void DanmuDisplay::setLockPosition(const bool &on) {
     window->setTransparentForMouseEvents(on);
-    btn_toggleLockPosition->setText(on ? "锁定窗口 [ON]" : "锁定窗口 [OFF]");
+    btn_toggleLockPosition->setText(on ? tr("锁定窗口 [ON]")
+                                       : tr("锁定窗口 [OFF]"));
 }

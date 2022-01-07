@@ -14,7 +14,7 @@ LiveRoom::LiveRoom() : Module("live_room") {
     input_roomID->setText("14003442");  // debug
     layout->addWidget(input_roomID);
 
-    btn_start = new QPushButton("连接", widget);
+    btn_start = new QPushButton(tr("连接"), widget);
     connect(btn_start, SIGNAL(clicked()), this, SLOT(start()));
     layout->addWidget(btn_start);
 }
