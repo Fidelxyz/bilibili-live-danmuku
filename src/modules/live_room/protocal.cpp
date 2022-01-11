@@ -10,7 +10,7 @@
 #define CMD_MAP(CMD) std::make_pair(QString(#CMD), CMD)
 const QHash<QString, enum Protocal::CMD> Protocal::cmdMap =
     QHash<QString, enum CMD>(
-        (std::initializer_list<std::pair<QString, enum CMD>>){
+        std::initializer_list<std::pair<QString, enum CMD>>{
             CMD_MAP(LIVE), CMD_MAP(PREPARING), CMD_MAP(DANMU_MSG),
             CMD_MAP(SEND_GIFT), CMD_MAP(COMBO_SEND), CMD_MAP(GIFT_TOP),
             CMD_MAP(WELCOME), CMD_MAP(WELCOME_GUARD), CMD_MAP(ENTRY_EFFECT),
@@ -37,8 +37,8 @@ bool checkHello(QByteArray data) {
     return valData == data;
 }
 
-void Protocal::startConnection(const int &roomID,
-                               const QJsonObject &liveRoomInfo) {
+void Protocal::startConnection(const int& roomID,
+                               const QJsonObject& liveRoomInfo) {
     QJsonObject liveRoomInfoData = liveRoomInfo["data"].toObject();
     QString url = liveRoomInfoData["host_list"][0]["host"].toString();
     QString token = liveRoomInfoData["token"].toString();
@@ -66,7 +66,7 @@ void Protocal::startConnection(const int &roomID,
     request.setRawHeader("Accept-Language",
                          "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
 
-    ws = new QWebSocket();
+    ws = new QWebSocket();  // deleted in stopConnection()
     ws->open(request);
 
     QEventLoop eventLoop;
@@ -79,7 +79,7 @@ void Protocal::startConnection(const int &roomID,
     connect(ws, SIGNAL(binaryMessageReceived(QByteArray)), this,
             SLOT(recvData(QByteArray)), Qt::QueuedConnection);
 
-    heartBeatTimer = new QTimer(this);
+    heartBeatTimer = new QTimer(this);  // deleted in stopConnection()
     connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(sendHeartbeat()));
     heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
@@ -98,7 +98,7 @@ void Protocal::stopConnection() {
     qDebug("Exit stopConnection");
 }
 
-void Protocal::recvData(const QByteArray &data) {
+void Protocal::recvData(const QByteArray& data) {
     qDebug() << "-------------------------------";
     qDebug() << "receive message: " << data;
 
@@ -126,10 +126,10 @@ void Protocal::recvData(const QByteArray &data) {
     QByteArray pack;
     switch (ver) {
         case DEFLATE:
-            if (!decompressDeflate(data.mid(headLen), pack)) {
-                qWarning("Decompression (deflate) failed.");
-                return;
-            }
+            //		if (!decompressDeflate(data.mid(headLen), pack)) {
+            //			qWarning("Decompression (deflate) failed.");
+            //			return;
+            //		}
             break;
         case BROTLI:
             if (!decompressBrotli(data.mid(headLen), pack)) {
@@ -182,12 +182,12 @@ void Protocal::sendHeartbeat() {
     ws->sendBinaryMessage(data);
 }
 
-void Protocal::recvHeartbeatReply(const QByteArray &msg) {
+void Protocal::recvHeartbeatReply(const QByteArray& msg) {
     qDebug() << "Update viewers count (protocal):" << bytesToInt32(msg.left(4));
     emit updateViewersCount(bytesToInt32(msg.left(4)));
 }
 
-void Protocal::recvMsg(const QJsonObject &msg) {
+void Protocal::recvMsg(const QJsonObject& msg) {
     QString cmd = msg["cmd"].toString();
     switch (cmdMap[cmd]) {
         case LIVE:

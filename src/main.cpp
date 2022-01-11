@@ -4,7 +4,7 @@
 #include <QResource>
 #include <QTranslator>
 
-#include "mainwindow.h"
+#include "danmuku.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -30,9 +30,7 @@ int main(int argc, char *argv[]) {
         qWarning("Failed to load QSS stylesheet (display.qss).");
     }
 
-    // a.setQuitOnLastWindowClosed(true);
-
-    MainWindow w;
+    Danmuku w;
     w.show();
     return a.exec();
 }

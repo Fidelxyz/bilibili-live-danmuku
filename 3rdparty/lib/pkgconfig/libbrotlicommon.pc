@@ -1,0 +1,11 @@
+prefix=
+exec_prefix=
+libdir=/lib
+includedir=/include
+
+Name: libbrotlicommon
+URL: https://github.com/google/brotli
+Description: Brotli common dictionary library
+Version: 1.0.9
+Libs: -L${libdir} -R${libdir} -lbrotlicommon
+Cflags: -I${includedir}

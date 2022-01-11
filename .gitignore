@@ -71,5 +71,6 @@ Thumbs.db
 
 # VS Code
 *.code-workspace
+.vscode/
 
 build/

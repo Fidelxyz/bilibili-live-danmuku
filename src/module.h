@@ -2,9 +2,10 @@
 #define MODULE_H
 
 #include <QObject>
+#include <QPointer>
 #include <QWidget>
 
-class MainWindow;
+class Danmuku;
 
 struct ModuleMetadata {
     QString name;
@@ -21,7 +22,7 @@ class Module : public QObject {
 
    public:
     ModuleMetadata moduleMetadata;
-    static MainWindow *moduleManager;
+    static Danmuku *danmuku;
 
    protected:
     QWidget *widget;

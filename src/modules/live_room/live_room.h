@@ -24,11 +24,12 @@ class LiveRoom : public Module {
     void stop();
 
    signals:
+    void started();
+    void stopped();
     void followersCountUpdated(const int& followersCount);
 
    public slots:
     void start();
-    bool isRunning();
     void updateFollowersCount();
 
    public:

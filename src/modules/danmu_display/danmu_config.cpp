@@ -6,17 +6,7 @@ DanmuConfig::DanmuConfig(QObject *parent)
     : QObject(parent),
       settings(APP_DIR_PATH + CONFIG_DIR_PATH + "/DanmuDisplay.ini",
                QSettings::IniFormat) {
-    windowWidth = settings.value("Window/WindowWidth", 400).toInt();
-    windowHeight = settings.value("Window/WindowHeight", 800).toInt();
-    opacity = settings.value("Window/OpacityPercentage", 70).toInt();
-    lockPosition = settings.value("Window/LockPosition", false).toBool();
-    fontSize = settings.value("Font/FontSize", 15).toInt();
-    mainColor = settings.value("Color/MainColor", "white").toString();
-    usernameColor =
-        settings.value("Color/UsernameColor", "lightblue").toString();
-    contentColor = settings.value("Color/ContentColor", "white").toString();
-    backgroundColor =
-        settings.value("Color/BackgroundColor", "black").toString();
+    load();
 
     qDebug("DanmuConfig loaded");
     qDebug() << "INI file path:" << settings.fileName();
@@ -24,16 +14,55 @@ DanmuConfig::DanmuConfig(QObject *parent)
 
 DanmuConfig::~DanmuConfig() {}
 
+void DanmuConfig::load() {
+    windowWidth =
+        settings.value("Window/WindowWidth", DEFAULT_CONFIG::windowWidth)
+            .toInt();
+    windowHeight =
+        settings.value("Window/WindowHeight", DEFAULT_CONFIG::windowHeight)
+            .toInt();
+    opacity =
+        settings.value("Window/OpacityPercentage", DEFAULT_CONFIG::opacity)
+            .toInt();
+    borderRadius =
+        settings.value("Window/BorderRadius", DEFAULT_CONFIG::borderRadius)
+            .toInt();
+    lockPosition =
+        settings.value("Window/LockPosition", DEFAULT_CONFIG::lockPosition)
+            .toBool();
+    font = QFont();
+    font.fromString(
+        settings.value("Font/Font", DEFAULT_CONFIG::font).toString());
+    mainColor =
+        settings.value("Color/MainColor", DEFAULT_CONFIG::mainColor).toString();
+    usernameColor =
+        settings.value("Color/UsernameColor", DEFAULT_CONFIG::usernameColor)
+            .toString();
+    contentColor =
+        settings.value("Color/ContentColor", DEFAULT_CONFIG::contentColor)
+            .toString();
+    backgroundColor =
+        settings.value("Color/BackgroundColor", DEFAULT_CONFIG::backgroundColor)
+            .toString();
+    scrollingSpeed =
+        settings.value("Danmu/ScrollingSpeed", DEFAULT_CONFIG::scrollingSpeed)
+            .toInt();
+    fps = settings.value("Danmu/FPS", DEFAULT_CONFIG::fps).toInt();
+}
+
 void DanmuConfig::save() {
     settings.setValue("Window/WindowWidth", windowWidth);
     settings.setValue("Window/WindowHeight", windowHeight);
     settings.setValue("Window/OpacityPercentage", opacity);
+    settings.setValue("Window/BorderRadius", borderRadius);
     settings.setValue("Window/LockPosition", lockPosition);
-    settings.setValue("Font/FontSize", fontSize);
+    settings.setValue("Font/Font", font.toString());
     settings.setValue("Color/MainColor", mainColor.name());
     settings.setValue("Color/UsernameColor", usernameColor.name());
     settings.setValue("Color/ContentColor", contentColor.name());
     settings.setValue("Color/BackgroundColor", backgroundColor.name());
+    settings.setValue("Danmu/ScrollingSpeed", scrollingSpeed);
+    settings.setValue("Danmu/FPS", fps);
 
     settings.sync();
 }

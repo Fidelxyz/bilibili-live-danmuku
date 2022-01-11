@@ -7,12 +7,12 @@
 #include <QNetworkReply>
 
 QJsonObject requestJsonResponse(QString url) {
-    QNetworkAccessManager *networkAccessManager = new QNetworkAccessManager();
+    QNetworkAccessManager networkAccessManager;
     QNetworkRequest request;
     request.setUrl(url);
 
     QEventLoop eventLoop;
-    QNetworkReply *reply = networkAccessManager->get(request);
+    QNetworkReply *reply = networkAccessManager.get(request);
     QObject::connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
     eventLoop.exec();
     QByteArray responseByte = reply->readAll();

@@ -8,13 +8,15 @@ LiveRoom::LiveRoom() : Module("live_room") {
     protocal = nullptr;
 
     // Control UI
-    QHBoxLayout *layout = new QHBoxLayout(widget);
+    QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by QT
 
-    input_roomID = new QLineEdit(widget);
+    input_roomID = new QLineEdit(widget);  // deleted by QT
+#ifdef QT_DEBUG
     input_roomID->setText("14003442");  // debug
+#endif
     layout->addWidget(input_roomID);
 
-    btn_start = new QPushButton(tr("连接"), widget);
+    btn_start = new QPushButton(tr("连接"), widget);  // deleted by QT
     connect(btn_start, SIGNAL(clicked()), this, SLOT(start()));
     layout->addWidget(btn_start);
 }
@@ -30,28 +32,40 @@ void LiveRoom::start() {
         stop();
     }
 
-    roomID = input_roomID->text().toInt();
-    protocal = new Protocal();
+    bool ok;
+    roomID = input_roomID->text().toInt(&ok);
+    if (!ok) {
+        qWarning("Invalid room ID. Exit.");
+        return;
+    }
+
+    QJsonObject danmuInfo = requestDanmuInfo();
+    if (danmuInfo["code"].toInt() != 0) {
+        qWarning("Danmu info is not vaild. Exit.");
+        return;
+    }
+
+    Q_ASSERT(protocal == nullptr);
+    protocal = new Protocal();  // deleted in stop()
     protocal->moveToThread(&protocalThread);
     protocalThread.start();
+
     QMetaObject::invokeMethod(protocal, "startConnection",
                               Q_ARG(const int &, roomID),
-                              Q_ARG(const QJsonObject &, requestDanmuInfo()));
+                              Q_ARG(const QJsonObject &, danmuInfo));
 
     uid = requestUid();
-}
 
-bool LiveRoom::isRunning() {
-    qDebug() << "isRunning:" << (protocal != nullptr);
-    return protocal != nullptr;
+    emit started();
 }
 
 void LiveRoom::stop() {
     qDebug("Enter stop");
     if (protocal == nullptr) {
-        qDebug("Exit stop: Protocal have not started.");
+        qDebug("Exit stop: Protocal has not been started.");
         return;
     }
+    emit stopped();
     QMetaObject::invokeMethod(protocal, "stopConnection",
                               (Qt::ConnectionType)Qt::BlockingQueuedConnection);
     protocalThread.quit();

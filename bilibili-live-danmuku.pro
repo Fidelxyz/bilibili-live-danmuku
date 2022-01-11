@@ -5,7 +5,7 @@ QT += \
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -26,13 +26,12 @@ SOURCES += \
     src/utils/byte_convert.cpp \
     src/utils/decompress.cpp \
     src/utils/network.cpp \
+    src/danmuku.cpp \
     src/main.cpp \
-    src/mainwindow.cpp \
     src/module.cpp
     
 HEADERS += \
     3rdparty/include/brotli/decode.h \
-    3rdparty/include/zlib/zlib.h \
     src/modules/danmu_display/danmu_config.h \
     src/modules/danmu_display/danmu_display.h \
     src/modules/danmu_display/danmu_loader.h \
@@ -43,18 +42,17 @@ HEADERS += \
     src/utils/byte_convert.h \
     src/utils/decompress.h \
     src/utils/network.h \
+    src/danmuku.h \
     src/global.h \
-    src/mainwindow.h \
     src/module.h
 
 FORMS += \
     src/modules/danmu_display/ui/danmu_panel.ui \
     src/modules/danmu_display/ui/danmu_window.ui \
-    src/ui/mainwindow.ui
+    src/ui/danmuku.ui
 
 LIBS += \
-    -L$$PWD/3rdparty/bin/brotli -llibbrotlidec \
-    -L$$PWD/3rdparty/bin/zlib -llibzlib
+    -L$$PWD/3rdparty/lib -lbrotlidec
 
 RESOURCES += \
     src/stylesheet/stylesheet.qrc

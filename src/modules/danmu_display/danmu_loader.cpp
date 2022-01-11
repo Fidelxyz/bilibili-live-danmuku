@@ -88,6 +88,6 @@ void DanmuLoader::loadItem(QListWidgetItem *item) {
 }
 
 void DanmuLoader::setScrollingSpeed(const float &speed, const int &fps) {
-    scrollingSpeed = speed / fps;
+    scrollingSpeed = speed / 10 / fps;
     sleepIntervalMs = 1000 / fps;
 }

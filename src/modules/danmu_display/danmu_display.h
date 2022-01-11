@@ -3,9 +3,9 @@
 
 #include <QHBoxLayout>
 #include <QListWidget>
+#include <QPointer>
 #include <QPushButton>
 #include <QTimer>
-#include <QPointer>
 
 #include "danmu_config.h"
 #include "danmu_loader.h"
@@ -27,8 +27,11 @@ class DanmuDisplay : public Module {
     void setLockPosition(const bool &on);
 
    public slots:
+    void enable();
+    void disable();
     void startDisplay();
     void startPanel();
+    void stop();
 
     void applyConfig();
     void toggleLockPosition();
@@ -50,8 +53,6 @@ class DanmuDisplay : public Module {
     QPushButton *btn_startDisplay;
     QPushButton *btn_startPanel;
     QPushButton *btn_toggleLockPosition;
-
-    QListWidget *danmuList;
 
     QTimer *updateFollowersCountTimer;
     QString contentFormat;
