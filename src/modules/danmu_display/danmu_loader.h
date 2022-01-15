@@ -1,6 +1,7 @@
 #ifndef DANMU_LOADER_H
 #define DANMU_LOADER_H
 
+#include <QEvent>
 #include <QListWidget>
 #include <QMutex>
 #include <QScrollBar>
@@ -18,6 +19,7 @@ class DanmuLoader : public QThread {
 
    protected:
     void run() override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
    public slots:
     void reload();

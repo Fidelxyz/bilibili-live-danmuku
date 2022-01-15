@@ -30,20 +30,20 @@ class Protocal : public QObject {
    private:
     void recvHeartbeatReply(const QByteArray &msg);
     void recvMsg(const QJsonObject &msg);
+    void sendHeartbeat();
+    void recvData(const QByteArray &data);
 
    signals:
-    void updateViewersCount(const int &viewersCount);
+    void viewersCountUpdated(const int &viewersCount);
     void recvDanmu(const int &uid, const QString &username, const QString &text,
                    const bool &isAdmin, const bool &isVIP,
                    const int &userGuardLevel);
+    void recvGift(const int &uid, const QString &username,
+                  const QString &giftName, const int &giftCount);
 
    public slots:
     void startConnection(const int &roomID, const QJsonObject &liveRoomInfo);
     void stopConnection();
-
-   private slots:
-    void sendHeartbeat();
-    void recvData(const QByteArray &data);
 
    private:
     QWebSocket *ws;

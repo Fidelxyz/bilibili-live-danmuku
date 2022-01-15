@@ -19,8 +19,9 @@ DanmuWindow::DanmuWindow(QWidget *parent)
     ui->frame_window->setLayout(ui->layout_content);
     ui->frame_window->move(0, 0);
 
-    ui->list_danmu->setAttribute(
-        Qt::WA_TransparentForMouseEvents);  // ignore mouse event
+    // ignore mouse event
+    ui->list_danmu->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->list_gift->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     show();
 }

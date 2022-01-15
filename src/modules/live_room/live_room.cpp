@@ -70,8 +70,14 @@ void LiveRoom::stop() {
                               (Qt::ConnectionType)Qt::BlockingQueuedConnection);
     protocalThread.quit();
     protocalThread.wait();
-    protocal->deleteLater();
+    // protocal->deleteLater();
+    delete protocal;
+    protocal = nullptr;
     qDebug("Exit stop");
+}
+
+QObject *LiveRoom::getProtocal() {
+    return protocal;
 }
 
 QJsonObject LiveRoom::requestDanmuInfo() {

@@ -17,25 +17,27 @@ DanmuPanel::DanmuPanel(DanmuConfig *config, QWidget *parent)
     setFixedSize(size());
     setLayout(ui->layout_panel);
 
-    connect(ui->btn_font, SIGNAL(clicked()), this, SLOT(setFont()));
-    connect(ui->spin_fontSize, SIGNAL(valueChanged(int)), this,
-            SLOT(setFontSize(const int &)));
-    connect(ui->btn_mainColor, SIGNAL(clicked()), this, SLOT(setMainColor()));
-    connect(ui->btn_usernameColor, SIGNAL(clicked()), this,
-            SLOT(setUsernameColor()));
-    connect(ui->btn_contentColor, SIGNAL(clicked()), this,
-            SLOT(setContentColor()));
-    connect(ui->btn_backgroundColor, SIGNAL(clicked()), this,
-            SLOT(setBackgroundColor()));
+    connect(ui->btn_font, &QPushButton::clicked, this, &setFont);
+    connect(ui->spin_fontSize, &QSpinBox::valueChanged, this, &setFontSize);
+    connect(ui->btn_mainColor, &QPushButton::clicked, this, &setMainColor);
+    connect(ui->btn_usernameColor, &QPushButton::clicked, this,
+            &setUsernameColor);
+    connect(ui->btn_contentColor, &QPushButton::clicked, this,
+            &setContentColor);
+    connect(ui->btn_backgroundColor, &QPushButton::clicked, this,
+            &setBackgroundColor);
 
     ui->combo_fps->addItems({"15", "30", "60"});
 
-    connect(ui->btn_apply, SIGNAL(clicked()), this, SLOT(apply()));
-    connect(ui->btn_setToDefault, SIGNAL(clicked()), this,
-            SLOT(setToDefault()));
-    connect(ui->btn_cancelChange, SIGNAL(clicked()), this, SLOT(loadConfig()));
+    connect(ui->btn_apply, &QPushButton::clicked, this, &apply);
+    connect(ui->btn_setToDefault, &QPushButton::clicked, this, &setToDefault);
+    connect(ui->btn_cancelChange, &QPushButton::clicked, this, &loadConfig);
 
-    connect(ui->btn_testDanmu, SIGNAL(clicked()), this, SLOT(testDanmu()));
+    connect(ui->btn_testDanmu, &QPushButton::clicked, this, &emitTestDanmu);
+    connect(ui->btn_testGift, &QPushButton::clicked, this, &emitTestGift);
+
+    connect(ui->btn_toggleShowGift, &QPushButton::clicked, this,
+            &toggleShowGift);
 
     loadConfig();
 
@@ -65,6 +67,9 @@ void DanmuPanel::loadConfig() {
     ui->combo_fps->setCurrentText(QString::number(config->fps));
     ui->slider_fps->setValue(
         ui->combo_fps->findText(ui->combo_fps->currentText()));
+    showGift = config->showGift;
+    setShowGift(showGift);
+    ui->spin_giftHeightRatio->setValue(config->giftHeightRatio);
 
 #define SET_BTN_STYLE_SHEET(NAME)  \
     ui->btn_##NAME->setStyleSheet( \
@@ -91,6 +96,8 @@ void DanmuPanel::apply() {
     config->backgroundColor = backgroundColor;
     config->scrollingSpeed = ui->spin_scrollingSpeed->value();
     config->fps = ui->combo_fps->currentText().toInt();
+    config->showGift = showGift;
+    config->giftHeightRatio = ui->spin_giftHeightRatio->value();
     config->apply();
     config->save();
 }
@@ -112,6 +119,9 @@ void DanmuPanel::setToDefault() {
     ui->combo_fps->setCurrentText(QString::number(DEFAULT_CONFIG::fps));
     ui->slider_fps->setValue(
         ui->combo_fps->findText(ui->combo_fps->currentText()));
+    showGift = DEFAULT_CONFIG::showGift;
+    setShowGift(showGift);
+    ui->spin_giftHeightRatio->setValue(DEFAULT_CONFIG::giftHeightRatio);
 
 #define SET_BTN_STYLE_SHEET(NAME)  \
     ui->btn_##NAME->setStyleSheet( \
@@ -125,10 +135,14 @@ void DanmuPanel::setToDefault() {
 #undef SET_BTN_STYLE_SHEET
 }
 
-void DanmuPanel::testDanmu() {
-    emit testDanmu(14003442, QString("XuanYun_Fidel"),
-                   QString("Danmu test Danmu test Danmu test Danmu test."),
-                   true, false, 233);
+void DanmuPanel::emitTestDanmu() {
+    emit testDanmu(14003442, "XuanYun_Fidel",
+                   "Danmu test Danmu test Danmu test Danmu test.", true, true,
+                   233);
+}
+
+void DanmuPanel::emitTestGift() {
+    emit testGift(14003442, "XuanYun_Fidel", "原石", 160);
 }
 
 void DanmuPanel::setFont() {
@@ -158,5 +172,16 @@ void DanmuPanel::setUsernameColor() { SET_COLOR(usernameColor); }
 void DanmuPanel::setContentColor() { SET_COLOR(contentColor); }
 
 void DanmuPanel::setBackgroundColor() { SET_COLOR(backgroundColor); }
+
+void DanmuPanel::toggleShowGift() {
+    showGift = !showGift;
+    setShowGift(showGift);
+}
+
+void DanmuPanel::setShowGift(const bool &on) {
+    ui->btn_toggleShowGift->setText(on ? "[ON]" : "[OFF]");
+    ui->slider_giftHeightRatio->setEnabled(on);
+    ui->spin_giftHeightRatio->setEnabled(on);
+}
 
 #undef SET_COLOR

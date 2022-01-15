@@ -70,17 +70,17 @@ void Protocal::startConnection(const int& roomID,
     ws->open(request);
 
     QEventLoop eventLoop;
-    QObject::connect(ws, SIGNAL(connected()), &eventLoop, SLOT(quit()));
+    connect(ws, &QWebSocket::connected, &eventLoop, &QEventLoop::quit);
     eventLoop.exec();
     qDebug("WS connected");
     ws->sendBinaryMessage(data);
     qDebug() << "send: " << data;
 
-    connect(ws, SIGNAL(binaryMessageReceived(QByteArray)), this,
-            SLOT(recvData(QByteArray)), Qt::QueuedConnection);
+    connect(ws, &QWebSocket::binaryMessageReceived, this, &recvData,
+            Qt::QueuedConnection);
 
     heartBeatTimer = new QTimer(this);  // deleted in stopConnection()
-    connect(heartBeatTimer, SIGNAL(timeout()), this, SLOT(sendHeartbeat()));
+    connect(heartBeatTimer, &QTimer::timeout, this, &sendHeartbeat);
     heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
 
@@ -126,21 +126,26 @@ void Protocal::recvData(const QByteArray& data) {
     QByteArray pack;
     switch (ver) {
         case DEFLATE:
-            //		if (!decompressDeflate(data.mid(headLen), pack)) {
-            //			qWarning("Decompression (deflate) failed.");
-            //			return;
-            //		}
+            Q_ASSERT(type == 5);
+            // if (!decompressDeflate(data.mid(headLen), pack)) {
+            //     qWarning("Decompression (deflate) failed.");
+            //     return;
+            // }
             break;
         case BROTLI:
+            Q_ASSERT(type == 5);
             if (!decompressBrotli(data.mid(headLen), pack)) {
                 qWarning("Decompression (brotli) failed.");
                 return;
             }
             break;
+        default:
+            pack = data;
+            break;
     }
 
     while (pack.length() != 0) {
-        qDebug() << "pack: " << pack;
+        qDebug() << "pack:" << pack;
 
         head = pack.left(WS_PACKAGE_HEADER_TOTAL_LENGTH);
 
@@ -159,15 +164,18 @@ void Protocal::recvData(const QByteArray& data) {
         QByteArray msg = pack.left(packLen).mid(WS_PACKAGE_HEADER_TOTAL_LENGTH);
         switch (type) {
             case MESSAGE:
-                qDebug() << "Message received: " << msg;
+                qDebug() << "Message received:" << msg;
                 recvMsg(QJsonDocument::fromJson(msg).object());
                 break;
             case HEARTBEAT_REPLY:
-                qDebug() << "Heartbeat received: " << msg;
+                qDebug() << "Heartbeat reply received:" << msg;
                 recvHeartbeatReply(msg);
                 break;
+            case AUTH_REPLY:
+                qDebug() << "Auth reply received:" << msg;
+                break;
             default:
-                qWarning() << "Unknown message, type = " << type << ".";
+                qWarning() << "Unknown message, type =" << type << ".";
                 return;
         }
 
@@ -176,6 +184,7 @@ void Protocal::recvData(const QByteArray& data) {
 }
 
 void Protocal::sendHeartbeat() {
+    qDebug("sendHeartbeat");
     QByteArray data("[object Object]");
     data.prepend(
         genHead(data.length(), WS_OP_HEARTBEAT, WS_HEADER_DEFAULT_SEQUENCE));
@@ -184,7 +193,7 @@ void Protocal::sendHeartbeat() {
 
 void Protocal::recvHeartbeatReply(const QByteArray& msg) {
     qDebug() << "Update viewers count (protocal):" << bytesToInt32(msg.left(4));
-    emit updateViewersCount(bytesToInt32(msg.left(4)));
+    emit viewersCountUpdated(bytesToInt32(msg.left(4)));
 }
 
 void Protocal::recvMsg(const QJsonObject& msg) {
@@ -203,12 +212,21 @@ void Protocal::recvMsg(const QJsonObject& msg) {
             bool isVIP = info[2][3].toString() == "1";
             int userGuardLevel = info[7].toInt();
             emit recvDanmu(uid, username, text, isAdmin, isVIP, userGuardLevel);
-            qDebug() << "Emit recvDanmu: " << uid << username << text << isAdmin
+            qDebug() << "Emit recvDanmu:" << uid << username << text << isAdmin
                      << isVIP << userGuardLevel;
             break;
         }
-        case SEND_GIFT:
+        case SEND_GIFT: {
+            QJsonValue data = msg["data"];
+            int uid = data["uid"].toInt();
+            QString username = data["uname"].toString();
+            QString giftName = data["giftName"].toString();
+            int giftCount = data["num"].toInt();
+            emit recvGift(uid, username, giftName, giftCount);
+            qDebug() << "Emit recvGift:" << uid << username << giftName
+                     << giftCount;
             break;
+        }
         case COMBO_SEND:
             break;
         case GIFT_TOP:

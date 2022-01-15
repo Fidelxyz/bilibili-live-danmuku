@@ -18,6 +18,8 @@ const QColor contentColor = "white";
 const QColor backgroundColor = "black";
 const int scrollingSpeed = 20;
 const int fps = 30;
+const bool showGift = true;
+const int giftHeightRatio = 20;
 }  // namespace DEFAULT_CONFIG
 
 class DanmuConfig : public QObject {
@@ -34,18 +36,34 @@ class DanmuConfig : public QObject {
     void changed();
 
    public:
+    // Window
+
     int windowWidth;
     int windowHeight;
     int opacity;
     int borderRadius;
     bool lockPosition;
+
+    // Font
+
     QFont font;
+
+    // Color
+
     QColor mainColor;
     QColor usernameColor;
     QColor contentColor;
     QColor backgroundColor;
+
+    // Danmu
+
     int scrollingSpeed;
     int fps;
+
+    // Gift
+
+    bool showGift;
+    int giftHeightRatio;
 
    private:
     QSettings settings;

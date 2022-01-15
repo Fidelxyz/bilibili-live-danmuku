@@ -18,22 +18,27 @@ class DanmuPanel : public QWidget {
     DanmuPanel(DanmuConfig *config, QWidget *parent = nullptr);
     ~DanmuPanel();
 
-   signals:
-    void testDanmu(const int &uid, const QString &username, const QString &text,
-                   const bool &isAdmin, const bool &isVIP,
-                   const int &userGuardLevel);
-
-   private slots:
+   private:
+    void emitTestDanmu();
+    void emitTestGift();
     void loadConfig();
     void apply();
     void setToDefault();
-    void testDanmu();
     void setFont();
     void setFontSize(const int &fontSize);
     void setMainColor();
     void setUsernameColor();
     void setContentColor();
     void setBackgroundColor();
+    void toggleShowGift();
+    void setShowGift(const bool &on);
+
+   signals:
+    void testDanmu(const int &uid, const QString &username, const QString &text,
+                   const bool &isAdmin, const bool &isVIP,
+                   const int &userGuardLevel);
+    void testGift(const int &uid, const QString &username,
+                  const QString &giftName, const int &giftCount);
 
    private:
     Ui::DanmuPanel *ui;
@@ -45,6 +50,8 @@ class DanmuPanel : public QWidget {
     QColor usernameColor;
     QColor contentColor;
     QColor backgroundColor;
+
+    bool showGift;
 };
 
 #endif

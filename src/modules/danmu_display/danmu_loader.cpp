@@ -2,6 +2,7 @@
 
 DanmuLoader::DanmuLoader(QListWidget *list) {
     this->list = list;
+    list->installEventFilter(this);
     scrollBar = list->verticalScrollBar();
     listViewHeight = list->height();
     loadingItemTotalHeight = 0;
@@ -22,6 +23,13 @@ DanmuLoader::~DanmuLoader() {
 void DanmuLoader::reload() {
     QMutexLocker loopLocker(&loopMutex);
 
+    list->clear();
+
+    QListWidgetItem *blankItem = new QListWidgetItem(list);  // deleted by QT
+    blankItem->setSizeHint(list->size());
+    qDebug() << "size:" << list->size();
+    list->addItem(blankItem);
+
     // clear queue
     std::queue<QListWidgetItem *> empty;
     std::swap(loadingItemQueue, empty);
@@ -30,7 +38,18 @@ void DanmuLoader::reload() {
     loadingItemTotalHeight = 0;
     loadedItemTotalHeight = listViewHeight;
     scrollBarPos = 0;
+
     updateCondition.wakeAll();
+}
+
+bool DanmuLoader::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == list) {
+        if (event->type() == QEvent::Resize) {
+            qDebug() << "eventFilter: Resize";
+            QMetaObject::invokeMethod(this, "reload");
+        }
+    }
+    return QThread::eventFilter(obj, event);
 }
 
 void DanmuLoader::run() {
@@ -42,6 +61,8 @@ void DanmuLoader::run() {
                 break;
             }
             scrollBarPos += loadingItemTotalHeight * scrollingSpeed;
+            // qDebug() << "Scrolling speed:"
+            //          << loadingItemTotalHeight * scrollingSpeed;
 
             // OUT
             while (true) {

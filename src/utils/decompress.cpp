@@ -39,7 +39,7 @@ bool decompressBrotli(const QByteArray& data, QByteArray& result) {
     uint8_t* nextOut = (uint8_t*)result.data();
     size_t totalOut = 0;
 
-    qDebug() << "Start to decompress data: " << data;
+    // qDebug() << "Start to decompress data: " << data;
 
     BrotliDecoderResult status;
     do {
@@ -48,7 +48,7 @@ bool decompressBrotli(const QByteArray& data, QByteArray& result) {
         result.resize(bufSize);
         nextOut = ((uint8_t*)result.data()) +
                   totalOut;  // after resize, the data address is changed
-        qDebug() << "Buffer size:" << availableOut;
+        // qDebug() << "Buffer size:" << availableOut;
         status = BrotliDecoderDecompressStream(
             s, &availableIn, &nextIn, &availableOut, &nextOut, &totalOut);
     } while (status == BROTLI_DECODER_RESULT_NEEDS_MORE_OUTPUT);
@@ -57,8 +57,8 @@ bool decompressBrotli(const QByteArray& data, QByteArray& result) {
     result.truncate(totalOut);
 
     if (status == BROTLI_DECODER_RESULT_SUCCESS) {
-        qDebug() << "Decompressed length:" << totalOut;
-        qDebug() << "Decompressed data:" << result;
+        // qDebug() << "Decompressed length:" << totalOut;
+        // qDebug() << "Decompressed data:" << result;
         return true;
     }
     // Error

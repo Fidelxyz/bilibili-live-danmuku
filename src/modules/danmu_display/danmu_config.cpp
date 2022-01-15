@@ -48,6 +48,11 @@ void DanmuConfig::load() {
         settings.value("Danmu/ScrollingSpeed", DEFAULT_CONFIG::scrollingSpeed)
             .toInt();
     fps = settings.value("Danmu/FPS", DEFAULT_CONFIG::fps).toInt();
+    showGift =
+        settings.value("Gift/ShowGift", DEFAULT_CONFIG::showGift).toBool();
+    giftHeightRatio =
+        settings.value("Gift/GiftHeightRatio", DEFAULT_CONFIG::giftHeightRatio)
+            .toInt();
 }
 
 void DanmuConfig::save() {
@@ -63,6 +68,8 @@ void DanmuConfig::save() {
     settings.setValue("Color/BackgroundColor", backgroundColor.name());
     settings.setValue("Danmu/ScrollingSpeed", scrollingSpeed);
     settings.setValue("Danmu/FPS", fps);
+    settings.setValue("Gift/ShowGift", showGift);
+    settings.setValue("Gift/GiftHeightRatio", giftHeightRatio);
 
     settings.sync();
 }

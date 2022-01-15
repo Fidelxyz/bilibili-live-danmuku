@@ -57,8 +57,8 @@ void DanmuDisplay::startDisplay() {
 
     Q_ASSERT(window == nullptr);
     window = new DanmuWindow();  // deleted in stop()
-    Q_ASSERT(loader == nullptr);
-    loader = new DanmuLoader(window->ui->list_danmu);  // deleted in stop()
+    Q_ASSERT(danmuLoader == nullptr);
+    danmuLoader = new DanmuLoader(window->ui->list_danmu);  // deleted in stop()
     Q_ASSERT(config == nullptr);
     config = new DanmuConfig();  // deleted in stop()
 
@@ -71,7 +71,7 @@ void DanmuDisplay::startDisplay() {
 
     applyConfig();
 
-    loader->start();
+    danmuLoader->start();
 
     // Followers count
     Module *moduleLiveRoom = getModule("live_room");
@@ -83,6 +83,24 @@ void DanmuDisplay::startDisplay() {
     connect(updateFollowersCountTimer, SIGNAL(timeout()), moduleLiveRoom,
             SLOT(updateFollowersCount()));
     updateFollowersCountTimer->start(UPDATE_FOLLOWERS_COUNT_INTERVAL_MS);
+
+    QObject *protocal;
+    QMetaObject::invokeMethod(moduleLiveRoom, "getProtocal",
+                              Q_RETURN_ARG(QObject *, protocal));
+    connect(protocal, SIGNAL(viewersCountUpdated(const int &)), this,
+            SLOT(updateViewersCount(const int &)));
+    connect(protocal,
+            SIGNAL(recvDanmu(const int &, const QString &, const QString &,
+                             const bool &, const bool &, const int &)),
+            this,
+            SLOT(recvDanmu(const int &, const QString &, const QString &,
+                           const bool &, const bool &, const int &)));
+    connect(protocal,
+            SIGNAL(recvGift(const int &, const QString &, const QString &,
+                            const int &)),
+            this,
+            SLOT(recvGift(const int &, const QString &, const QString &,
+                          const int &)));
 }
 
 void DanmuDisplay::startPanel() {
@@ -93,12 +111,8 @@ void DanmuDisplay::startPanel() {
     Q_ASSERT(panel == nullptr);
     panel = new DanmuPanel(config);  // deleted in stop()
 
-    connect(panel,
-            SIGNAL(testDanmu(const int &, const QString &, const QString &,
-                             const bool &, const bool &, const int &)),
-            this,
-            SLOT(recvDanmu(const int &, const QString &, const QString &,
-                           const bool &, const bool &, const int &)));
+    connect(panel, &DanmuPanel::testDanmu, this, &recvDanmu);
+    connect(panel, &DanmuPanel::testGift, this, &recvGift);
 }
 
 void DanmuDisplay::stop() {
@@ -116,8 +130,11 @@ void DanmuDisplay::stop() {
         updateFollowersCountTimer = nullptr;
     }
 
-    if (!loader.isNull()) {
-        loader->deleteLater();
+    if (!danmuLoader.isNull()) {
+        danmuLoader->deleteLater();
+    }
+    if (!giftLoader.isNull()) {
+        giftLoader->deleteLater();
     }
     if (!window.isNull()) {
         window->deleteLater();
@@ -138,7 +155,7 @@ void DanmuDisplay::stop() {
 void DanmuDisplay::recvDanmu(const int &uid, const QString &username,
                              const QString &text, const bool &isAdmin,
                              const bool &isVIP, const int &userGuardLevel) {
-    qDebug() << "Display: " << uid << username << text << isAdmin << isVIP
+    qDebug() << "Display danmu: " << uid << username << text << isAdmin << isVIP
              << userGuardLevel;
 
     QString prefix = "";
@@ -149,13 +166,11 @@ void DanmuDisplay::recvDanmu(const int &uid, const QString &username,
     }
 
     if (isAdmin) {
-        // suffix.append("<span
-        // style=\"padding-left:10px;padding-right:10px;border-radius:10px;background-color:yellow;\">房</span>");
         suffix.append("<span style=\"color:yellow\">[房]</span>");
     }
 
     QLabel *label =
-        new QLabel(contentFormat.arg(prefix, username, suffix, text),
+        new QLabel(danmuContentFormat.arg(prefix, username, suffix, text),
                    window->ui->list_danmu);  // deleted by QT
 
     label->setFont(config->font);
@@ -168,7 +183,31 @@ void DanmuDisplay::recvDanmu(const int &uid, const QString &username,
     window->ui->list_danmu->setItemWidget(item, label);
     item->setSizeHint(label->sizeHint());
 
-    loader->loadItem(item);
+    danmuLoader->loadItem(item);
+}
+
+void DanmuDisplay::recvGift(const int &uid, const QString &username,
+                            const QString &giftName, const int &giftCount) {
+    if (giftLoader.isNull()) {
+        return;
+    }
+
+    qDebug() << "Display gift:" << uid << username << giftName << giftCount;
+
+    QLabel *label = new QLabel(
+        giftContentFormat.arg(username, giftName, QString::number(giftCount)));
+
+    label->setFont(config->font);
+    label->setFixedWidth(window->ui->list_gift->width());
+    label->setWordWrap(true);
+
+    QListWidgetItem *item =
+        new QListWidgetItem(window->ui->list_gift);  // deleted by QT
+    window->ui->list_gift->addItem(item);
+    window->ui->list_gift->setItemWidget(item, label);
+    item->setSizeHint(label->sizeHint());
+
+    giftLoader->loadItem(item);
 }
 
 void DanmuDisplay::updateViewersCount(const int &viewersCount) {
@@ -182,17 +221,23 @@ void DanmuDisplay::updateFollowersCount(const int &followersCount) {
 }
 
 void DanmuDisplay::applyConfig() {
-    contentFormat = QString(
-                        "%1<span style=\"color:%2\">%3</span>%4: <span "
-                        "style=\"color:%5\">%6</span>")
-                        .arg("%1", config->usernameColor.name(), "%2", "%3",
-                             config->contentColor.name(), "%4");
+    danmuContentFormat = QString(
+                             "%1<span style=\"color:%2\">%3</span>%4: <span "
+                             "style=\"color:%5\">%6</span>")
+                             .arg("%1", config->usernameColor.name(), "%2",
+                                  "%3", config->contentColor.name(), "%4");
+    giftContentFormat = QString(
+                            "<span style=\"color:%1\">%2</span> 送出了礼物 "
+                            "<span style=\"color:%3\">%4</span> x%5")
+                            .arg(config->usernameColor.name(), "%1",
+                                 config->contentColor.name(), "%2", "%3");
     window->setStyleSheet(
         QString("QLabel{color:%1}").arg(config->mainColor.name()));
     window->ui->frame_window->setStyleSheet(
         QString("background-color:%1;border-radius:%2px")
             .arg(config->backgroundColor.name(),
                  QString::number(config->borderRadius)));
+
     window->resize(config->windowWidth, config->windowHeight);
     window->ui->frame_window->resize(config->windowWidth, config->windowHeight);
     window->setWindowOpacity((qreal)config->opacity / 100);
@@ -202,15 +247,34 @@ void DanmuDisplay::applyConfig() {
     window->ui->label_followersCount->setFont(config->font);
     window->ui->label_viewersCount->setFont(config->font);
 
-    loader->setScrollingSpeed(config->scrollingSpeed, config->fps);
+    danmuLoader->setScrollingSpeed(config->scrollingSpeed, config->fps);
 
-    // load / reload window->ui->list_danmu
-    window->ui->list_danmu->clear();
-    QListWidgetItem *blankItem =
-        new QListWidgetItem(window->ui->list_danmu);  // deleted by QT
-    blankItem->setSizeHint(window->ui->list_danmu->size());
-    window->ui->list_danmu->addItem(blankItem);
-    QMetaObject::invokeMethod(loader, "reload");
+    QMetaObject::invokeMethod(danmuLoader, "reload");
+
+    // giftLoader
+    if (config->showGift) {  // showGift == true
+        if (giftLoader.isNull()) {
+            giftLoader =
+                new DanmuLoader(window->ui->list_gift);  // deleted in stop()
+            giftLoader->start();
+            window->ui->list_gift->show();
+        }
+
+        // apply config on giftLoader
+        giftLoader->setScrollingSpeed(config->scrollingSpeed, config->fps);
+        window->ui->layout_content->setStretchFactor(window->ui->list_gift,
+                                                     config->giftHeightRatio);
+        window->ui->layout_content->setStretchFactor(
+            window->ui->list_danmu, 100 - config->giftHeightRatio);
+
+        QMetaObject::invokeMethod(giftLoader, "reload");
+
+    } else {  // showGift == false
+        if (!giftLoader.isNull()) {
+            giftLoader->deleteLater();
+            window->ui->list_gift->hide();
+        }
+    }
 }
 
 void DanmuDisplay::toggleLockPosition() {

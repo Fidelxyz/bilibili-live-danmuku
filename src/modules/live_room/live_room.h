@@ -30,12 +30,11 @@ class LiveRoom : public Module {
 
    public slots:
     void start();
+    QObject* getProtocal();
     void updateFollowersCount();
 
-   public:
-    Protocal* protocal;
-
    private:
+    Protocal* protocal;
     QLineEdit* input_roomID;
     QPushButton* btn_start;
 
