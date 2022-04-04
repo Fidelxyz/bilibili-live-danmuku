@@ -51,7 +51,7 @@ jobs:
         shell: cmd
         run: |
           qmake
-          mingw32-make
+          ${{ env.Qt6_DIR }}/../../Tools/${{ matrix.qt_tools_mingw_install }}/bin/mingw32-make release
       - name: package
         id: package
         env:
