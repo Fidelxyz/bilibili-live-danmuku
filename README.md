@@ -1,6 +1,6 @@
 # bilibili-live-danmuku
 
-一个基于 [QT 6](https://doc.qt.io/qt-6/index.html) 的哔哩哔哩直播弹幕库。
+一个基于 [Qt 6](https://doc.qt.io/qt-6/index.html) 的 Bilibili 直播弹幕库。
 
 目前处于早期开发阶段，~~勉强能用~~。
 

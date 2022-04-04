@@ -90,17 +90,17 @@ void DanmuDisplay::startDisplay() {
     connect(protocal, SIGNAL(viewersCountUpdated(const int &)), this,
             SLOT(updateViewersCount(const int &)));
     connect(protocal,
-            SIGNAL(recvDanmu(const int &, const QString &, const QString &,
-                             const bool &, const bool &, const int &)),
+            SIGNAL(recvDanmu(const int, const QString &, const QString &,
+                             const bool, const bool, const int)),
             this,
-            SLOT(recvDanmu(const int &, const QString &, const QString &,
-                           const bool &, const bool &, const int &)));
-    connect(protocal,
-            SIGNAL(recvGift(const int &, const QString &, const QString &,
-                            const int &)),
-            this,
-            SLOT(recvGift(const int &, const QString &, const QString &,
-                          const int &)));
+            SLOT(recvDanmu(const int, const QString &, const QString &,
+                           const bool, const bool, const int)));
+    connect(
+        protocal,
+        SIGNAL(
+            recvGift(const int, const QString &, const QString &, const int)),
+        this,
+        SLOT(recvGift(const int, const QString &, const QString &, const int)));
 }
 
 void DanmuDisplay::startPanel() {
@@ -152,9 +152,9 @@ void DanmuDisplay::stop() {
     qDebug("Exit stop");
 }
 
-void DanmuDisplay::recvDanmu(const int &uid, const QString &username,
-                             const QString &text, const bool &isAdmin,
-                             const bool &isVIP, const int &userGuardLevel) {
+void DanmuDisplay::recvDanmu(const int uid, const QString &username,
+                             const QString &text, const bool isAdmin,
+                             const bool isVIP, const int userGuardLevel) {
     qDebug() << "Display danmu: " << uid << username << text << isAdmin << isVIP
              << userGuardLevel;
 
@@ -186,8 +186,8 @@ void DanmuDisplay::recvDanmu(const int &uid, const QString &username,
     danmuLoader->loadItem(item);
 }
 
-void DanmuDisplay::recvGift(const int &uid, const QString &username,
-                            const QString &giftName, const int &giftCount) {
+void DanmuDisplay::recvGift(const int uid, const QString &username,
+                            const QString &giftName, const int giftCount) {
     if (giftLoader.isNull()) {
         return;
     }

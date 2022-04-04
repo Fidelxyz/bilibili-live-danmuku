@@ -36,11 +36,11 @@ class DanmuDisplay : public Module {
     void applyConfig();
     void toggleLockPosition();
 
-    void recvDanmu(const int &uid, const QString &username, const QString &text,
-                   const bool &isAdmin, const bool &isVIP,
-                   const int &userGuardLevel);
-    void recvGift(const int &uid, const QString &username,
-                  const QString &giftName, const int &giftCount);
+    void recvDanmu(const int uid, const QString &username, const QString &text,
+                   const bool isAdmin, const bool isVIP,
+                   const int userGuardLevel);
+    void recvGift(const int uid, const QString &username,
+                  const QString &giftName, const int giftCount);
 
     void updateViewersCount(const int &viewersCount);
     void updateFollowersCount(const int &followersCount);

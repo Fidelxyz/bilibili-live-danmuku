@@ -34,11 +34,11 @@ class DanmuPanel : public QWidget {
     void setShowGift(const bool &on);
 
    signals:
-    void testDanmu(const int &uid, const QString &username, const QString &text,
-                   const bool &isAdmin, const bool &isVIP,
-                   const int &userGuardLevel);
-    void testGift(const int &uid, const QString &username,
-                  const QString &giftName, const int &giftCount);
+    void testDanmu(const int uid, const QString &username, const QString &text,
+                   const bool isAdmin, const bool isVIP,
+                   const int userGuardLevel);
+    void testGift(const int uid, const QString &username,
+                  const QString &giftName, const int giftCount);
 
    private:
     Ui::DanmuPanel *ui;

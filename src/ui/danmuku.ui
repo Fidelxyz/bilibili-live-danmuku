@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
-    <height>188</height>
+    <width>326</width>
+    <height>183</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Bilibili弹幕库 Developed by Fidel</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
@@ -23,7 +23,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>329</width>
+     <width>326</width>
      <height>22</height>
     </rect>
    </property>
