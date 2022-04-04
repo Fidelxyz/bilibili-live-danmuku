@@ -1,15 +1,15 @@
-name: Windows
+name: Windows MSVC
 on: 
   push:
     paths:
       - '*.pro'
       - 'src/**'
-      - '.github/workflows/windows.yml'
+      - '.github/workflows/windows-msvc.yml'
   pull_request:
     paths:
       - '*.pro'
       - 'src/**'
-      - '.github/workflows/windows.yml'
+      - '.github/workflows/windows-msvc.yml'
 jobs:
   build:
     name: Build
@@ -30,7 +30,8 @@ jobs:
           version: ${{ matrix.qt_ver }}
           arch: ${{ matrix.qt_arch }}
           cached: 'false'
-          aqtversion: '==2.0.5'          
+          aqtversion: '==2.0.5'
+          modules: qtwebsockets
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -46,16 +47,15 @@ jobs:
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
           echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
       - name: package
-        id: package      
+        id: package
         env:
           archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
-          msvcArch: ${{ matrix.msvc_arch }}          
+          msvcArch: ${{ matrix.msvc_arch }}
         shell: pwsh
         run: |
           & scripts\windows-publish.ps1 ${env:archiveName} ${env:targetName}
-          # 记录packageName给后续step
            $name = ${env:archiveName}
-           echo "::set-output name=packageName::$name"           
+           echo "::set-output name=packageName::$name"
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
@@ -68,4 +68,4 @@ jobs:
           file: ${{ steps.package.outputs.packageName }}.zip
           asset_name: ${{ steps.package.outputs.packageName }}.zip
           tag: ${{ github.ref }}
-          overwrite: true 
+          overwrite: true

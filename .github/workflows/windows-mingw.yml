@@ -32,6 +32,7 @@ jobs:
           arch: ${{ matrix.qt_arch }}
           tools: ${{ matrix.qt_tools }}
           cached: 'false'
+          modules: qtwebsockets
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -72,4 +73,4 @@ jobs:
           file: ${{ steps.package.outputs.packageName }}.zip
           asset_name: ${{ steps.package.outputs.packageName }}.zip
           tag: ${{ github.ref }}
-          overwrite: true 
+          overwrite: true
