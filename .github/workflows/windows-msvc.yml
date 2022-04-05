@@ -4,11 +4,15 @@ on:
     paths:
       - '*.pro'
       - 'src/**'
+      - '3rdparty/**'
+      - 'res/**'
       - '.github/workflows/windows-msvc.yml'
   pull_request:
     paths:
       - '*.pro'
       - 'src/**'
+      - '3rdparty/**'
+      - 'res/**'
       - '.github/workflows/windows-msvc.yml'
 jobs:
   build:
@@ -22,7 +26,7 @@ jobs:
             msvc_arch: x64
             qt_arch_install: msvc2019_64
     env:
-      targetName: HelloActions-Qt.exe
+      targetName: bilibili-live-danmuku.exe
     steps:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2

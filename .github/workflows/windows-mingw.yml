@@ -4,11 +4,15 @@ on:
     paths:
       - '*.pro'
       - 'src/**'
+      - '3rdparty/**'
+      - 'res/**'
       - '.github/workflows/windows-mingw.yml'
   pull_request:
     paths:
       - '*.pro'
       - 'src/**'
+      - '3rdparty/**'
+      - 'res/**'
       - '.github/workflows/windows-mingw.yml'
 jobs:
   build:
@@ -59,7 +63,7 @@ jobs:
         shell: cmd
         run: |
           qmake
-          ${{ env.Qt6_DIR }}/../../Tools/${{ matrix.qt_tools_mingw_install }}/bin/mingw32-make release
+          "${{ env.IQTA_TOOLS }}/${{ matrix.qt_tools_mingw_install }}/bin/mingw32-make.exe" release
       - name: package
         id: package
         env:
