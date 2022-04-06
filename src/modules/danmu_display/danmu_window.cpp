@@ -1,8 +1,12 @@
 #include "danmu_window.h"
 
+#include <windows.h>
+
 #include <QMouseEvent>
 
 #include "ui_danmu_window.h"
+
+#pragma comment(lib, "user32.lib")
 
 DanmuWindow::DanmuWindow(QWidget *parent)
     : QWidget(parent), ui(new Ui::DanmuWindow) {  // deleted in ~DanmuWindow
@@ -10,8 +14,8 @@ DanmuWindow::DanmuWindow(QWidget *parent)
 
     ui->setupUi(this);
 
-    setWindowFlag(Qt::FramelessWindowHint);      // frameless window
-    setWindowFlag(Qt::WindowStaysOnTopHint);     // Always on top
+    setWindowFlag(Qt::FramelessWindowHint);   // frameless window
+    setWindowFlag(Qt::WindowStaysOnTopHint);  // Always on top
     // setWindowFlag(Qt::Tool);                     // hide docker icon
     setAttribute(Qt::WA_DeleteOnClose);          // delete when closing window
     setAttribute(Qt::WA_TranslucentBackground);  // transparent background

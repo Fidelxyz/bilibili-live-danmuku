@@ -4,6 +4,14 @@
 
 目前处于早期开发阶段，~~勉强能用~~。
 
+## Build Status
+
+------------------------------------
+| Windows MSVC | Windows MinGW |
+| -------------|---------------|
+| [![Windows MSVC](https://github.com/Fidelxyz/bilibili-live-danmuku/actions/workflows/windows-msvc.yml/badge.svg?branch=main)](https://github.com/Fidelxyz/bilibili-live-danmuku/actions/workflows/windows-msvc.yml) | [![Windows MinGW](https://github.com/Fidelxyz/bilibili-live-danmuku/actions/workflows/windows-mingw.yml/badge.svg?branch=main)](https://github.com/Fidelxyz/bilibili-live-danmuku/actions/workflows/windows-mingw.yml) | 
+------------------------------------
+
 ## 代码引用及参考
 
 该项目使用了以下开源项目的代码：
