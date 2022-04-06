@@ -24,7 +24,7 @@ jobs:
           - qt_arch: win64_mingw
             qt_ver: 6.2.2
             qt_tools: 'tools_mingw90,9.0.0-1-202203221220,qt.tools.win64_mingw900'
-            qt_tools_mingw_install: mingw900_64
+            qt_tools_mingw_install: mingw1120_64
     env:
       targetName: bilibili-live-danmuku.exe
     steps:
@@ -43,7 +43,7 @@ jobs:
           arch: ${{ matrix.qt_arch }}
           tools: ${{ matrix.qt_tools }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
-          modules: qtwebsockets
+          modules: 'qtwebsockets'
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -57,14 +57,6 @@ jobs:
         run: |
           Get-Command -Name 'qmake' | Format-List
           Get-Command -Name 'mingw32-make' | Format-List
-      # Debugger start
-      # - uses: shaowenchen/debugger-action@v2
-      #   name: debugger
-      #   timeout-minutes: 30
-      #   continue-on-error: true
-      #   with:
-      #     ngrok_token: ${{ secrets.NGROK_TOKEN }}
-      # Debugger end
       - name: mingw-build
         id: build
         shell: cmd
