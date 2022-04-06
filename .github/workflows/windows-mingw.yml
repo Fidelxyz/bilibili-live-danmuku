@@ -30,7 +30,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ../Qt
-          key: ${{ runner.os }}-QtCache
+          key: windows-mingw-QtCache
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
@@ -59,8 +59,9 @@ jobs:
         id: build
         shell: cmd
         run: |
-          qmake
-          mingw32-make
+          qmake -o ./build/Makefile
+          cd ./build
+          mingw32-make release
       - name: package
         id: package
         env:
@@ -73,4 +74,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ${{ steps.package.outputs.packageName }}
+          path: ./build/${{ steps.package.outputs.packageName }}

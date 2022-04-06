@@ -10,17 +10,17 @@ Write-Host "scriptDir" $scriptDir
 
 function Main() {
 
-    New-Item -ItemType Directory .\$archiveName # create directory
-    Copy-Item .\release\$targetName .\$archiveName\ # copy exe
+    New-Item -ItemType Directory .\build\$archiveName # create directory
+    Copy-Item .\build\release\$targetName .\build\$archiveName\ # copy exe
 
     # copy dependency
-    windeployqt --compiler-runtime .\$archiveName\$targetName
-    Copy-Item .\3rdparty\bin\*.dll .\$archiveName\
+    windeployqt --compiler-runtime .\build\$archiveName\$targetName
+    Copy-Item .\3rdparty\bin\*.dll .\build\$archiveName\
 
     $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
-    Remove-Item -Path .\$archiveName -Include $excludeList -Recurse -Force
+    Remove-Item -Path .\build\$archiveName -Include $excludeList -Recurse -Force
 
-    Compress-Archive -Path .\$archiveName .\$archiveName'.zip'
+    Compress-Archive -Path .\build\$archiveName .\build\$archiveName'.zip'
 }
 
 if ($null -eq $archiveName -or $null -eq $targetName) {
