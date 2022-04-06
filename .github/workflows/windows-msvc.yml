@@ -18,15 +18,12 @@ jobs:
   build:
     name: Build
     runs-on: windows-2019
-    strategy:
-      matrix:
-        include:
-          - qt_ver: 6.2.2
-            qt_arch: win64_msvc2019_64
-            msvc_arch: x64
-            qt_arch_install: msvc2019_64
     env:
       targetName: bilibili-live-danmuku.exe
+      qt_ver: 6.2.2
+      qt_arch: win64_msvc2019_64
+      msvc_arch: x64
+      qt_arch_install: msvc2019_64
     steps:
       - name: Cache Qt
         id: cache-qt
@@ -37,11 +34,11 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: '${{ matrix.qt_ver }}'
+          version: '${{ env.qt_ver }}'
           aqtversion: '==2.0.6'
           host: 'windows'
           target: 'desktop'
-          arch: ${{ matrix.qt_arch }}
+          arch: ${{ env.qt_arch }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           modules: qtwebsockets
       - uses: actions/checkout@v2
@@ -51,9 +48,8 @@ jobs:
         id: build
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
-          qmake -o ./build/Makefile
-          cd ./build
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ env.msvc_arch }}
+          qmake
           nmake
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
@@ -62,8 +58,8 @@ jobs:
       - name: package
         id: package
         env:
-          archiveName: ${{ matrix.qt_arch }}
-          msvcArch: ${{ matrix.msvc_arch }}
+          archiveName: ${{ env.qt_arch }}
+          msvcArch: ${{ env.msvc_arch }}
         shell: pwsh
         run: |
           & ./scripts/windows-msvc-package.ps1 ${env:archiveName} ${env:targetName}
@@ -72,4 +68,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ./build/${{ steps.package.outputs.packageName }}
+          path: ${{ steps.package.outputs.packageName }}

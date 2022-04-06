@@ -18,15 +18,12 @@ jobs:
   build:
     name: Build
     runs-on: windows-2019
-    strategy:
-      matrix:
-        include:
-          - qt_arch: win64_mingw
-            qt_ver: 6.2.2
-            qt_tools: 'tools_mingw90,9.0.0-1-202203221220,qt.tools.win64_mingw900'
-            qt_tools_mingw_install: mingw1120_64
     env:
       targetName: bilibili-live-danmuku.exe
+      qt_arch: win64_mingw
+      qt_ver: 6.2.2
+      qt_tools: 'tools_mingw90,9.0.0-1-202203221220,qt.tools.win64_mingw900'
+      qt_tools_mingw_install: mingw1120_64
     steps:
       - name: Cache Qt
         id: cache-qt
@@ -37,12 +34,12 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: '${{ matrix.qt_ver }}'
+          version: '${{ env.qt_ver }}'
           aqtversion: '==2.0.6'
           host: 'windows'
           target: 'desktop'
-          arch: ${{ matrix.qt_arch }}
-          tools: ${{ matrix.qt_tools }}
+          arch: ${{ env.qt_arch }}
+          tools: ${{ env.qt_tools }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           modules: 'qtwebsockets'
       - uses: actions/checkout@v2
@@ -52,7 +49,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "${{ env.Qt6_DIR }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          Write-Output "${{ env.Qt6_DIR }}/../../Tools/${{ matrix.qt_tools_mingw_install }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          Write-Output "${{ env.Qt6_DIR }}/../../Tools/${{ env.qt_tools_mingw_install }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: where is qmake & where is mingw32-make
         shell: pwsh
         run: |
@@ -62,13 +59,12 @@ jobs:
         id: build
         shell: cmd
         run: |
-          qmake -o ./build/Makefile
-          cd ./build
-          mingw32-make release
+          qmake
+          mingw32-make
       - name: package
         id: package
         env:
-          archiveName: ${{ matrix.qt_arch }}
+          archiveName: ${{ env.qt_arch }}
         shell: pwsh
         run: |
           & ./scripts/windows-mingw-package.ps1 ${env:archiveName} ${env:targetName}
@@ -77,4 +73,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ./build/${{ steps.package.outputs.packageName }}
+          path: ${{ steps.package.outputs.packageName }}

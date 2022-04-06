@@ -17,22 +17,25 @@ Write-Host "scriptDir" $scriptDir
 
 function Main() {
 
-    New-Item -ItemType Directory .\build\$archiveName # create directory
+    New-Item -ItemType Directory .\$archiveName # create directory
 
-    Copy-Item .\build\release\$targetName .\build\$archiveName\ # copy exe
-    windeployqt --no-translations .\build\$archiveName\$targetName # copy dependency
+    Copy-Item .\release\$targetName .\$archiveName\ # copy exe
+
+    # copy dependency
+    windeployqt --no-translations .\$archiveName\$targetName
+    Copy-Item .\3rdparty\bin\*.dll .\$archiveName\
     
     $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
-    Remove-Item -Path .\build\$archiveName -Include $excludeList -Recurse -Force
+    Remove-Item -Path .\$archiveName -Include $excludeList -Recurse -Force
 
     $redistDll="{0}{1}\*.CRT\*.dll" -f $env:vcToolsRedistDir.Trim(),$env:msvcArch
-    Copy-Item $redistDll .\build\$archiveName\
+    Copy-Item $redistDll .\$archiveName\
 
     # copy WinSdk
     $sdkDll="{0}Redist\{1}ucrt\DLLs\{2}\*.dll" -f $env:winSdkDir.Trim(),$env:winSdkVer.Trim(),$env:msvcArch
-    Copy-Item $sdkDll ..\build\$archiveName\
+    Copy-Item $sdkDll ..\$archiveName\
     
-    Compress-Archive -Path ..\build\$archiveName .\build\$archiveName'.zip'
+    Compress-Archive -Path .\$archiveName .\$archiveName'.zip'
 }
 
 if ($null -eq $archiveName || $null -eq $targetName) {
