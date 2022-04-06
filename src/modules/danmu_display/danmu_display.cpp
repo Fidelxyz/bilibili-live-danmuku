@@ -111,8 +111,8 @@ void DanmuDisplay::startPanel() {
     Q_ASSERT(panel == nullptr);
     panel = new DanmuPanel(config);  // deleted in stop()
 
-    connect(panel, &DanmuPanel::testDanmu, this, &recvDanmu);
-    connect(panel, &DanmuPanel::testGift, this, &recvGift);
+    connect(panel, &DanmuPanel::testDanmu, this, &DanmuDisplay::recvDanmu);
+    connect(panel, &DanmuPanel::testGift, this, &DanmuDisplay::recvGift);
 }
 
 void DanmuDisplay::stop() {

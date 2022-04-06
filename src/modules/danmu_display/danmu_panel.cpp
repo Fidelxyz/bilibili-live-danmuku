@@ -17,27 +17,33 @@ DanmuPanel::DanmuPanel(DanmuConfig *config, QWidget *parent)
     setFixedSize(size());
     setLayout(ui->layout_panel);
 
-    connect(ui->btn_font, &QPushButton::clicked, this, &setFont);
-    connect(ui->spin_fontSize, &QSpinBox::valueChanged, this, &setFontSize);
-    connect(ui->btn_mainColor, &QPushButton::clicked, this, &setMainColor);
+    connect(ui->btn_font, &QPushButton::clicked, this, &DanmuPanel::setFont);
+    connect(ui->spin_fontSize, &QSpinBox::valueChanged, this,
+            &DanmuPanel::setFontSize);
+    connect(ui->btn_mainColor, &QPushButton::clicked, this,
+            &DanmuPanel::setMainColor);
     connect(ui->btn_usernameColor, &QPushButton::clicked, this,
-            &setUsernameColor);
+            &DanmuPanel::setUsernameColor);
     connect(ui->btn_contentColor, &QPushButton::clicked, this,
-            &setContentColor);
+            &DanmuPanel::setContentColor);
     connect(ui->btn_backgroundColor, &QPushButton::clicked, this,
-            &setBackgroundColor);
+            &DanmuPanel::setBackgroundColor);
 
     ui->combo_fps->addItems({"15", "30", "60"});
 
-    connect(ui->btn_apply, &QPushButton::clicked, this, &apply);
-    connect(ui->btn_setToDefault, &QPushButton::clicked, this, &setToDefault);
-    connect(ui->btn_cancelChange, &QPushButton::clicked, this, &loadConfig);
+    connect(ui->btn_apply, &QPushButton::clicked, this, &DanmuPanel::apply);
+    connect(ui->btn_setToDefault, &QPushButton::clicked, this,
+            &DanmuPanel::setToDefault);
+    connect(ui->btn_cancelChange, &QPushButton::clicked, this,
+            &DanmuPanel::loadConfig);
 
-    connect(ui->btn_testDanmu, &QPushButton::clicked, this, &emitTestDanmu);
-    connect(ui->btn_testGift, &QPushButton::clicked, this, &emitTestGift);
+    connect(ui->btn_testDanmu, &QPushButton::clicked, this,
+            &DanmuPanel::emitTestDanmu);
+    connect(ui->btn_testGift, &QPushButton::clicked, this,
+            &DanmuPanel::emitTestGift);
 
     connect(ui->btn_toggleShowGift, &QPushButton::clicked, this,
-            &toggleShowGift);
+            &DanmuPanel::toggleShowGift);
 
     loadConfig();
 
