@@ -28,13 +28,21 @@ jobs:
     env:
       targetName: bilibili-live-danmuku.exe
     steps:
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: ${{ matrix.qt_ver }}
+          version: '${{ matrix.qt_ver }}'
+          aqtversion: '==2.0.6'
+          host: 'windows'
+          target: 'desktop'
           arch: ${{ matrix.qt_arch }}
-          cached: 'false'
-          aqtversion: '==2.0.5'
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           modules: qtwebsockets
       - uses: actions/checkout@v2
         with:
@@ -44,7 +52,8 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
-          qmake
+          qmake -o ./build/Makefile
+          cd ./build
           nmake
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
@@ -53,7 +62,7 @@ jobs:
       - name: package
         id: package
         env:
-          archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
+          archiveName: ${{ matrix.qt_arch }}
           msvcArch: ${{ matrix.msvc_arch }}
         shell: pwsh
         run: |
@@ -63,13 +72,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.package.outputs.packageName }}
-          path: ${{ steps.package.outputs.packageName }}
-      - name: uploadRelease
-        if: startsWith(github.event.ref, 'refs/tags/')
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ steps.package.outputs.packageName }}.zip
-          asset_name: ${{ steps.package.outputs.packageName }}.zip
-          tag: ${{ github.ref }}
-          overwrite: true
+          path: ./build/${{ steps.package.outputs.packageName }}

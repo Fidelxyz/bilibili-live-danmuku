@@ -76,11 +76,11 @@ void Protocal::startConnection(const int& roomID,
     ws->sendBinaryMessage(data);
     qDebug() << "send: " << data;
 
-    connect(ws, &QWebSocket::binaryMessageReceived, this, &recvData,
+    connect(ws, &QWebSocket::binaryMessageReceived, this, &Protocal::recvData,
             Qt::QueuedConnection);
 
     heartBeatTimer = new QTimer(this);  // deleted in stopConnection()
-    connect(heartBeatTimer, &QTimer::timeout, this, &sendHeartbeat);
+    connect(heartBeatTimer, &QTimer::timeout, this, &Protocal::sendHeartbeat);
     heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
 
