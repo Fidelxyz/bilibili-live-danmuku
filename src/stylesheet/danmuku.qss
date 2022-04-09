@@ -1,0 +1,7 @@
+QPushButton {
+    padding: 5px;
+}
+
+QLineEdit {
+    padding: 4px;
+}

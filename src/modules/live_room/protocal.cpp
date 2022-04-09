@@ -147,6 +147,10 @@ void Protocal::recvData(const QByteArray& data) {
     while (pack.length() != 0) {
         qDebug() << "pack:" << pack;
 
+        if (pack == "[object Object]") {  // heartbeat reply
+            break;
+        }
+
         head = pack.left(WS_PACKAGE_HEADER_TOTAL_LENGTH);
 
         int packLen = bytesToInt32(head.mid(WS_PACKAGE_OFFSET, 4));

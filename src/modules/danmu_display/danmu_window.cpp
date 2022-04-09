@@ -2,11 +2,14 @@
 
 #include <windows.h>
 
+#include <QFile>
 #include <QMouseEvent>
 
 #include "ui_danmu_window.h"
 
+#ifdef Q_CC_MSVC
 #pragma comment(lib, "user32.lib")
+#endif
 
 DanmuWindow::DanmuWindow(QWidget *parent)
     : QWidget(parent), ui(new Ui::DanmuWindow) {  // deleted in ~DanmuWindow
@@ -26,6 +29,17 @@ DanmuWindow::DanmuWindow(QWidget *parent)
     // ignore mouse event
     ui->list_danmu->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->list_gift->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    // Qss
+    QFile qss(":/modules/danmu_display/stylesheet/danmu_window.qss");
+    if (qss.open(QFile::ReadOnly)) {
+        qDebug("QSS loaded.");
+        QString stylesheet = QLatin1String(qss.readAll());
+        setStyleSheet(stylesheet);
+        qss.close();
+    } else {
+        qWarning("Failed to load QSS stylesheet (danmu_window.qss).");
+    }
 
     show();
 }

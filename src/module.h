@@ -16,17 +16,19 @@ class Module : public QObject {
     Q_OBJECT
 
    public:
-    Module(const QString &name, const QList<QString> &dependencies = {});
+    Module(const QString &name, const QList<QString> &dependencies,
+           Danmuku *parent);
     ~Module();
     QWidget *getWidget() const;
 
+   protected:
+    Module *getModule(const QString &name);
+
    public:
     ModuleMetadata moduleMetadata;
-    static Danmuku *danmuku;
 
    protected:
     QWidget *widget;
-    static Module *getModule(const QString &name);
 };
 
 #define MODULE

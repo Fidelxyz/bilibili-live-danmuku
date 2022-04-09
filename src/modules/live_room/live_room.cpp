@@ -4,13 +4,14 @@
 
 #include "utils/network.h"
 
-LiveRoom::LiveRoom() : Module("live_room") {
+LiveRoom::LiveRoom(Danmuku *parent) : Module("live_room", {}, parent) {
     protocal = nullptr;
 
     // Control UI
     QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by QT
 
     input_roomID = new QLineEdit(widget);  // deleted by QT
+    input_roomID->setPlaceholderText(tr("直播间号"));
 #ifdef QT_DEBUG
     input_roomID->setText("14003442");  // debug
 #endif
@@ -76,9 +77,7 @@ void LiveRoom::stop() {
     qDebug("Exit stop");
 }
 
-QObject *LiveRoom::getProtocal() {
-    return protocal;
-}
+QObject *LiveRoom::getProtocal() { return protocal; }
 
 QJsonObject LiveRoom::requestDanmuInfo() {
     QJsonObject response = requestJsonResponse(
@@ -113,7 +112,9 @@ void LiveRoom::updateFollowersCount() {
         qWarning("Error occured in followersCountUpdated.");
         return;
     }
-    qDebug() << "followersCountUpdated:"
-             << response["data"][(QString) "follower"].toInt();
-    emit followersCountUpdated(response["data"][(QString) "follower"].toInt());
+    qDebug()
+        << "followersCountUpdated:"
+        << response[QStringLiteral("data")][QStringLiteral("follower")].toInt();
+    emit followersCountUpdated(
+        response[QStringLiteral("data")][QStringLiteral("follower")].toInt());
 }

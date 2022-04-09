@@ -4,15 +4,14 @@
 
 #include "danmuku.h"
 
-Danmuku *Module::danmuku = nullptr;
-
-Module::Module(const QString &name, const QList<QString> &dependencies)
-    : QObject(danmuku) {
+Module::Module(const QString &name, const QList<QString> &dependencies,
+               Danmuku *parent)
+    : QObject(parent) {
     qDebug() << "Loading module:" << name;
     moduleMetadata.name = name;
     moduleMetadata.dependencies = dependencies;
 
-    widget = new QWidget(danmuku);  // deleted by QT
+    widget = new QWidget(parent);  // deleted by QT
     // TODO check dependencies
 }
 
@@ -20,6 +19,7 @@ Module::~Module() { qDebug() << "Unloading module:" << moduleMetadata.name; }
 
 QWidget *Module::getWidget() const { return widget; }
 
+// for communication with other modules
 Module *Module::getModule(const QString &name) {
-    return danmuku->getModule(name);
+    return ((Danmuku *)parent())->getModule(name);
 }

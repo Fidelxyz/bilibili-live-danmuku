@@ -15,7 +15,7 @@ class LiveRoom : public Module {
     MODULE
 
    public:
-    LiveRoom();
+    LiveRoom(Danmuku* parent);
     ~LiveRoom();
 
    private:

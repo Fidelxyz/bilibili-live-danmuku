@@ -4,7 +4,7 @@
 
 #include "ui_danmu_window.h"
 
-DanmuDisplay::DanmuDisplay() : Module("danmu_display") {
+DanmuDisplay::DanmuDisplay(Danmuku *parent) : Module("danmu_display", {}, parent) {
     config = nullptr;
     updateFollowersCountTimer = nullptr;
 

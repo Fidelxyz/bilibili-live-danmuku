@@ -20,7 +20,7 @@ class DanmuDisplay : public Module {
     MODULE
 
    public:
-    DanmuDisplay();
+    DanmuDisplay(Danmuku *parent);
     ~DanmuDisplay();
 
    private:

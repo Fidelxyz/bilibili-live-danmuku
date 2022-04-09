@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/stylesheet">
-        <file>display.qss</file>
+        <file>danmuku.qss</file>
     </qresource>
 </RCC>

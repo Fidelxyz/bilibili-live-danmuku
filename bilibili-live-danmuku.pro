@@ -57,6 +57,7 @@ LIBS += \
     -L$$PWD/3rdparty/lib -lbrotlidec
 
 RESOURCES += \
+    src/modules/danmu_display/stylesheet/stylesheet.qrc \
     src/stylesheet/stylesheet.qrc
 
 TRANSLATIONS += \

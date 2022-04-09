@@ -1,5 +1,7 @@
 #include "danmuku.h"
 
+#include <QFile>
+#include <QGraphicsDropShadowEffect>
 #include <vector>
 
 #include "module.h"
@@ -19,9 +21,19 @@ Danmuku::Danmuku(QWidget *parent)
 
     layout_modules = new QVBoxLayout(ui->centralWidget);  // deleted by QT
 
-    Module::danmuku = this;
-    loadModule(new LiveRoom());      // deleted in unloadModule
-    loadModule(new DanmuDisplay());  // deleted in unloadModule
+    loadModule(new LiveRoom(this));      // deleted in unloadModule
+    loadModule(new DanmuDisplay(this));  // deleted in unloadModule
+
+    // Qss
+    QFile qss(":/stylesheet/danmuku.qss");
+    if (qss.open(QFile::ReadOnly)) {
+        qDebug("QSS loaded.");
+        QString stylesheet = QLatin1String(qss.readAll());
+        setStyleSheet(stylesheet);
+        qss.close();
+    } else {
+        qWarning("Failed to load QSS stylesheet (danmuku.qss).");
+    }
 }
 
 Danmuku::~Danmuku() {
