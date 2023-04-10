@@ -1,5 +1,5 @@
-#ifndef DANMU_DISPLAY_H
-#define DANMU_DISPLAY_H
+#ifndef DANMUKU_MODULES_DANMU_DISPLAY_DANMU_DISPLAY_H_
+#define DANMUKU_MODULES_DANMU_DISPLAY_DANMU_DISPLAY_H_
 
 #include <QHBoxLayout>
 #include <QListWidget>
@@ -63,4 +63,4 @@ class DanmuDisplay : public Module {
     QString giftContentFormat;
 };
 
-#endif
+#endif  // DANMUKU_MODULES_DANMU_DISPLAY_DANMU_DISPLAY_H_

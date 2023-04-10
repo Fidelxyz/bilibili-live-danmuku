@@ -11,7 +11,7 @@ Module::Module(const QString &name, const QList<QString> &dependencies,
     moduleMetadata.name = name;
     moduleMetadata.dependencies = dependencies;
 
-    widget = new QWidget(parent);  // deleted by QT
+    widget = new QWidget(parent);  // deleted by Qt
     // TODO check dependencies
 }
 

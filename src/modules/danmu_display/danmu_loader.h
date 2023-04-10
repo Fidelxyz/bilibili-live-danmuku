@@ -1,5 +1,5 @@
-#ifndef DANMU_LOADER_H
-#define DANMU_LOADER_H
+#ifndef DANMUKU_MODULES_DANMU_DISPLAY_DANMU_LOADER_H_
+#define DANMUKU_MODULES_DANMU_DISPLAY_DANMU_LOADER_H_
 
 #include <QEvent>
 #include <QListWidget>
@@ -13,7 +13,7 @@ class DanmuLoader : public QThread {
     Q_OBJECT
 
    public:
-    DanmuLoader(QListWidget *list);
+    DanmuLoader(QListWidget *list, QObject *parent = nullptr);
     ~DanmuLoader();
     void loadItem(QListWidgetItem *item);
 
@@ -41,4 +41,4 @@ class DanmuLoader : public QThread {
     QWaitCondition updateCondition;
 };
 
-#endif
+#endif  // DANMUKU_MODULES_DANMU_DISPLAY_DANMU_LOADER_H_

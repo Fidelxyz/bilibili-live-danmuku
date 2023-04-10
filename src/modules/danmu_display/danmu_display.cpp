@@ -4,7 +4,8 @@
 
 #include "ui_danmu_window.h"
 
-DanmuDisplay::DanmuDisplay(Danmuku *parent) : Module("danmu_display", {}, parent) {
+DanmuDisplay::DanmuDisplay(Danmuku *parent)
+    : Module("danmu_display", {}, parent) {
     config = nullptr;
     updateFollowersCountTimer = nullptr;
 
@@ -58,9 +59,10 @@ void DanmuDisplay::startDisplay() {
     Q_ASSERT(window == nullptr);
     window = new DanmuWindow();  // deleted in stop()
     Q_ASSERT(danmuLoader == nullptr);
-    danmuLoader = new DanmuLoader(window->ui->list_danmu);  // deleted in stop()
+    danmuLoader =
+        new DanmuLoader(window->ui->list_danmu, this);  // deleted in stop()
     Q_ASSERT(config == nullptr);
-    config = new DanmuConfig();  // deleted in stop()
+    config = new DanmuConfig(this);  // deleted in stop()
 
     connect(config, SIGNAL(changed()), this, SLOT(applyConfig()));
 
@@ -254,8 +256,8 @@ void DanmuDisplay::applyConfig() {
     // giftLoader
     if (config->showGift) {  // showGift == true
         if (giftLoader.isNull()) {
-            giftLoader =
-                new DanmuLoader(window->ui->list_gift);  // deleted in stop()
+            giftLoader = new DanmuLoader(window->ui->list_gift,
+                                         this);  // deleted in stop()
             giftLoader->start();
             window->ui->list_gift->show();
         }

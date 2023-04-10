@@ -21,8 +21,9 @@ Danmuku::Danmuku(QWidget *parent)
 
     layout_modules = new QVBoxLayout(ui->centralWidget);  // deleted by QT
 
-    loadModule(new LiveRoom(this));      // deleted in unloadModule
-    loadModule(new DanmuDisplay(this));  // deleted in unloadModule
+    // TODO: Dynamic modules loader
+    loadModule(new LiveRoom(this));      // deleted by Qt
+    loadModule(new DanmuDisplay(this));  // deleted by Qt
 
     // Qss
     QFile qss(":/stylesheet/danmuku.qss");

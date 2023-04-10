@@ -1,9 +1,9 @@
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef DANMUKU_UTILS_NETWORK_H_
+#define DANMUKU_UTILS_NETWORK_H_
 
 #include <QJsonObject>
 #include <QString>
 
 QJsonObject requestJsonResponse(QString url);
 
-#endif
+#endif  // DANMUKU_UTILS_NETWORK_H_

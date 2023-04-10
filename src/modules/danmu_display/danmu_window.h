@@ -1,5 +1,5 @@
-#ifndef DANMU_WINDOW_H
-#define DANMU_WINDOW_H
+#ifndef DANMUKU_MODULES_DANMU_DISPLAY_DANMU_WINDOW_H_
+#define DANMUKU_MODULES_DANMU_DISPLAY_DANMU_WINDOW_H_
 
 #include <QWidget>
 
@@ -30,4 +30,4 @@ class DanmuWindow : public QWidget {
     QPoint mouseDragPosition;
 };
 
-#endif
+#endif  // DANMUKU_MODULES_DANMU_DISPLAY_DANMU_WINDOW_H_

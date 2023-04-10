@@ -1,5 +1,5 @@
-#ifndef DANMU_CONFIG_H
-#define DANMU_CONFIG_H
+#ifndef DANMUKU_MODULES_DANMU_DISPLAY_DANMU_CONFIG_H_
+#define DANMUKU_MODULES_DANMU_DISPLAY_DANMU_CONFIG_H_
 
 #include <QColor>
 #include <QFont>
@@ -69,4 +69,4 @@ class DanmuConfig : public QObject {
     QSettings settings;
 };
 
-#endif
+#endif  // DANMUKU_MODULES_DANMU_DISPLAY_DANMU_CONFIG_H_

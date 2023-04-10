@@ -1,6 +1,6 @@
 #include "danmu_loader.h"
 
-DanmuLoader::DanmuLoader(QListWidget *list) {
+DanmuLoader::DanmuLoader(QListWidget *list, QObject *parent) : QThread(parent) {
     this->list = list;
     list->installEventFilter(this);
     scrollBar = list->verticalScrollBar();

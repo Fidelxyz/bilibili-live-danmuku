@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DANMUKU_DANMUKU_H_
+#define DANMUKU_DANMUKU_H_
 
 #include <QMainWindow>
 #include <QVBoxLayout>
@@ -29,4 +29,4 @@ class Danmuku : public QMainWindow {
     std::unordered_map<QString, Module*> modules;
 };
 
-#endif
+#endif  // DANMUKU_DANMUKU_H_

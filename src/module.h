@@ -1,5 +1,5 @@
-#ifndef MODULE_H
-#define MODULE_H
+#ifndef DANMUKU_MODULE_H_
+#define DANMUKU_MODULE_H_
 
 #include <QObject>
 #include <QPointer>
@@ -33,4 +33,4 @@ class Module : public QObject {
 
 #define MODULE
 
-#endif
+#endif  // DANMUKU_MODULE_H_

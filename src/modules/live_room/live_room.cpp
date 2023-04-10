@@ -8,16 +8,16 @@ LiveRoom::LiveRoom(Danmuku *parent) : Module("live_room", {}, parent) {
     protocal = nullptr;
 
     // Control UI
-    QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by QT
+    QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by Qt
 
-    input_roomID = new QLineEdit(widget);  // deleted by QT
+    input_roomID = new QLineEdit(widget);  // deleted by Qt
     input_roomID->setPlaceholderText(tr("直播间号"));
 #ifdef QT_DEBUG
     input_roomID->setText("14003442");  // debug
 #endif
     layout->addWidget(input_roomID);
 
-    btn_start = new QPushButton(tr("连接"), widget);  // deleted by QT
+    btn_start = new QPushButton(tr("连接"), widget);  // deleted by Qt
     connect(btn_start, SIGNAL(clicked()), this, SLOT(start()));
     layout->addWidget(btn_start);
 }
@@ -48,6 +48,7 @@ void LiveRoom::start() {
 
     Q_ASSERT(protocal == nullptr);
     protocal = new Protocal();  // deleted in stop()
+    // protocal cannot be assigned a parent if it is passed into moveToThread()
     protocal->moveToThread(&protocalThread);
     protocalThread.start();
 
@@ -71,9 +72,6 @@ void LiveRoom::stop() {
                               (Qt::ConnectionType)Qt::BlockingQueuedConnection);
     protocalThread.quit();
     protocalThread.wait();
-    // protocal->deleteLater();
-    delete protocal;
-    protocal = nullptr;
     qDebug("Exit stop");
 }
 

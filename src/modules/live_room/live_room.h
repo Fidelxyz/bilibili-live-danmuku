@@ -1,5 +1,5 @@
-#ifndef LIVE_ROOM_H
-#define LIVE_ROOM_H
+#ifndef DANMUKU_MODULES_LIVE_ROOM_LIVE_ROOM_H_
+#define DANMUKU_MODULES_LIVE_ROOM_LIVE_ROOM_H_
 
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -43,4 +43,4 @@ class LiveRoom : public Module {
     QThread protocalThread;
 };
 
-#endif
+#endif  // DANMUKU_MODULES_LIVE_ROOM_LIVE_ROOM_H_

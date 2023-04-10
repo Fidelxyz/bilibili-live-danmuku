@@ -1,5 +1,5 @@
-#ifndef DANMU_PANEL_H
-#define DANMU_PANEL_H
+#ifndef DANMUKU_MODULES_DANMU_DISPLAY_DANMU_PANEL_H_
+#define DANMUKU_MODULES_DANMU_DISPLAY_DANMU_PANEL_H_
 
 #include <QWidget>
 
@@ -54,4 +54,4 @@ class DanmuPanel : public QWidget {
     bool showGift;
 };
 
-#endif
+#endif  // DANMUKU_MODULES_DANMU_DISPLAY_DANMU_LOADER_H_

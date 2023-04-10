@@ -21,10 +21,12 @@ const QHash<QString, enum Protocal::CMD> Protocal::cmdMap =
 
 QByteArray genHead(int datalength, int opeation, int sequence) {
     QByteArray buffer = QByteArray();
+    buffer.append(int32ToBytes(
+        (uint32_t)(datalength + Protocal::WS_PACKAGE_HEADER_TOTAL_LENGTH)));
     buffer.append(
-        int32ToBytes((uint32_t)(datalength + WS_PACKAGE_HEADER_TOTAL_LENGTH)));
-    buffer.append(int16ToBytes((uint16_t)(WS_PACKAGE_HEADER_TOTAL_LENGTH)));
-    buffer.append(int16ToBytes((uint16_t)(WS_HEADER_DEFAULT_VERSION)));
+        int16ToBytes((uint16_t)(Protocal::WS_PACKAGE_HEADER_TOTAL_LENGTH)));
+    buffer.append(
+        int16ToBytes((uint16_t)(Protocal::WS_HEADER_DEFAULT_VERSION)));
     buffer.append(int32ToBytes((uint32_t)(opeation)));
     buffer.append(int32ToBytes((uint32_t)(sequence)));
     return buffer;
@@ -32,8 +34,8 @@ QByteArray genHead(int datalength, int opeation, int sequence) {
 
 bool checkHello(QByteArray data) {
     QByteArray valData("{\"code\":0}");
-    valData.prepend(genHead(valData.length(), WS_OP_CONNECT_SUCCESS,
-                            WS_HEADER_DEFAULT_SEQUENCE));
+    valData.prepend(genHead(valData.length(), Protocal::WS_OP_CONNECT_SUCCESS,
+                            Protocal::WS_HEADER_DEFAULT_SEQUENCE));
     return valData == data;
 }
 
@@ -66,7 +68,8 @@ void Protocal::startConnection(const int& roomID,
     request.setRawHeader("Accept-Language",
                          "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
 
-    ws = new QWebSocket();  // deleted in stopConnection()
+    ws = new QWebSocket(QString(), QWebSocketProtocol::VersionLatest,
+                        this);  // deleted in stopConnection()
     ws->open(request);
 
     QEventLoop eventLoop;
@@ -84,7 +87,7 @@ void Protocal::startConnection(const int& roomID,
     heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
 
-Protocal::Protocal() {
+Protocal::Protocal(QObject* parent) : QObject(parent) {
     ws = nullptr;
     heartBeatTimer = nullptr;
 }
