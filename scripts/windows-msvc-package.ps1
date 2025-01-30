@@ -18,11 +18,10 @@ Write-Host "scriptDir" $scriptDir
 function Main() {
 
     New-Item -ItemType Directory .\build\$archiveName # create directory
-    Copy-Item .\build\release\$targetName .\build\$archiveName\ # copy exe
+    Copy-Item .\build\$targetName .\build\$archiveName\ # copy exe
 
     # copy dependency
     windeployqt --no-translations .\build\$archiveName\$targetName
-    Copy-Item .\3rdparty\bin\*.dll .\build\$archiveName\
     
     $excludeList = @("*.qmlc", "*.ilk", "*.exp", "*.lib", "*.pdb")
     Remove-Item -Path .\build\$archiveName -Include $excludeList -Recurse -Force
