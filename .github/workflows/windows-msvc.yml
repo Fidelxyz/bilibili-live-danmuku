@@ -1,61 +1,52 @@
 name: Windows MSVC
-on: 
+
+on:
   push:
     paths:
-      - '*.pro'
       - 'src/**'
-      - '3rdparty/**'
       - 'res/**'
       - '.github/workflows/windows-msvc.yml'
   pull_request:
     paths:
-      - '*.pro'
       - 'src/**'
-      - '3rdparty/**'
       - 'res/**'
       - '.github/workflows/windows-msvc.yml'
+
+env:
+  BUILD_TYPE: Release
+
 jobs:
   build:
     name: Build
     runs-on: windows-2019
     env:
       targetName: bilibili-live-danmuku.exe
-      qt_ver: 6.2.2
+      qt_ver: 6.8.1
       qt_arch: win64_msvc2019_64
       msvc_arch: x64
-      qt_arch_install: msvc2019_64
+
     steps:
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: windows-msvc-QtCache
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4
         with:
-          version: '${{ env.qt_ver }}'
-          aqtversion: '==2.0.6'
-          host: 'windows'
-          target: 'desktop'
+          version: ${{ env.qt_ver }}
           arch: ${{ env.qt_arch }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
           modules: qtwebsockets
-      - uses: actions/checkout@v2
+          cache: true
+
+      - uses: actions/checkout@v4
+
+      - uses: ilammy/msvc-dev-cmd@v1
         with:
-          fetch-depth: 1
-      - name: msvc-build
-        id: build
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ env.msvc_arch }}
-          qmake -o ./build/Makefile
-          cd ./build
-          nmake
-          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
-          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
-          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
-          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
+          arch: ${{ env.msvc_arch }}
+
+      - name: Configure CMake
+        run: >
+          cmake
+          -B ./build
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
       - name: package
         id: package
         env:
@@ -66,7 +57,8 @@ jobs:
           & ./scripts/windows-msvc-package.ps1 ${env:archiveName} ${env:targetName}
            $name = ${env:archiveName}
            echo "::set-output name=packageName::$name"
-      - uses: actions/upload-artifact@v2
+
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.packageName }}
           path: ./build/${{ steps.package.outputs.packageName }}

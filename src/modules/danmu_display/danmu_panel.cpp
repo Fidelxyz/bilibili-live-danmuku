@@ -3,7 +3,7 @@
 #include <QColorDialog>
 #include <QFontDialog>
 
-#include "ui_danmu_panel.h"
+#include "ui/ui_danmu_panel.h"
 
 DanmuPanel::DanmuPanel(DanmuConfig *config, QWidget *parent)
     : QWidget(parent),

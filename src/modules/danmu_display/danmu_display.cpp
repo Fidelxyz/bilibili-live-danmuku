@@ -2,7 +2,7 @@
 
 #include <QLabel>
 
-#include "ui_danmu_window.h"
+#include "ui/ui_danmu_window.h"
 
 DanmuDisplay::DanmuDisplay(Danmuku *parent)
     : Module("danmu_display", {}, parent) {
@@ -86,19 +86,19 @@ void DanmuDisplay::startDisplay() {
             SLOT(updateFollowersCount()));
     updateFollowersCountTimer->start(UPDATE_FOLLOWERS_COUNT_INTERVAL_MS);
 
-    QObject *protocal;
-    QMetaObject::invokeMethod(moduleLiveRoom, "getProtocal",
-                              Q_RETURN_ARG(QObject *, protocal));
-    connect(protocal, SIGNAL(viewersCountUpdated(const int &)), this,
+    QObject *protocol;
+    QMetaObject::invokeMethod(moduleLiveRoom, "getProtocol",
+                              Q_RETURN_ARG(QObject *, protocol));
+    connect(protocol, SIGNAL(viewersCountUpdated(const int &)), this,
             SLOT(updateViewersCount(const int &)));
-    connect(protocal,
+    connect(protocol,
             SIGNAL(recvDanmu(const int, const QString &, const QString &,
-                             const bool, const bool, const int)),
+                       const bool, const bool, const int)),
             this,
             SLOT(recvDanmu(const int, const QString &, const QString &,
-                           const bool, const bool, const int)));
+                     const bool, const bool, const int)));
     connect(
-        protocal,
+        protocol,
         SIGNAL(
             recvGift(const int, const QString &, const QString &, const int)),
         this,
@@ -224,15 +224,15 @@ void DanmuDisplay::updateFollowersCount(const int &followersCount) {
 
 void DanmuDisplay::applyConfig() {
     danmuContentFormat = QString(
-                             "%1<span style=\"color:%2\">%3</span>%4: <span "
-                             "style=\"color:%5\">%6</span>")
-                             .arg("%1", config->usernameColor.name(), "%2",
-                                  "%3", config->contentColor.name(), "%4");
+        "%1<span style=\"color:%2\">%3</span>%4: <span "
+        "style=\"color:%5\">%6</span>")
+        .arg("%1", config->usernameColor.name(), "%2",
+             "%3", config->contentColor.name(), "%4");
     giftContentFormat = QString(
-                            "<span style=\"color:%1\">%2</span> 送出了礼物 "
-                            "<span style=\"color:%3\">%4</span> x%5")
-                            .arg(config->usernameColor.name(), "%1",
-                                 config->contentColor.name(), "%2", "%3");
+        "<span style=\"color:%1\">%2</span> 送出了礼物 "
+        "<span style=\"color:%3\">%4</span> x%5")
+        .arg(config->usernameColor.name(), "%1",
+             config->contentColor.name(), "%2", "%3");
     window->setStyleSheet(
         QString("QLabel{color:%1}").arg(config->mainColor.name()));
     window->ui->frame_window->setStyleSheet(

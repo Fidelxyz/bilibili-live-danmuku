@@ -1,12 +1,12 @@
-#ifndef DANMUKU_MODULES_LIVE_ROOM_PROTOCAL_H_
-#define DANMUKU_MODULES_LIVE_ROOM_PROTOCAL_H_
+#ifndef DANMUKU_MODULES_LIVE_ROOM_PROTOCOL_H_
+#define DANMUKU_MODULES_LIVE_ROOM_PROTOCOL_H_
 
 #include <QTimer>
 #include <QWebSocket>
 
 QByteArray genHead(int datalength, int opeation, int sequence);
 
-class Protocal : public QObject {
+class Protocol : public QObject {
     Q_OBJECT
 
    public:
@@ -25,7 +25,7 @@ class Protocal : public QObject {
 
     static const int WS_HEARTBEAT_INTERVAL_MS = 30000;
 
-    enum BODY_PROTOCAL_VERSION { DEFLATE = 2, BROTLI = 3 };
+    enum BODY_PROTOCOL_VERSION { DEFLATE = 2, BROTLI = 3 };
     enum MSG_TYPE { HEARTBEAT_REPLY = 3, MESSAGE = 5, AUTH_REPLY = 8 };
     enum CMD {
         UNKNOWN = 0,
@@ -47,7 +47,7 @@ class Protocal : public QObject {
     };
 
    public:
-    Protocal(QObject *parent = nullptr);
+    Protocol(QObject *parent = nullptr);
 
    private:
     void recvHeartbeatReply(const QByteArray &msg);
@@ -73,4 +73,4 @@ class Protocal : public QObject {
     static const QHash<QString, enum CMD> cmdMap;
 };
 
-#endif  // DANMUKU_MODULES_LIVE_ROOM_PROTOCAL_H_
+#endif  // DANMUKU_MODULES_LIVE_ROOM_PROTOCOL_H_

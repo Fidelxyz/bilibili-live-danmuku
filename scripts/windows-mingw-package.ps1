@@ -11,7 +11,7 @@ Write-Host "scriptDir" $scriptDir
 function Main() {
 
     New-Item -ItemType Directory .\build\$archiveName # create directory
-    Copy-Item .\build\release\$targetName .\build\$archiveName\ # copy exe
+    Copy-Item .\build\$targetName .\build\$archiveName\ # copy target
 
     # copy dependency
     windeployqt --compiler-runtime .\build\$archiveName\$targetName

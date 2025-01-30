@@ -5,7 +5,7 @@
 #include "utils/network.h"
 
 LiveRoom::LiveRoom(Danmuku *parent) : Module("live_room", {}, parent) {
-    protocal = nullptr;
+    protocol = nullptr;
 
     // Control UI
     QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by Qt
@@ -29,7 +29,7 @@ LiveRoom::~LiveRoom() {
 }
 
 void LiveRoom::start() {
-    if (protocal != nullptr) {
+    if (protocol != nullptr) {
         stop();
     }
 
@@ -46,13 +46,13 @@ void LiveRoom::start() {
         return;
     }
 
-    Q_ASSERT(protocal == nullptr);
-    protocal = new Protocal();  // deleted in stop()
-    // protocal cannot be assigned a parent if it is passed into moveToThread()
-    protocal->moveToThread(&protocalThread);
-    protocalThread.start();
+    Q_ASSERT(protocol == nullptr);
+    protocol = new Protocol();  // deleted in stop()
+    // protocol cannot be assigned a parent if it is passed into moveToThread()
+    protocol->moveToThread(&protocolThread);
+    protocolThread.start();
 
-    QMetaObject::invokeMethod(protocal, "startConnection",
+    QMetaObject::invokeMethod(protocol, "startConnection",
                               Q_ARG(const int &, roomID),
                               Q_ARG(const QJsonObject &, danmuInfo));
 
@@ -63,19 +63,20 @@ void LiveRoom::start() {
 
 void LiveRoom::stop() {
     qDebug("Enter stop");
-    if (protocal == nullptr) {
-        qDebug("Exit stop: Protocal has not been started.");
+    if (protocol == nullptr) {
+        qDebug("Exit stop: Protocol has not been started.");
         return;
     }
     emit stopped();
-    QMetaObject::invokeMethod(protocal, "stopConnection",
+    QMetaObject::invokeMethod(protocol, "stopConnection",
                               (Qt::ConnectionType)Qt::BlockingQueuedConnection);
-    protocalThread.quit();
-    protocalThread.wait();
+    protocolThread.quit();
+    protocolThread.wait();
+    protocol = nullptr;
     qDebug("Exit stop");
 }
 
-QObject *LiveRoom::getProtocal() { return protocal; }
+QObject *LiveRoom::getProtocol() { return protocol; }
 
 QJsonObject LiveRoom::requestDanmuInfo() {
     QJsonObject response = requestJsonResponse(

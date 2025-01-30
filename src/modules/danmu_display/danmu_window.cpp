@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QMouseEvent>
 
-#include "ui_danmu_window.h"
+#include "ui/ui_danmu_window.h"
 
 #ifdef Q_CC_MSVC
 #pragma comment(lib, "user32.lib")

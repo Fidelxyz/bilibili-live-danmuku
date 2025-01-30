@@ -1,4 +1,4 @@
-#include "protocal.h"
+#include "protocol.h"
 
 #include <QEventLoop>
 #include <QJsonDocument>
@@ -8,7 +8,7 @@
 #include "utils/decompress.h"
 
 #define CMD_MAP(CMD) std::make_pair(QString(#CMD), CMD)
-const QHash<QString, enum Protocal::CMD> Protocal::cmdMap =
+const QHash<QString, enum Protocol::CMD> Protocol::cmdMap =
     QHash<QString, enum CMD>(
         std::initializer_list<std::pair<QString, enum CMD>>{
             CMD_MAP(LIVE), CMD_MAP(PREPARING), CMD_MAP(DANMU_MSG),
@@ -22,11 +22,11 @@ const QHash<QString, enum Protocal::CMD> Protocal::cmdMap =
 QByteArray genHead(int datalength, int opeation, int sequence) {
     QByteArray buffer = QByteArray();
     buffer.append(int32ToBytes(
-        (uint32_t)(datalength + Protocal::WS_PACKAGE_HEADER_TOTAL_LENGTH)));
+        (uint32_t)(datalength + Protocol::WS_PACKAGE_HEADER_TOTAL_LENGTH)));
     buffer.append(
-        int16ToBytes((uint16_t)(Protocal::WS_PACKAGE_HEADER_TOTAL_LENGTH)));
+        int16ToBytes((uint16_t)(Protocol::WS_PACKAGE_HEADER_TOTAL_LENGTH)));
     buffer.append(
-        int16ToBytes((uint16_t)(Protocal::WS_HEADER_DEFAULT_VERSION)));
+        int16ToBytes((uint16_t)(Protocol::WS_HEADER_DEFAULT_VERSION)));
     buffer.append(int32ToBytes((uint32_t)(opeation)));
     buffer.append(int32ToBytes((uint32_t)(sequence)));
     return buffer;
@@ -34,12 +34,12 @@ QByteArray genHead(int datalength, int opeation, int sequence) {
 
 bool checkHello(QByteArray data) {
     QByteArray valData("{\"code\":0}");
-    valData.prepend(genHead(valData.length(), Protocal::WS_OP_CONNECT_SUCCESS,
-                            Protocal::WS_HEADER_DEFAULT_SEQUENCE));
+    valData.prepend(genHead(valData.length(), Protocol::WS_OP_CONNECT_SUCCESS,
+                            Protocol::WS_HEADER_DEFAULT_SEQUENCE));
     return valData == data;
 }
 
-void Protocal::startConnection(const int& roomID,
+void Protocol::startConnection(const int& roomID,
                                const QJsonObject& liveRoomInfo) {
     QJsonObject liveRoomInfoData = liveRoomInfo["data"].toObject();
     QString url = liveRoomInfoData["host_list"][0]["host"].toString();
@@ -79,29 +79,31 @@ void Protocal::startConnection(const int& roomID,
     ws->sendBinaryMessage(data);
     qDebug() << "send: " << data;
 
-    connect(ws, &QWebSocket::binaryMessageReceived, this, &Protocal::recvData,
+    connect(ws, &QWebSocket::binaryMessageReceived, this, &Protocol::recvData,
             Qt::QueuedConnection);
 
     heartBeatTimer = new QTimer(this);  // deleted in stopConnection()
-    connect(heartBeatTimer, &QTimer::timeout, this, &Protocal::sendHeartbeat);
+    connect(heartBeatTimer, &QTimer::timeout, this, &Protocol::sendHeartbeat);
     heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
 
-Protocal::Protocal(QObject* parent) : QObject(parent) {
+Protocol::Protocol(QObject* parent) : QObject(parent) {
     ws = nullptr;
     heartBeatTimer = nullptr;
 }
 
-void Protocal::stopConnection() {
+void Protocol::stopConnection() {
     qDebug("Enter stopConnection");
+    Q_ASSERT(heartBeatTimer != nullptr);
     heartBeatTimer->stop();
     heartBeatTimer->deleteLater();
+    Q_ASSERT(ws != nullptr);
     ws->close();
     ws->deleteLater();
     qDebug("Exit stopConnection");
 }
 
-void Protocal::recvData(const QByteArray& data) {
+void Protocol::recvData(const QByteArray& data) {
     qDebug() << "-------------------------------";
     qDebug() << "receive message: " << data;
 
@@ -190,7 +192,7 @@ void Protocal::recvData(const QByteArray& data) {
     }
 }
 
-void Protocal::sendHeartbeat() {
+void Protocol::sendHeartbeat() {
     qDebug("sendHeartbeat");
     QByteArray data("[object Object]");
     data.prepend(
@@ -198,12 +200,12 @@ void Protocal::sendHeartbeat() {
     ws->sendBinaryMessage(data);
 }
 
-void Protocal::recvHeartbeatReply(const QByteArray& msg) {
-    qDebug() << "Update viewers count (protocal):" << bytesToInt32(msg.left(4));
+void Protocol::recvHeartbeatReply(const QByteArray& msg) {
+    qDebug() << "Update viewers count (protocol):" << bytesToInt32(msg.left(4));
     emit viewersCountUpdated(bytesToInt32(msg.left(4)));
 }
 
-void Protocal::recvMsg(const QJsonObject& msg) {
+void Protocol::recvMsg(const QJsonObject& msg) {
     QString cmd = msg["cmd"].toString();
     switch (cmdMap[cmd]) {
         case LIVE:

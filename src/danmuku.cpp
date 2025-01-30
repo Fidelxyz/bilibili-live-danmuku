@@ -7,7 +7,7 @@
 #include "module.h"
 #include "modules/danmu_display/danmu_display.h"
 #include "modules/live_room/live_room.h"
-#include "ui_danmuku.h"
+#include "ui/ui_danmuku.h"
 
 class Module;
 

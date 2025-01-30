@@ -8,7 +8,7 @@
 #include <QThread>
 
 #include "module.h"
-#include "protocal.h"
+#include "protocol.h"
 
 class LiveRoom : public Module {
     Q_OBJECT
@@ -30,17 +30,17 @@ class LiveRoom : public Module {
 
    public slots:
     void start();
-    QObject* getProtocal();
+    QObject* getProtocol();
     void updateFollowersCount();
 
    private:
-    Protocal* protocal;
+    Protocol* protocol;
     QLineEdit* input_roomID;
     QPushButton* btn_start;
 
     int roomID;
     int uid;
-    QThread protocalThread;
+    QThread protocolThread;
 };
 
 #endif  // DANMUKU_MODULES_LIVE_ROOM_LIVE_ROOM_H_
