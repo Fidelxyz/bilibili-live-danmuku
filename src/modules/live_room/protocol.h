@@ -65,7 +65,7 @@ class Protocol final : public QObject {
     void stopConnection() const;
 
    private:
-    QWebSocket                      *ws = nullptr;
+    QWebSocket                      *ws             = nullptr;
     QTimer                          *heartBeatTimer = nullptr;
     static const QHash<QString, CMD> cmdMap;
 };

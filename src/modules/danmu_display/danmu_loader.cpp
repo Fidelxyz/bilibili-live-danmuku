@@ -53,25 +53,27 @@ bool DanmuLoader::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void DanmuLoader::run() {
+    qDebug("Enter DanmuLoader::run");
     QMutexLocker updateLocker(&updateMutex);
-    while (!isInterruptionRequested()) {
-        while (true) {
+    while (!isInterruptionRequested()) {  // Trigger loop
+        while (true) {                    // Animation loop
             QMutexLocker loopLocker(&loopMutex);
             if (loadingItemQueue.empty()) {
                 break;
             }
-            scrollBarPos += static_cast<int>(
-                static_cast<float>(loadingItemTotalHeight) * scrollingSpeed);
+            scrollBarPos +=
+                static_cast<float>(loadingItemTotalHeight) * scrollingSpeed;
             // qDebug() << "Scrolling speed:"
             //          << loadingItemTotalHeight * scrollingSpeed;
 
             // OUT
             while (true) {
                 if (const int itemHeight = list->item(0)->sizeHint().height();
-                    itemHeight + list->item(1)->sizeHint().height() <
+                    static_cast<float>(itemHeight +
+                                       list->item(1)->sizeHint().height()) <
                     scrollBarPos) {
                     qDebug("Delete item.");
-                    scrollBarPos -= itemHeight;
+                    scrollBarPos -= static_cast<float>(itemHeight);
                     loadedItemTotalHeight -= itemHeight;
                     QListWidgetItem *item = list->takeItem(0);
                     delete list->itemWidget(item);
@@ -80,14 +82,14 @@ void DanmuLoader::run() {
                     break;
                 }
             }
-            scrollBar->setValue(scrollBarPos);
+            scrollBar->setValue(static_cast<int>(scrollBarPos));
 
             // IN
             while (!loadingItemQueue.empty()) {
                 if (const int itemHeight =
                         loadingItemQueue.front()->sizeHint().height();
-                    loadedItemTotalHeight + itemHeight <=
-                    scrollBarPos + listViewHeight) {
+                    static_cast<float>(loadedItemTotalHeight + itemHeight) <=
+                    scrollBarPos + static_cast<float>(listViewHeight)) {
                     loadingItemQueue.pop();
                     loadingItemTotalHeight -= itemHeight;
                     loadedItemTotalHeight += itemHeight;
@@ -98,8 +100,11 @@ void DanmuLoader::run() {
             loopLocker.unlock();
             msleep(sleepIntervalMs);
         }
+        qDebug("Wait for update");
         updateCondition.wait(&updateMutex);
+        qDebug("Wake up due to update");
     }
+    qDebug("Exit DanmuLoader::run");
 }
 
 void DanmuLoader::loadItem(QListWidgetItem *item) {

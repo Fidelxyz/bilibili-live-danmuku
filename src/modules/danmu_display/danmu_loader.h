@@ -30,9 +30,10 @@ class DanmuLoader final : public QThread {
     int                           loadingItemTotalHeight;
     int                           loadedItemTotalHeight;
     int                           listViewHeight;
-    int                           scrollBarPos;
-    float                         scrollingSpeed;
-    unsigned long                 sleepIntervalMs;
+    // for accuracy, scrollBarPos is processed in float
+    float         scrollBarPos;
+    float         scrollingSpeed;
+    unsigned long sleepIntervalMs;
 
     QListWidget   *list;
     QScrollBar    *scrollBar;

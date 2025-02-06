@@ -120,24 +120,28 @@ void DanmuDisplay::stop() {
 
     if (updateFollowersCountTimer != nullptr) {
         updateFollowersCountTimer->stop();
-        updateFollowersCountTimer->deleteLater();
+        delete updateFollowersCountTimer;
         updateFollowersCountTimer = nullptr;
     }
 
     if (!danmuLoader.isNull()) {
-        danmuLoader->deleteLater();
+        delete danmuLoader;
+        danmuLoader = nullptr;
     }
     if (!giftLoader.isNull()) {
-        giftLoader->deleteLater();
+        delete giftLoader;
+        giftLoader = nullptr;
     }
     if (!window.isNull()) {
-        window->deleteLater();
+        delete window;
+        window = nullptr;
     }
     if (!panel.isNull()) {
-        panel->deleteLater();
+        delete panel;
+        panel = nullptr;
     }
     if (config != nullptr) {
-        config->deleteLater();
+        delete config;
         config = nullptr;
     }
 
@@ -171,8 +175,8 @@ void DanmuDisplay::recvDanmu(const int uid, const QString& username,
     label->setFixedWidth(window->ui->list_danmu->width());
     label->setWordWrap(true);
 
-    auto* item = new QListWidgetItem(window->ui->list_danmu);  // deleted by QT
-    window->ui->list_danmu->addItem(item);
+    auto* item = new QListWidgetItem();     // not specify parent
+    window->ui->list_danmu->addItem(item);  // set parent here
     window->ui->list_danmu->setItemWidget(item, label);
     item->setSizeHint(label->sizeHint());
 
@@ -196,8 +200,8 @@ void DanmuDisplay::recvGift(const int uid, const QString& username,
     label->setFixedWidth(window->ui->list_gift->width());
     label->setWordWrap(true);
 
-    auto* item = new QListWidgetItem(window->ui->list_gift);  // deleted by QT
-    window->ui->list_gift->addItem(item);
+    auto* item = new QListWidgetItem();    // not specify parent
+    window->ui->list_gift->addItem(item);  // set parent here
     window->ui->list_gift->setItemWidget(item, label);
     item->setSizeHint(label->sizeHint());
 

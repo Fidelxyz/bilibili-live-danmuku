@@ -19,8 +19,8 @@ class LiveRoom final : public Module {
 
    private:
     [[nodiscard]] QJsonObject requestDanmuInfo() const;
-    [[nodiscard]] int requestUid() const;
-    void stop();
+    [[nodiscard]] int         requestUid() const;
+    void                      stop();
 
    signals:
     void started();
@@ -28,17 +28,17 @@ class LiveRoom final : public Module {
     void followersCountUpdated(const int& followersCount);
 
    public slots:
-    void start();
+    void                   start();
     [[nodiscard]] QObject* getProtocol() const;
-    void updateFollowersCount();
+    void                   updateFollowersCount();
 
    private:
-    Protocol* protocol;
-    QLineEdit* input_roomID;
+    Protocol*    protocol;
+    QLineEdit*   input_roomID;
     QPushButton* btn_start;
 
-    int roomID = -1;
-    int uid = -1;
+    int     roomID = -1;
+    int     uid    = -1;
     QThread protocolThread;
 };
 
