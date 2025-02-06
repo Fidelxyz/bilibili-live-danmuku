@@ -49,6 +49,6 @@ class DanmuPanel final : public QWidget {
     QColor contentColor;
     QColor backgroundColor;
 
-    bool showGift;
+    bool showGift = DEFAULT_CONFIG::showGift;
 };
 #endif

@@ -44,9 +44,6 @@ class Protocol final : public QObject {
         CUT_OFF
     };
 
-   public:
-    explicit Protocol(QObject *parent = nullptr);
-
    private:
     void              recvHeartbeatReply(const QByteArray &msg);
     void              recvMsg(const QJsonObject &msg);
@@ -68,8 +65,8 @@ class Protocol final : public QObject {
     void stopConnection() const;
 
    private:
-    QWebSocket                      *ws;
-    QTimer                          *heartBeatTimer;
+    QWebSocket                      *ws = nullptr;
+    QTimer                          *heartBeatTimer = nullptr;
     static const QHash<QString, CMD> cmdMap;
 };
 

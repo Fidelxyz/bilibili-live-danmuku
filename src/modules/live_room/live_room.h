@@ -11,7 +11,7 @@
 
 class LiveRoom final : public Module {
     Q_OBJECT
-    MODULE
+    DANMUKU_MODULE
 
    public:
     explicit LiveRoom(Danmuku* parent);
@@ -37,8 +37,8 @@ class LiveRoom final : public Module {
     QLineEdit* input_roomID;
     QPushButton* btn_start;
 
-    int roomID;
-    int uid;
+    int roomID = -1;
+    int uid = -1;
     QThread protocolThread;
 };
 

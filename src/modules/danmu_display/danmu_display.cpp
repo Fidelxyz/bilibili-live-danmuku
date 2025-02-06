@@ -112,7 +112,7 @@ void DanmuDisplay::startPanel() {
 void DanmuDisplay::stop() {
     qDebug("Enter stop");
 
-    if (Module* moduleLiveRoom = getModule("live_room");
+    if (const Module* moduleLiveRoom = getModule("live_room");
         moduleLiveRoom != nullptr) {
         disconnect(moduleLiveRoom, SIGNAL(followersCountUpdated(const int&)),
                    this, SLOT(updateFollowersCount(const int&)));
@@ -148,7 +148,7 @@ void DanmuDisplay::stop() {
 
 void DanmuDisplay::recvDanmu(const int uid, const QString& username,
                              const QString& text, const bool isAdmin,
-                             const bool isVIP, const int userGuardLevel) {
+                             const bool isVIP, const int userGuardLevel) const {
     qDebug() << "Display danmu: " << uid << username << text << isAdmin << isVIP
              << userGuardLevel;
 
@@ -180,7 +180,8 @@ void DanmuDisplay::recvDanmu(const int uid, const QString& username,
 }
 
 void DanmuDisplay::recvGift(const int uid, const QString& username,
-                            const QString& giftName, const int giftCount) {
+                            const QString& giftName,
+                            const int      giftCount) const {
     if (giftLoader.isNull()) {
         return;
     }
@@ -203,12 +204,12 @@ void DanmuDisplay::recvGift(const int uid, const QString& username,
     giftLoader->loadItem(item);
 }
 
-void DanmuDisplay::updateViewersCount(const int& viewersCount) {
+void DanmuDisplay::updateViewersCount(const int& viewersCount) const {
     window->ui->label_viewersCount->setText(QString::number(viewersCount));
     qDebug() << "Update viewers count (display):" << viewersCount;
 }
 
-void DanmuDisplay::updateFollowersCount(const int& followersCount) {
+void DanmuDisplay::updateFollowersCount(const int& followersCount) const {
     window->ui->label_followersCount->setText(QString::number(followersCount));
     qDebug() << "Update followers count (display):" << followersCount;
 }
@@ -271,13 +272,13 @@ void DanmuDisplay::applyConfig() {
     }
 }
 
-void DanmuDisplay::toggleLockPosition() {
+void DanmuDisplay::toggleLockPosition() const {
     config->lockPosition = !config->lockPosition;
     config->save();
     setLockPosition(config->lockPosition);
 }
 
-void DanmuDisplay::setLockPosition(const bool& on) {
+void DanmuDisplay::setLockPosition(const bool& on) const {
     window->setTransparentForMouseEvents(on);
     btn_toggleLockPosition->setText(on ? tr("锁定窗口 [ON]")
                                        : tr("锁定窗口 [OFF]"));

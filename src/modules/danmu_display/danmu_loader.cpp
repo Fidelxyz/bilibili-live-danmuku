@@ -110,7 +110,7 @@ void DanmuLoader::loadItem(QListWidgetItem *item) {
     updateCondition.wakeAll();
 }
 
-void DanmuLoader::setScrollingSpeed(const float &speed, const int &fps) {
-    scrollingSpeed  = speed / 10 / static_cast<float>(fps);
+void DanmuLoader::setScrollingSpeed(const int speed, const int fps) {
+    scrollingSpeed  = static_cast<float>(speed) / 10 / static_cast<float>(fps);
     sleepIntervalMs = 1000 / fps;
 }

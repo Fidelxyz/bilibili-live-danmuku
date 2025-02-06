@@ -2,16 +2,29 @@ cmake_minimum_required(VERSION 3.16)
 project(bilibili-live-danmuku)
 
 set(CMAKE_CXX_STANDARD 17)
-add_compile_options(
-        -Wall -Wextra
-        -fsanitize=address,undefined
-        -fsanitize-address-use-after-scope
-)
-add_link_options(
-        -Wall -Wextra
-        -fsanitize=address,undefined
-        -fsanitize-address-use-after-scope
-)
+
+# Compiler options
+add_compile_options(-Wall $<$<CONFIG:DEBUG>:-fsanitize=address>)
+if (NOT MSVC)
+    add_compile_options(
+            -Wextra
+            $<$<CONFIG:DEBUG>:-fsanitize=address,undefined>
+            $<$<CONFIG:DEBUG>:-fsanitize-address-use-after-scope>
+    )
+endif ()
+
+add_link_options(-Wall -fsanitize=address)
+if (NOT MSVC)
+    add_link_options(
+            -Wextra
+            $<$<CONFIG:DEBUG>:-fsanitize=address,undefined>
+            $<$<CONFIG:DEBUG>:-fsanitize-address-use-after-scope>
+    )
+endif ()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_compile_definitions(QT_NO_DEBUG_OUTPUT)
+endif ()
 
 # Find Qt libraries
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Network WebSockets Widgets LinguistTools)

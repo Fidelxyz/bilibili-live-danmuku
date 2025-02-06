@@ -37,11 +37,11 @@ class DanmuConfig final : public QObject {
    public:
     // Window
 
-    int windowWidth;
-    int windowHeight;
-    int opacity;
-    int borderRadius;
-    bool lockPosition;
+    int windowWidth = DEFAULT_CONFIG::windowWidth;
+    int windowHeight = DEFAULT_CONFIG::windowHeight;
+    int opacity = DEFAULT_CONFIG::opacity;
+    int borderRadius = DEFAULT_CONFIG::borderRadius;
+    bool lockPosition = DEFAULT_CONFIG::lockPosition;
 
     // Font
 
@@ -56,13 +56,13 @@ class DanmuConfig final : public QObject {
 
     // Danmu
 
-    int scrollingSpeed;
-    int fps;
+    int scrollingSpeed = DEFAULT_CONFIG::scrollingSpeed;
+    int fps = DEFAULT_CONFIG::fps;
 
     // Gift
 
-    bool showGift;
-    int giftHeightRatio;
+    bool showGift = DEFAULT_CONFIG::showGift;
+    int giftHeightRatio = DEFAULT_CONFIG::giftHeightRatio;
 
    private:
     QSettings settings;

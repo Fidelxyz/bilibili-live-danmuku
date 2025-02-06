@@ -16,14 +16,14 @@ constexpr int UPDATE_FOLLOWERS_COUNT_INTERVAL_MS = 30000;
 
 class DanmuDisplay final : public Module {
     Q_OBJECT
-    MODULE
+    DANMUKU_MODULE
 
    public:
     explicit DanmuDisplay(Danmuku *parent);
     ~DanmuDisplay() override;
 
    private:
-    void setLockPosition(const bool &on);
+    void setLockPosition(const bool &on) const;
 
    public slots:
     void enable() const;
@@ -33,15 +33,15 @@ class DanmuDisplay final : public Module {
     void stop();
 
     void applyConfig();
-    void toggleLockPosition();
+    void toggleLockPosition() const;
 
     void recvDanmu(int uid, const QString &username, const QString &text,
-                   bool isAdmin, bool isVIP, int userGuardLevel);
+                   bool isAdmin, bool isVIP, int userGuardLevel) const;
     void recvGift(int uid, const QString &username, const QString &giftName,
-                  int giftCount);
+                  int giftCount) const;
 
-    void updateViewersCount(const int &viewersCount);
-    void updateFollowersCount(const int &followersCount);
+    void updateViewersCount(const int &viewersCount) const;
+    void updateFollowersCount(const int &followersCount) const;
 
    private:
     // submodule

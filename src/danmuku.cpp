@@ -2,15 +2,15 @@
 
 #include <QFile>
 #include <QGraphicsDropShadowEffect>
+#include <QGuiApplication>
 
 #include "modules/danmu_display/danmu_display.h"
 #include "modules/live_room/live_room.h"
 
 Danmuku::Danmuku(QWidget *parent) : QMainWindow(parent) {
     // deleted in ~Danmuku
-    qSetMessagePattern(
-        "%{if-category}%{category} | %{endif}%{type} | %{file}:%{line} | "
-        "%{function} | %{message}");
+
+    setAttribute(Qt::WA_DeleteOnClose);
 
     // setup UI
     resize(300, 180);
@@ -21,17 +21,17 @@ Danmuku::Danmuku(QWidget *parent) : QMainWindow(parent) {
     centralWidget->setEnabled(true);
     setCentralWidget(centralWidget);
 
-    layout_modules = new QVBoxLayout(centralWidget); // deleted by QT
+    layout_modules = new QVBoxLayout(centralWidget);  // deleted by QT
 
     // TODO: Dynamic modules loader
-    loadModule(new LiveRoom(this)); // deleted by Qt
-    loadModule(new DanmuDisplay(this)); // deleted by Qt
+    loadModule(new LiveRoom(this));      // deleted by Qt
+    loadModule(new DanmuDisplay(this));  // deleted by Qt
 }
 
 Danmuku::~Danmuku() {
     qDebug("Enter ~Danmuku");
     for (auto module = modules.begin(); module != modules.end();
-         module = modules.erase(module)) {
+         module      = modules.erase(module)) {
         // TODO: erase in unloadModule
         unloadModule(module->second);
     }

@@ -1,36 +1,43 @@
 #include "byte_convert.h"
 
 #include <QByteArray>
+#include <QtEndian>
 #include <cstdint>
 
 QByteArray int16ToBytes(const uint16_t data) {
-    QByteArray bytes;
-    bytes.append(static_cast<char>(data >> 8 & 0xFF));
-    bytes.append(static_cast<char>(data & 0xFF));
-    return bytes;
+    if constexpr (Q_BYTE_ORDER == Q_LITTLE_ENDIAN) {
+        return QByteArray::fromRawData(reinterpret_cast<const char *>(&data),
+                                       sizeof(data));
+    } else {
+        QByteArray bytes(sizeof(data), 0);
+        qToLittleEndian<quint16>(data, bytes.data());
+        return bytes;
+    }
 }
 
 QByteArray int32ToBytes(const uint32_t data) {
-    QByteArray bytes;
-    bytes.append(static_cast<char>(data >> 24 & 0xFF));
-    bytes.append(static_cast<char>(data >> 16 & 0xFF));
-    bytes.append(static_cast<char>(data >> 8 & 0xFF));
-    bytes.append(static_cast<char>(data & 0xFF));
-    return bytes;
+    if constexpr (Q_BYTE_ORDER == Q_LITTLE_ENDIAN) {
+        return QByteArray::fromRawData(reinterpret_cast<const char *>(&data),
+                                       sizeof(data));
+    } else {
+        QByteArray bytes(sizeof(data), 0);
+        qToLittleEndian<quint32>(data, bytes.data());
+        return bytes;
+    }
 }
 
 uint16_t bytesToInt16(const QByteArray &bytes) {
-    uint16_t data = 0;
-    data |= bytes[0] << 8;
-    data |= bytes[1];
-    return data;
+    if constexpr (Q_BYTE_ORDER == Q_LITTLE_ENDIAN) {
+        return qFromBigEndian<quint16>(bytes.data());
+    } else {
+        return qFromLittleEndian<quint16>(bytes.data());
+    }
 }
 
 uint32_t bytesToInt32(const QByteArray &bytes) {
-    uint32_t data = 0;
-    data |= static_cast<uint8_t>(bytes[0]) << 24;
-    data |= static_cast<uint8_t>(bytes[1]) << 16;
-    data |= static_cast<uint8_t>(bytes[2]) << 8;
-    data |= static_cast<uint8_t>(bytes[3]);
-    return data;
+    if constexpr (Q_BYTE_ORDER == Q_LITTLE_ENDIAN) {
+        return qFromBigEndian<quint32>(bytes.data());
+    } else {
+        return qFromLittleEndian<quint32>(bytes.data());
+    }
 }

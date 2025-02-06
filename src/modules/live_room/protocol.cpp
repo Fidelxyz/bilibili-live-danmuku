@@ -9,7 +9,7 @@
 
 #define CMD_MAP(CMD) {QString(#CMD), CMD}
 // clang-format off
-const auto Protocol::cmdMap = QHash<QString, CMD>({
+const QHash<QString, Protocol::CMD> Protocol::cmdMap = QHash<QString, CMD>({
     CMD_MAP(LIVE),
     CMD_MAP(PREPARING),
     CMD_MAP(DANMU_MSG),
@@ -94,11 +94,6 @@ void Protocol::startConnection(const int&         roomID,
     heartBeatTimer->start(WS_HEARTBEAT_INTERVAL_MS);
 }
 
-Protocol::Protocol(QObject* parent) : QObject(parent) {
-    ws             = nullptr;
-    heartBeatTimer = nullptr;
-}
-
 void Protocol::stopConnection() const {
     qDebug("Enter stopConnection");
     Q_ASSERT(heartBeatTimer != nullptr);
@@ -160,11 +155,8 @@ void Protocol::recvData(const QByteArray& data) {
     }
 
     // Decompress pack
-    // TODO: Extract into a single function
     QByteArray pack = decompressPack(data);
-    if (pack.isEmpty()) {
-        return;
-    }
+    if (pack.isEmpty()) return;
 
     while (pack.length() != 0) {
         qDebug() << "pack:" << pack;
@@ -222,8 +214,7 @@ void Protocol::recvHeartbeatReply(const QByteArray& msg) {
 }
 
 void Protocol::recvMsg(const QJsonObject& msg) {
-    QString cmd = msg["cmd"].toString();
-    switch (cmdMap[cmd]) {
+    switch (cmdMap[msg["cmd"].toString()]) {
         case DANMU_MSG: {
             const QJsonValue info           = msg["info"];
             const QString    text           = info[1].toString();

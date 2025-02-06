@@ -30,6 +30,6 @@ class Module : public QObject {
     QWidget *widget;
 };
 
-#define MODULE
+#define DANMUKU_MODULE
 
 #endif  // DANMUKU_MODULE_H_
