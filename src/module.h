@@ -2,7 +2,6 @@
 #define DANMUKU_MODULE_H_
 
 #include <QObject>
-#include <QPointer>
 #include <QWidget>
 
 class Danmuku;
@@ -18,11 +17,11 @@ class Module : public QObject {
    public:
     Module(const QString &name, const QList<QString> &dependencies,
            Danmuku *parent);
-    ~Module();
-    QWidget *getWidget() const;
+    ~Module() override;
+    [[nodiscard]] QWidget *getWidget() const;
 
    protected:
-    Module *getModule(const QString &name);
+    [[nodiscard]] Module *getModule(const QString &name) const;
 
    public:
     ModuleMetadata moduleMetadata;

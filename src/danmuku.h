@@ -7,17 +7,17 @@
 
 #include "module.h"
 
-class Danmuku : public QMainWindow {
-  Q_OBJECT
+class Danmuku final : public QMainWindow {
+    Q_OBJECT
 
-  public:
+   public:
     explicit Danmuku(QWidget *parent = nullptr);
     ~Danmuku() override;
     [[nodiscard]] Module *getModule(const QString &name) const;
     void loadModule(Module *module);
-    void unloadModule(Module *module);
+    void unloadModule(const Module *module);
 
-  private:
+   private:
     QWidget *centralWidget;
     QVBoxLayout *layout_modules;
     std::unordered_map<QString, Module *> modules;

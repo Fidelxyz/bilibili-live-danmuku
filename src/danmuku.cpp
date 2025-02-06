@@ -2,12 +2,12 @@
 
 #include <QFile>
 #include <QGraphicsDropShadowEffect>
-#include <vector>
 
 #include "modules/danmu_display/danmu_display.h"
 #include "modules/live_room/live_room.h"
 
-Danmuku::Danmuku(QWidget *parent) : QMainWindow(parent) {  // deleted in ~Danmuku
+Danmuku::Danmuku(QWidget *parent) : QMainWindow(parent) {
+    // deleted in ~Danmuku
     qSetMessagePattern(
         "%{if-category}%{category} | %{endif}%{type} | %{file}:%{line} | "
         "%{function} | %{message}");
@@ -21,35 +21,25 @@ Danmuku::Danmuku(QWidget *parent) : QMainWindow(parent) {  // deleted in ~Danmuk
     centralWidget->setEnabled(true);
     setCentralWidget(centralWidget);
 
-    layout_modules = new QVBoxLayout(centralWidget);  // deleted by QT
+    layout_modules = new QVBoxLayout(centralWidget); // deleted by QT
 
     // TODO: Dynamic modules loader
-    loadModule(new LiveRoom(this));      // deleted by Qt
-    loadModule(new DanmuDisplay(this));  // deleted by Qt
-
-    // Qss
-    QFile qss(":/stylesheet/danmuku.qss");
-    if (qss.open(QFile::ReadOnly)) {
-        qDebug("QSS loaded.");
-        QString stylesheet = QLatin1String(qss.readAll());
-        setStyleSheet(stylesheet);
-        qss.close();
-    } else {
-        qWarning("Failed to load QSS stylesheet (danmuku.qss).");
-    }
+    loadModule(new LiveRoom(this)); // deleted by Qt
+    loadModule(new DanmuDisplay(this)); // deleted by Qt
 }
 
 Danmuku::~Danmuku() {
     qDebug("Enter ~Danmuku");
     for (auto module = modules.begin(); module != modules.end();
          module = modules.erase(module)) {
+        // TODO: erase in unloadModule
         unloadModule(module->second);
     }
     qDebug("Exit ~Danmuku");
 }
 
 Module *Danmuku::getModule(const QString &name) const {
-    auto iter = modules.find(name);
+    const auto iter = modules.find(name);
     if (iter == modules.end()) {
         qWarning() << "Module" << name << "not found.";
         return nullptr;
@@ -63,8 +53,9 @@ void Danmuku::loadModule(Module *module) {
     layout_modules->addWidget(module->getWidget());
 }
 
-void Danmuku::unloadModule(Module *module) {
+void Danmuku::unloadModule(const Module *module) {
     qDebug() << "Unloading module:" << module->moduleMetadata.name << module;
     layout_modules->removeWidget(module->getWidget());
+    // TODO: remove from modules here
     delete module;
 }

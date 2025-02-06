@@ -9,12 +9,12 @@ class DanmuWindow;
 }
 QT_END_NAMESPACE
 
-class DanmuWindow : public QWidget {
+class DanmuWindow final : public QWidget {
     Q_OBJECT
 
    public:
-    DanmuWindow(QWidget *parent = nullptr);
-    ~DanmuWindow();
+    explicit DanmuWindow(QWidget *parent = nullptr);
+    ~DanmuWindow() override;
     void setTransparentForMouseEvents(const bool &on);
 
    private:

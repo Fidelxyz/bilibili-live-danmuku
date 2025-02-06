@@ -6,28 +6,27 @@
 #include <QSettings>
 
 namespace DEFAULT_CONFIG {
-const int windowWidth = 350;
-const int windowHeight = 600;
-const int opacity = 70;
-const int borderRadius = 8;
-const bool lockPosition = false;
-const QFont font = QFont("Microsoft YaHei UI");
+constexpr int windowWidth = 350;
+constexpr int windowHeight = 600;
+constexpr int opacity = 70;
+constexpr int borderRadius = 8;
+constexpr bool lockPosition = false;
+const auto font = QFont("Microsoft YaHei UI");
 const QColor mainColor = "white";
 const QColor usernameColor = "lightblue";
 const QColor contentColor = "white";
 const QColor backgroundColor = "black";
-const int scrollingSpeed = 20;
-const int fps = 30;
-const bool showGift = true;
-const int giftHeightRatio = 20;
+constexpr int scrollingSpeed = 20;
+constexpr int fps = 30;
+constexpr bool showGift = true;
+constexpr int giftHeightRatio = 20;
 }  // namespace DEFAULT_CONFIG
 
-class DanmuConfig : public QObject {
+class DanmuConfig final : public QObject {
     Q_OBJECT
 
    public:
-    DanmuConfig(QObject *parent = nullptr);
-    ~DanmuConfig();
+    explicit DanmuConfig(QObject *parent = nullptr);
     void load();
     void save();
     void apply();

@@ -6,7 +6,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-QJsonObject requestJsonResponse(QString url) {
+QJsonObject requestJsonResponse(const QString& url) {
     QNetworkAccessManager networkAccessManager;
     QNetworkRequest request;
     request.setUrl(url);
@@ -15,7 +15,7 @@ QJsonObject requestJsonResponse(QString url) {
     QNetworkReply *reply = networkAccessManager.get(request);
     QObject::connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
     eventLoop.exec();
-    QByteArray responseByte = reply->readAll();
+    const QByteArray responseByte = reply->readAll();
     qDebug() << "getJsonResponse:" << responseByte;
 
     return QJsonDocument::fromJson(responseByte).object();

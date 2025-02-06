@@ -1,721 +1,721 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DanmuPanel</class>
- <widget class="QWidget" name="DanmuPanel">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>706</width>
-    <height>421</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>弹幕面板配置</string>
-  </property>
-  <widget class="QWidget" name="gridLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>671</width>
-     <height>391</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="layout_panel">
-    <property name="leftMargin">
-     <number>20</number>
-    </property>
-    <property name="topMargin">
-     <number>20</number>
-    </property>
-    <property name="rightMargin">
-     <number>20</number>
-    </property>
-    <property name="bottomMargin">
-     <number>20</number>
-    </property>
-    <property name="horizontalSpacing">
-     <number>12</number>
-    </property>
-    <property name="verticalSpacing">
-     <number>8</number>
-    </property>
-    <item row="7" column="4">
-     <widget class="QLabel" name="prompt_backgroundColor">
-      <property name="text">
-       <string>背景颜色</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1">
-     <widget class="QSlider" name="slider_giftHeightRatio">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>99</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="6">
-     <widget class="QSpinBox" name="spin_fontSize">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>999</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="prompt_borderRadius">
-      <property name="text">
-       <string>圆角半径</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="6">
-     <widget class="QPushButton" name="btn_contentColor">
-      <property name="text">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="2">
-     <widget class="QPushButton" name="btn_toggleShowGift"/>
-    </item>
-    <item row="9" column="0">
-     <widget class="QLabel" name="prompt_toggleShowGift">
-      <property name="text">
-       <string>显示礼物</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QSpinBox" name="spin_windowHeight">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>99999</number>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="3">
-     <widget class="QLabel" name="prompt_danmuOptions">
-      <property name="text">
-       <string>弹幕选项</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="4">
-     <widget class="QLabel" name="prompt_font">
-      <property name="text">
-       <string>字体</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="4">
-     <widget class="QLabel" name="prompt_usernameColor">
-      <property name="text">
-       <string>用户名颜色</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="5">
-     <widget class="QSlider" name="slider_fontSize">
-      <property name="minimum">
-       <number>5</number>
-      </property>
-      <property name="maximum">
-       <number>50</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="6">
-     <widget class="QPushButton" name="btn_font">
-      <property name="text">
-       <string>修改字体…</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="6">
-     <widget class="QPushButton" name="btn_mainColor">
-      <property name="text">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="prompt_opacity">
-      <property name="text">
-       <string>不透明度</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QSpinBox" name="spin_opacity">
-      <property name="suffix">
-       <string>%</string>
-      </property>
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="2">
-     <widget class="QSpinBox" name="spin_scrollingSpeed">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>1000</number>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="4">
-     <widget class="QLabel" name="prompt_contentColor">
-      <property name="text">
-       <string>弹幕内容颜色</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="3" rowspan="11">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="prompt_fps">
-      <property name="text">
-       <string>FPS</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="4" colspan="3">
-     <widget class="QLabel" name="prompt_colorOptions">
-      <property name="text">
-       <string>配色选项</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="prompt_scrollingSpeed">
-      <property name="text">
-       <string>滚动速度</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="3">
-     <widget class="QLabel" name="prompt_windowOptions">
-      <property name="text">
-       <string>窗口选项</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QSpinBox" name="spin_windowWidth">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>99999</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QSlider" name="slider_windowHeight">
-      <property name="minimum">
-       <number>50</number>
-      </property>
-      <property name="maximum">
-       <number>1000</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="prompt_windowHeight">
-      <property name="text">
-       <string>高度</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QSlider" name="slider_windowWidth">
-      <property name="minimum">
-       <number>20</number>
-      </property>
-      <property name="maximum">
-       <number>1000</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="6">
-     <widget class="QPushButton" name="btn_backgroundColor">
-      <property name="text">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QSlider" name="slider_fps">
-      <property name="maximum">
-       <number>2</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0" colspan="3">
-     <widget class="QLabel" name="prompt_giftOptions">
-      <property name="text">
-       <string>礼物选项</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="4">
-     <widget class="QLabel" name="prompt_mainColor">
-      <property name="text">
-       <string>基本颜色</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0">
-     <widget class="QLabel" name="prompt_giftHeightRatio">
-      <property name="text">
-       <string>礼物窗口占比</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QSlider" name="slider_borderRadius">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="prompt_windowWidth">
-      <property name="text">
-       <string>宽度</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="2">
-     <widget class="QSpinBox" name="spin_giftHeightRatio">
-      <property name="suffix">
-       <string>%</string>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="6">
-     <widget class="QPushButton" name="btn_usernameColor">
-      <property name="text">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2">
-     <widget class="QComboBox" name="combo_fps">
-      <property name="editable">
-       <bool>true</bool>
-      </property>
-      <property name="insertPolicy">
-       <enum>QComboBox::NoInsert</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="5">
-     <widget class="QLabel" name="label_font">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QSlider" name="slider_opacity">
-      <property name="minimum">
-       <number>0</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4" colspan="3">
-     <widget class="QLabel" name="prompt_fontOptions">
-      <property name="text">
-       <string>字体选项</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="QSpinBox" name="spin_borderRadius">
-      <property name="maximum">
-       <number>99999</number>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QSlider" name="slider_scrollingSpeed">
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4">
-     <widget class="QLabel" name="prompt_fontSize">
-      <property name="text">
-       <string>字体大小</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="2" colspan="5">
-     <layout class="QHBoxLayout" name="layout_controlButton">
-      <property name="spacing">
-       <number>8</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="btn_testDanmu">
-        <property name="text">
-         <string>测试弹幕</string>
+    <class>DanmuPanel</class>
+    <widget class="QWidget" name="DanmuPanel">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>706</width>
+                <height>421</height>
+            </rect>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_testGift">
-        <property name="text">
-         <string>测试礼物</string>
+        <property name="windowTitle">
+            <string>弹幕面板配置</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_setToDefault">
-        <property name="text">
-         <string>恢复默认</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_cancelChange">
-        <property name="text">
-         <string>取消修改</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_apply">
-        <property name="text">
-         <string>应用</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
- </widget>
- <tabstops>
-  <tabstop>slider_windowWidth</tabstop>
-  <tabstop>spin_windowWidth</tabstop>
-  <tabstop>slider_windowHeight</tabstop>
-  <tabstop>spin_windowHeight</tabstop>
-  <tabstop>btn_testDanmu</tabstop>
- </tabstops>
- <resources/>
- <connections>
-  <connection>
-   <sender>slider_windowHeight</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_windowHeight</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>221</x>
-     <y>118</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>308</x>
-     <y>121</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_windowHeight</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_windowHeight</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>308</x>
-     <y>121</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>221</x>
-     <y>118</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_windowWidth</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_windowWidth</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>221</x>
-     <y>88</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>329</x>
-     <y>91</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_windowWidth</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_windowWidth</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>329</x>
-     <y>91</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>221</x>
-     <y>88</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_fontSize</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_fontSize</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>555</x>
-     <y>118</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>670</x>
-     <y>121</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_fontSize</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_fontSize</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>670</x>
-     <y>121</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>555</x>
-     <y>118</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_opacity</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_opacity</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>221</x>
-     <y>146</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>329</x>
-     <y>149</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_opacity</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_opacity</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>329</x>
-     <y>149</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>221</x>
-     <y>146</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_scrollingSpeed</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_scrollingSpeed</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>249</x>
-     <y>240</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>329</x>
-     <y>239</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_scrollingSpeed</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_scrollingSpeed</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>329</x>
-     <y>240</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>249</x>
-     <y>240</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_fps</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>combo_fps</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>249</x>
-     <y>272</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>329</x>
-     <y>275</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>combo_fps</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>slider_fps</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>329</x>
-     <y>275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>249</x>
-     <y>272</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_borderRadius</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_borderRadius</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>221</x>
-     <y>176</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>329</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_borderRadius</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_borderRadius</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>329</x>
-     <y>179</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>221</x>
-     <y>176</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>slider_giftHeightRatio</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spin_giftHeightRatio</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>179</x>
-     <y>358</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>262</x>
-     <y>358</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spin_giftHeightRatio</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>slider_giftHeightRatio</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>318</x>
-     <y>348</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>181</x>
-     <y>360</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+        <widget class="QWidget" name="gridLayoutWidget">
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>671</width>
+                    <height>391</height>
+                </rect>
+            </property>
+            <layout class="QGridLayout" name="layout_panel">
+                <property name="leftMargin">
+                    <number>20</number>
+                </property>
+                <property name="topMargin">
+                    <number>20</number>
+                </property>
+                <property name="rightMargin">
+                    <number>20</number>
+                </property>
+                <property name="bottomMargin">
+                    <number>20</number>
+                </property>
+                <property name="horizontalSpacing">
+                    <number>12</number>
+                </property>
+                <property name="verticalSpacing">
+                    <number>8</number>
+                </property>
+                <item row="7" column="4">
+                    <widget class="QLabel" name="prompt_backgroundColor">
+                        <property name="text">
+                            <string>背景颜色</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="10" column="1">
+                    <widget class="QSlider" name="slider_giftHeightRatio">
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                        <property name="maximum">
+                            <number>99</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="6">
+                    <widget class="QSpinBox" name="spin_fontSize">
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                        <property name="maximum">
+                            <number>999</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="4" column="0">
+                    <widget class="QLabel" name="prompt_borderRadius">
+                        <property name="text">
+                            <string>圆角半径</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="6" column="6">
+                    <widget class="QPushButton" name="btn_contentColor">
+                        <property name="text">
+                            <string notr="true"/>
+                        </property>
+                    </widget>
+                </item>
+                <item row="9" column="2">
+                    <widget class="QPushButton" name="btn_toggleShowGift"/>
+                </item>
+                <item row="9" column="0">
+                    <widget class="QLabel" name="prompt_toggleShowGift">
+                        <property name="text">
+                            <string>显示礼物</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="2">
+                    <widget class="QSpinBox" name="spin_windowHeight">
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                        <property name="maximum">
+                            <number>99999</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="5" column="0" colspan="3">
+                    <widget class="QLabel" name="prompt_danmuOptions">
+                        <property name="text">
+                            <string>弹幕选项</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="1" column="4">
+                    <widget class="QLabel" name="prompt_font">
+                        <property name="text">
+                            <string>字体</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="5" column="4">
+                    <widget class="QLabel" name="prompt_usernameColor">
+                        <property name="text">
+                            <string>用户名颜色</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="5">
+                    <widget class="QSlider" name="slider_fontSize">
+                        <property name="minimum">
+                            <number>5</number>
+                        </property>
+                        <property name="maximum">
+                            <number>50</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="1" column="6">
+                    <widget class="QPushButton" name="btn_font">
+                        <property name="text">
+                            <string>修改字体…</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="4" column="6">
+                    <widget class="QPushButton" name="btn_mainColor">
+                        <property name="text">
+                            <string notr="true"/>
+                        </property>
+                    </widget>
+                </item>
+                <item row="3" column="0">
+                    <widget class="QLabel" name="prompt_opacity">
+                        <property name="text">
+                            <string>不透明度</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="3" column="2">
+                    <widget class="QSpinBox" name="spin_opacity">
+                        <property name="suffix">
+                            <string>%</string>
+                        </property>
+                        <property name="minimum">
+                            <number>0</number>
+                        </property>
+                        <property name="maximum">
+                            <number>100</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="6" column="2">
+                    <widget class="QSpinBox" name="spin_scrollingSpeed">
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                        <property name="maximum">
+                            <number>1000</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="6" column="4">
+                    <widget class="QLabel" name="prompt_contentColor">
+                        <property name="text">
+                            <string>弹幕内容颜色</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="0" column="3" rowspan="11">
+                    <spacer name="verticalSpacer">
+                        <property name="orientation">
+                            <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                            <size>
+                                <width>20</width>
+                                <height>40</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </item>
+                <item row="7" column="0">
+                    <widget class="QLabel" name="prompt_fps">
+                        <property name="text">
+                            <string>FPS</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="3" column="4" colspan="3">
+                    <widget class="QLabel" name="prompt_colorOptions">
+                        <property name="text">
+                            <string>配色选项</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="6" column="0">
+                    <widget class="QLabel" name="prompt_scrollingSpeed">
+                        <property name="text">
+                            <string>滚动速度</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="0" column="0" colspan="3">
+                    <widget class="QLabel" name="prompt_windowOptions">
+                        <property name="text">
+                            <string>窗口选项</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="1" column="2">
+                    <widget class="QSpinBox" name="spin_windowWidth">
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                        <property name="maximum">
+                            <number>99999</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="1">
+                    <widget class="QSlider" name="slider_windowHeight">
+                        <property name="minimum">
+                            <number>50</number>
+                        </property>
+                        <property name="maximum">
+                            <number>1000</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="0">
+                    <widget class="QLabel" name="prompt_windowHeight">
+                        <property name="text">
+                            <string>高度</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="1" column="1">
+                    <widget class="QSlider" name="slider_windowWidth">
+                        <property name="minimum">
+                            <number>20</number>
+                        </property>
+                        <property name="maximum">
+                            <number>1000</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="7" column="6">
+                    <widget class="QPushButton" name="btn_backgroundColor">
+                        <property name="text">
+                            <string notr="true"/>
+                        </property>
+                    </widget>
+                </item>
+                <item row="7" column="1">
+                    <widget class="QSlider" name="slider_fps">
+                        <property name="maximum">
+                            <number>2</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="8" column="0" colspan="3">
+                    <widget class="QLabel" name="prompt_giftOptions">
+                        <property name="text">
+                            <string>礼物选项</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="4" column="4">
+                    <widget class="QLabel" name="prompt_mainColor">
+                        <property name="text">
+                            <string>基本颜色</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="10" column="0">
+                    <widget class="QLabel" name="prompt_giftHeightRatio">
+                        <property name="text">
+                            <string>礼物窗口占比</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="4" column="1">
+                    <widget class="QSlider" name="slider_borderRadius">
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="1" column="0">
+                    <widget class="QLabel" name="prompt_windowWidth">
+                        <property name="text">
+                            <string>宽度</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="10" column="2">
+                    <widget class="QSpinBox" name="spin_giftHeightRatio">
+                        <property name="suffix">
+                            <string>%</string>
+                        </property>
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="5" column="6">
+                    <widget class="QPushButton" name="btn_usernameColor">
+                        <property name="text">
+                            <string notr="true"/>
+                        </property>
+                    </widget>
+                </item>
+                <item row="7" column="2">
+                    <widget class="QComboBox" name="combo_fps">
+                        <property name="editable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="insertPolicy">
+                            <enum>QComboBox::NoInsert</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="1" column="5">
+                    <widget class="QLabel" name="label_font">
+                        <property name="text">
+                            <string/>
+                        </property>
+                    </widget>
+                </item>
+                <item row="3" column="1">
+                    <widget class="QSlider" name="slider_opacity">
+                        <property name="minimum">
+                            <number>0</number>
+                        </property>
+                        <property name="maximum">
+                            <number>100</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="0" column="4" colspan="3">
+                    <widget class="QLabel" name="prompt_fontOptions">
+                        <property name="text">
+                            <string>字体选项</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="4" column="2">
+                    <widget class="QSpinBox" name="spin_borderRadius">
+                        <property name="maximum">
+                            <number>99999</number>
+                        </property>
+                    </widget>
+                </item>
+                <item row="6" column="1">
+                    <widget class="QSlider" name="slider_scrollingSpeed">
+                        <property name="minimum">
+                            <number>1</number>
+                        </property>
+                        <property name="maximum">
+                            <number>100</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="4">
+                    <widget class="QLabel" name="prompt_fontSize">
+                        <property name="text">
+                            <string>字体大小</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="11" column="2" colspan="5">
+                    <layout class="QHBoxLayout" name="layout_controlButton">
+                        <property name="spacing">
+                            <number>8</number>
+                        </property>
+                        <item>
+                            <widget class="QPushButton" name="btn_testDanmu">
+                                <property name="text">
+                                    <string>测试弹幕</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="btn_testGift">
+                                <property name="text">
+                                    <string>测试礼物</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="btn_setToDefault">
+                                <property name="text">
+                                    <string>恢复默认</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="btn_cancelChange">
+                                <property name="text">
+                                    <string>取消修改</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="btn_apply">
+                                <property name="text">
+                                    <string>应用</string>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </item>
+            </layout>
+        </widget>
+    </widget>
+    <tabstops>
+        <tabstop>slider_windowWidth</tabstop>
+        <tabstop>spin_windowWidth</tabstop>
+        <tabstop>slider_windowHeight</tabstop>
+        <tabstop>spin_windowHeight</tabstop>
+        <tabstop>btn_testDanmu</tabstop>
+    </tabstops>
+    <resources/>
+    <connections>
+        <connection>
+            <sender>slider_windowHeight</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_windowHeight</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>221</x>
+                    <y>118</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>308</x>
+                    <y>121</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_windowHeight</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_windowHeight</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>308</x>
+                    <y>121</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>221</x>
+                    <y>118</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_windowWidth</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_windowWidth</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>221</x>
+                    <y>88</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>329</x>
+                    <y>91</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_windowWidth</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_windowWidth</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>329</x>
+                    <y>91</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>221</x>
+                    <y>88</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_fontSize</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_fontSize</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>555</x>
+                    <y>118</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>670</x>
+                    <y>121</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_fontSize</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_fontSize</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>670</x>
+                    <y>121</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>555</x>
+                    <y>118</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_opacity</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_opacity</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>221</x>
+                    <y>146</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>329</x>
+                    <y>149</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_opacity</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_opacity</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>329</x>
+                    <y>149</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>221</x>
+                    <y>146</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_scrollingSpeed</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_scrollingSpeed</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>249</x>
+                    <y>240</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>329</x>
+                    <y>239</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_scrollingSpeed</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_scrollingSpeed</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>329</x>
+                    <y>240</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>249</x>
+                    <y>240</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_fps</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>combo_fps</receiver>
+            <slot>setCurrentIndex(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>249</x>
+                    <y>272</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>329</x>
+                    <y>275</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>combo_fps</sender>
+            <signal>currentIndexChanged(int)</signal>
+            <receiver>slider_fps</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>329</x>
+                    <y>275</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>249</x>
+                    <y>272</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_borderRadius</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_borderRadius</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>221</x>
+                    <y>176</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>329</x>
+                    <y>179</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_borderRadius</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_borderRadius</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>329</x>
+                    <y>179</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>221</x>
+                    <y>176</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>slider_giftHeightRatio</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>spin_giftHeightRatio</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>179</x>
+                    <y>358</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>262</x>
+                    <y>358</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>spin_giftHeightRatio</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>slider_giftHeightRatio</receiver>
+            <slot>setValue(int)</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>318</x>
+                    <y>348</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>181</x>
+                    <y>360</y>
+                </hint>
+            </hints>
+        </connection>
+    </connections>
 </ui>

@@ -3,24 +3,23 @@
 
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include <QObject>
 #include <QPushButton>
 #include <QThread>
 
 #include "module.h"
 #include "protocol.h"
 
-class LiveRoom : public Module {
+class LiveRoom final : public Module {
     Q_OBJECT
     MODULE
 
    public:
-    LiveRoom(Danmuku* parent);
-    ~LiveRoom();
+    explicit LiveRoom(Danmuku* parent);
+    ~LiveRoom() override;
 
    private:
-    QJsonObject requestDanmuInfo();
-    int requestUid();
+    [[nodiscard]] QJsonObject requestDanmuInfo() const;
+    [[nodiscard]] int requestUid() const;
     void stop();
 
    signals:
@@ -30,7 +29,7 @@ class LiveRoom : public Module {
 
    public slots:
     void start();
-    QObject* getProtocol();
+    [[nodiscard]] QObject* getProtocol() const;
     void updateFollowersCount();
 
    private:

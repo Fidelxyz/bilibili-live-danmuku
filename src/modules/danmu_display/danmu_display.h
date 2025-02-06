@@ -2,7 +2,6 @@
 #define DANMUKU_MODULES_DANMU_DISPLAY_DANMU_DISPLAY_H_
 
 #include <QHBoxLayout>
-#include <QListWidget>
 #include <QPointer>
 #include <QPushButton>
 #include <QTimer>
@@ -13,21 +12,21 @@
 #include "danmu_window.h"
 #include "module.h"
 
-const int UPDATE_FOLLOWERS_COUNT_INTERVAL_MS = 30000;
+constexpr int UPDATE_FOLLOWERS_COUNT_INTERVAL_MS = 30000;
 
-class DanmuDisplay : public Module {
+class DanmuDisplay final : public Module {
     Q_OBJECT
     MODULE
 
    public:
-    DanmuDisplay(Danmuku *parent);
-    ~DanmuDisplay();
+    explicit DanmuDisplay(Danmuku *parent);
+    ~DanmuDisplay() override;
 
    private:
     void setLockPosition(const bool &on);
 
    public slots:
-    void enable();
+    void enable() const;
     void disable();
     void startDisplay();
     void startPanel();
@@ -36,11 +35,10 @@ class DanmuDisplay : public Module {
     void applyConfig();
     void toggleLockPosition();
 
-    void recvDanmu(const int uid, const QString &username, const QString &text,
-                   const bool isAdmin, const bool isVIP,
-                   const int userGuardLevel);
-    void recvGift(const int uid, const QString &username,
-                  const QString &giftName, const int giftCount);
+    void recvDanmu(int uid, const QString &username, const QString &text,
+                   bool isAdmin, bool isVIP, int userGuardLevel);
+    void recvGift(int uid, const QString &username, const QString &giftName,
+                  int giftCount);
 
     void updateViewersCount(const int &viewersCount);
     void updateFollowersCount(const int &followersCount);

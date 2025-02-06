@@ -1,9 +1,7 @@
 #include "decompress.h"
 
-#include <QDebug>
-
 #include "brotli/decode.h"
-//#include "zlib/zlib.h"
+// #include "zlib/zlib.h"
 
 // HAVE NOT BEEN TESTED YET
 // bool decompressDeflate(const QByteArray& data, QByteArray& result) {
@@ -29,15 +27,16 @@
 //     return false;
 // }
 
-bool decompressBrotli(const QByteArray& data, QByteArray& result) {
-    BrotliDecoderState* s = BrotliDecoderCreateInstance(NULL, NULL, NULL);
+bool decompressBrotli(const QByteArray& data, QByteArray* const result) {
+    BrotliDecoderState* s =
+        BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
 
-    size_t bufSize = data.size();
-    size_t availableIn = bufSize;
-    size_t availableOut = bufSize;
-    const uint8_t* nextIn = (const uint8_t*)data.constData();
-    uint8_t* nextOut = (uint8_t*)result.data();
-    size_t totalOut = 0;
+    qsizetype bufSize      = data.size();
+    size_t    availableIn  = bufSize;
+    size_t    availableOut = bufSize;
+    auto      nextIn       = reinterpret_cast<const uint8_t*>(data.constData());
+    auto      nextOut      = reinterpret_cast<uint8_t*>(result->data());
+    size_t    totalOut     = 0;
 
     // qDebug() << "Start to decompress data: " << data;
 
@@ -45,8 +44,8 @@ bool decompressBrotli(const QByteArray& data, QByteArray& result) {
     do {
         availableOut += bufSize;
         bufSize <<= 1;
-        result.resize(bufSize);
-        nextOut = ((uint8_t*)result.data()) +
+        result->resize(bufSize);
+        nextOut = reinterpret_cast<uint8_t*>(result->data()) +
                   totalOut;  // after resize, the data address is changed
         // qDebug() << "Buffer size:" << availableOut;
         status = BrotliDecoderDecompressStream(
@@ -54,7 +53,7 @@ bool decompressBrotli(const QByteArray& data, QByteArray& result) {
     } while (status == BROTLI_DECODER_RESULT_NEEDS_MORE_OUTPUT);
 
     BrotliDecoderDestroyInstance(s);
-    result.truncate(totalOut);
+    result->truncate(static_cast<qsizetype>(totalOut));
 
     if (status == BROTLI_DECODER_RESULT_SUCCESS) {
         // qDebug() << "Decompressed length:" << totalOut;

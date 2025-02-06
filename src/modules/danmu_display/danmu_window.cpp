@@ -1,6 +1,8 @@
 #include "danmu_window.h"
 
+#ifdef Q_OS_WIN
 #include <windows.h>
+#endif
 
 #include <QFile>
 #include <QMouseEvent>
@@ -29,17 +31,6 @@ DanmuWindow::DanmuWindow(QWidget *parent)
     // ignore mouse event
     ui->list_danmu->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->list_gift->setAttribute(Qt::WA_TransparentForMouseEvents);
-
-    // Qss
-    QFile qss(":/modules/danmu_display/stylesheet/danmu_window.qss");
-    if (qss.open(QFile::ReadOnly)) {
-        qDebug("QSS loaded.");
-        QString stylesheet = QLatin1String(qss.readAll());
-        setStyleSheet(stylesheet);
-        qss.close();
-    } else {
-        qWarning("Failed to load QSS stylesheet (danmu_window.qss).");
-    }
 
     show();
 }
@@ -78,11 +69,8 @@ void DanmuWindow::mouseMoveEvent(QMouseEvent *event) {
     QWidget::mouseMoveEvent(event);
 }
 
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
-
 void DanmuWindow::setTransparentForMouseEvents(const bool &on) {
+    // TODO: Not working on macOS
 #ifdef Q_OS_WIN
     if (on) {
         SetWindowLong(

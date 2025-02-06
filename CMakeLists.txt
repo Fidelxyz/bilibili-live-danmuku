@@ -2,6 +2,16 @@ cmake_minimum_required(VERSION 3.16)
 project(bilibili-live-danmuku)
 
 set(CMAKE_CXX_STANDARD 17)
+add_compile_options(
+        -Wall -Wextra
+        -fsanitize=address,undefined
+        -fsanitize-address-use-after-scope
+)
+add_link_options(
+        -Wall -Wextra
+        -fsanitize=address,undefined
+        -fsanitize-address-use-after-scope
+)
 
 # Find Qt libraries
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Network WebSockets Widgets LinguistTools)
@@ -54,8 +64,6 @@ set(UI_FILES
 
 # Resource files
 set(RESOURCES
-        src/modules/danmu_display/stylesheet/stylesheet.qrc
-        src/stylesheet/stylesheet.qrc
 )
 
 # Translation files
@@ -79,9 +87,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         unofficial::brotli::brotlidec
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-        LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
-        LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+if (MSVC)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
+            LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+endif ()
 
 # Add translations
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES zh_CN)

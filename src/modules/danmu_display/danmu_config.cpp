@@ -12,8 +12,6 @@ DanmuConfig::DanmuConfig(QObject *parent)
     qDebug() << "INI file path:" << settings.fileName();
 }
 
-DanmuConfig::~DanmuConfig() {}
-
 void DanmuConfig::load() {
     windowWidth =
         settings.value("Window/WindowWidth", DEFAULT_CONFIG::windowWidth)

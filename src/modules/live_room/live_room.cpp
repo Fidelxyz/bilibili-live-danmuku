@@ -1,14 +1,12 @@
 #include "live_room.h"
 
-#include <QJsonObject>
-
 #include "utils/network.h"
 
 LiveRoom::LiveRoom(Danmuku *parent) : Module("live_room", {}, parent) {
     protocol = nullptr;
 
     // Control UI
-    QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by Qt
+    auto *layout = new QHBoxLayout(widget);  // deleted by Qt
 
     input_roomID = new QLineEdit(widget);  // deleted by Qt
     input_roomID->setPlaceholderText(tr("直播间号"));
@@ -52,9 +50,8 @@ void LiveRoom::start() {
     protocol->moveToThread(&protocolThread);
     protocolThread.start();
 
-    QMetaObject::invokeMethod(protocol, "startConnection",
-                              Q_ARG(const int &, roomID),
-                              Q_ARG(const QJsonObject &, danmuInfo));
+    QMetaObject::invokeMethod(protocol, "startConnection", Q_ARG(int, roomID),
+                              Q_ARG(QJsonObject, danmuInfo));
 
     uid = requestUid();
 
@@ -69,27 +66,27 @@ void LiveRoom::stop() {
     }
     emit stopped();
     QMetaObject::invokeMethod(protocol, "stopConnection",
-                              (Qt::ConnectionType)Qt::BlockingQueuedConnection);
+                              Qt::BlockingQueuedConnection);
     protocolThread.quit();
     protocolThread.wait();
     protocol = nullptr;
     qDebug("Exit stop");
 }
 
-QObject *LiveRoom::getProtocol() { return protocol; }
+QObject *LiveRoom::getProtocol() const { return protocol; }
 
-QJsonObject LiveRoom::requestDanmuInfo() {
+QJsonObject LiveRoom::requestDanmuInfo() const {
     QJsonObject response = requestJsonResponse(
         QString("https://api.live.bilibili.com/xlive/web-room/v1/index/"
                 "getDanmuInfo?id=%1")
             .arg(roomID));
     if (response["code"].toInt() != 0) {
-        qWarning("Error occured in requestDanmuInfo.");
+        qWarning("Error occurred in requestDanmuInfo.");
     }
     return response;
 }
 
-int LiveRoom::requestUid() {
+int LiveRoom::requestUid() const {
     QJsonObject response = requestJsonResponse(
         QString("https://api.live.bilibili.com/xlive/web-room/v2/index/"
                 "getRoomPlayInfo?room_id=%1&protocol=0,1&format=0,1,2&"
@@ -97,7 +94,7 @@ int LiveRoom::requestUid() {
                 "1&qn=0&platform=web&ptype=8")
             .arg(roomID));
     if (response["code"].toInt() != 0) {
-        qWarning("Error occured in requestUid.");
+        qWarning("Error occurred in requestUid.");
         return 0;
     }
     return response["data"].toObject()["uid"].toInt();
@@ -108,7 +105,7 @@ void LiveRoom::updateFollowersCount() {
         QString("https://api.bilibili.com/x/relation/stat?vmid=%1&jsonp=jsonp")
             .arg(uid));
     if (response["code"].toInt() != 0) {
-        qWarning("Error occured in followersCountUpdated.");
+        qWarning("Error occurred in followersCountUpdated.");
         return;
     }
     qDebug()

@@ -65,9 +65,9 @@ void DanmuPanel::loadConfig() {
     ui->label_font->setText(
         QString("%1 %2").arg(font.family(), font.styleName()));
     ui->spin_fontSize->setValue(font.pointSize());
-    mainColor = config->mainColor;
-    usernameColor = config->usernameColor;
-    contentColor = config->contentColor;
+    mainColor       = config->mainColor;
+    usernameColor   = config->usernameColor;
+    contentColor    = config->contentColor;
     backgroundColor = config->backgroundColor;
     ui->spin_scrollingSpeed->setValue(config->scrollingSpeed);
     ui->combo_fps->setCurrentText(QString::number(config->fps));
@@ -79,7 +79,7 @@ void DanmuPanel::loadConfig() {
 
 #define SET_BTN_STYLE_SHEET(NAME)  \
     ui->btn_##NAME->setStyleSheet( \
-        QString("background-color:%1").arg(NAME.name()))
+        QString("background-color:%1").arg((NAME).name()))
 
     SET_BTN_STYLE_SHEET(mainColor);
     SET_BTN_STYLE_SHEET(usernameColor);
@@ -89,20 +89,20 @@ void DanmuPanel::loadConfig() {
 #undef SET_BTN_STYLE_SHEET
 }
 
-void DanmuPanel::apply() {
+void DanmuPanel::apply() const {
     qDebug("apply");
-    config->windowWidth = ui->spin_windowWidth->value();
-    config->windowHeight = ui->spin_windowHeight->value();
-    config->opacity = ui->spin_opacity->value();
-    config->borderRadius = ui->spin_borderRadius->value();
-    config->font = font;
-    config->mainColor = mainColor;
-    config->usernameColor = usernameColor;
-    config->contentColor = contentColor;
+    config->windowWidth     = ui->spin_windowWidth->value();
+    config->windowHeight    = ui->spin_windowHeight->value();
+    config->opacity         = ui->spin_opacity->value();
+    config->borderRadius    = ui->spin_borderRadius->value();
+    config->font            = font;
+    config->mainColor       = mainColor;
+    config->usernameColor   = usernameColor;
+    config->contentColor    = contentColor;
     config->backgroundColor = backgroundColor;
-    config->scrollingSpeed = ui->spin_scrollingSpeed->value();
-    config->fps = ui->combo_fps->currentText().toInt();
-    config->showGift = showGift;
+    config->scrollingSpeed  = ui->spin_scrollingSpeed->value();
+    config->fps             = ui->combo_fps->currentText().toInt();
+    config->showGift        = showGift;
     config->giftHeightRatio = ui->spin_giftHeightRatio->value();
     config->apply();
     config->save();
@@ -117,9 +117,9 @@ void DanmuPanel::setToDefault() {
     ui->label_font->setText(
         QString("%1 %2").arg(font.family(), font.styleName()));
     ui->spin_fontSize->setValue(font.pointSize());
-    mainColor = DEFAULT_CONFIG::mainColor;
-    usernameColor = DEFAULT_CONFIG::usernameColor;
-    contentColor = DEFAULT_CONFIG::contentColor;
+    mainColor       = DEFAULT_CONFIG::mainColor;
+    usernameColor   = DEFAULT_CONFIG::usernameColor;
+    contentColor    = DEFAULT_CONFIG::contentColor;
     backgroundColor = DEFAULT_CONFIG::backgroundColor;
     ui->spin_scrollingSpeed->setValue(DEFAULT_CONFIG::scrollingSpeed);
     ui->combo_fps->setCurrentText(QString::number(DEFAULT_CONFIG::fps));
@@ -131,7 +131,7 @@ void DanmuPanel::setToDefault() {
 
 #define SET_BTN_STYLE_SHEET(NAME)  \
     ui->btn_##NAME->setStyleSheet( \
-        QString("background-color:%1").arg(NAME.name()))
+        QString("background-color:%1").arg((NAME).name()))
 
     SET_BTN_STYLE_SHEET(mainColor);
     SET_BTN_STYLE_SHEET(usernameColor);
@@ -152,8 +152,8 @@ void DanmuPanel::emitTestGift() {
 }
 
 void DanmuPanel::setFont() {
-    bool ok;
-    QFont font = QFontDialog::getFont(&ok, this->font, this);
+    bool        ok;
+    const QFont font = QFontDialog::getFont(&ok, this->font, this);
     if (ok) {
         this->font = font;
         ui->label_font->setText(
@@ -166,10 +166,10 @@ void DanmuPanel::setFontSize(const int &fontSize) {
     font.setPointSize(fontSize);
 }
 
-#define SET_COLOR(NAME)                        \
-    NAME = QColorDialog::getColor(NAME, this), \
-    ui->btn_##NAME->setStyleSheet(             \
-        QString("background-color:%1").arg(NAME.name()))
+#define SET_COLOR(NAME)                            \
+    (NAME) = QColorDialog::getColor((NAME), this), \
+    ui->btn_##NAME->setStyleSheet(                 \
+        QString("background-color:%1").arg((NAME).name()))
 
 void DanmuPanel::setMainColor() { SET_COLOR(mainColor); }
 
@@ -184,7 +184,7 @@ void DanmuPanel::toggleShowGift() {
     setShowGift(showGift);
 }
 
-void DanmuPanel::setShowGift(const bool &on) {
+void DanmuPanel::setShowGift(const bool &on) const {
     ui->btn_toggleShowGift->setText(on ? "[ON]" : "[OFF]");
     ui->slider_giftHeightRatio->setEnabled(on);
     ui->spin_giftHeightRatio->setEnabled(on);

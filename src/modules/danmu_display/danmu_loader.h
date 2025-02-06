@@ -9,12 +9,12 @@
 #include <QWaitCondition>
 #include <queue>
 
-class DanmuLoader : public QThread {
+class DanmuLoader final : public QThread {
     Q_OBJECT
 
    public:
-    DanmuLoader(QListWidget *list, QObject *parent = nullptr);
-    ~DanmuLoader();
+    explicit DanmuLoader(QListWidget *list, QObject *parent = nullptr);
+    ~DanmuLoader() override;
     void loadItem(QListWidgetItem *item);
 
    protected:
@@ -27,17 +27,17 @@ class DanmuLoader : public QThread {
 
    private:
     std::queue<QListWidgetItem *> loadingItemQueue;  // item, height
-    int loadingItemTotalHeight;
-    int loadedItemTotalHeight;
-    int listViewHeight;
-    float scrollBarPos;
-    float scrollingSpeed;
-    unsigned long sleepIntervalMs;
+    int                           loadingItemTotalHeight;
+    int                           loadedItemTotalHeight;
+    int                           listViewHeight;
+    int                           scrollBarPos;
+    float                         scrollingSpeed;
+    unsigned long                 sleepIntervalMs;
 
-    QListWidget *list;
-    QScrollBar *scrollBar;
-    QMutex updateMutex;
-    QMutex loopMutex;
+    QListWidget   *list;
+    QScrollBar    *scrollBar;
+    QMutex         updateMutex;
+    QMutex         loopMutex;
     QWaitCondition updateCondition;
 };
 

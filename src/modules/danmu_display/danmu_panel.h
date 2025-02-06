@@ -10,19 +10,18 @@ namespace Ui {
 class DanmuPanel;
 }
 QT_END_NAMESPACE
-
-class DanmuPanel : public QWidget {
+class DanmuPanel final : public QWidget {
     Q_OBJECT
 
    public:
-    DanmuPanel(DanmuConfig *config, QWidget *parent = nullptr);
-    ~DanmuPanel();
+    explicit DanmuPanel(DanmuConfig *config, QWidget *parent = nullptr);
+    ~DanmuPanel() override;
 
    private:
     void emitTestDanmu();
     void emitTestGift();
     void loadConfig();
-    void apply();
+    void apply() const;
     void setToDefault();
     void setFont();
     void setFontSize(const int &fontSize);
@@ -31,14 +30,13 @@ class DanmuPanel : public QWidget {
     void setContentColor();
     void setBackgroundColor();
     void toggleShowGift();
-    void setShowGift(const bool &on);
+    void setShowGift(const bool &on) const;
 
    signals:
-    void testDanmu(const int uid, const QString &username, const QString &text,
-                   const bool isAdmin, const bool isVIP,
-                   const int userGuardLevel);
-    void testGift(const int uid, const QString &username,
-                  const QString &giftName, const int giftCount);
+    void testDanmu(int uid, const QString &username, const QString &text,
+                   bool isAdmin, bool isVIP, int userGuardLevel);
+    void testGift(int uid, const QString &username, const QString &giftName,
+                  int giftCount);
 
    private:
     Ui::DanmuPanel *ui;
@@ -53,5 +51,4 @@ class DanmuPanel : public QWidget {
 
     bool showGift;
 };
-
-#endif  // DANMUKU_MODULES_DANMU_DISPLAY_DANMU_LOADER_H_
+#endif

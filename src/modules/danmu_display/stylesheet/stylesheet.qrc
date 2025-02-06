@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/modules/danmu_display/stylesheet">
-        <file>danmu_window.qss</file>
-    </qresource>
-</RCC>

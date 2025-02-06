@@ -4,13 +4,13 @@
 
 #include "ui/ui_danmu_window.h"
 
-DanmuDisplay::DanmuDisplay(Danmuku *parent)
+DanmuDisplay::DanmuDisplay(Danmuku* parent)
     : Module("danmu_display", {"live_room"}, parent) {
-    config = nullptr;
+    config                    = nullptr;
     updateFollowersCountTimer = nullptr;
 
     // Module UI
-    QHBoxLayout *layout = new QHBoxLayout(widget);  // deleted by QT
+    auto* layout = new QHBoxLayout(widget);  // deleted by QT
 
     btn_startDisplay =
         new QPushButton(tr("弹幕显示"), widget);  // deleted by QT
@@ -30,7 +30,7 @@ DanmuDisplay::DanmuDisplay(Danmuku *parent)
             SLOT(toggleLockPosition()));
     layout->addWidget(btn_toggleLockPosition);
 
-    Module *moduleLiveRoom = getModule("live_room");
+    const Module* const moduleLiveRoom = getModule("live_room");
     connect(moduleLiveRoom, SIGNAL(started()), this, SLOT(enable()));
     connect(moduleLiveRoom, SIGNAL(stopped()), this, SLOT(disable()));
 }
@@ -43,7 +43,7 @@ DanmuDisplay::~DanmuDisplay() {
 
 // slots
 
-void DanmuDisplay::enable() { btn_startDisplay->setEnabled(true); }
+void DanmuDisplay::enable() const { btn_startDisplay->setEnabled(true); }
 
 void DanmuDisplay::disable() {
     btn_startDisplay->setEnabled(false);
@@ -76,9 +76,9 @@ void DanmuDisplay::startDisplay() {
     danmuLoader->start();
 
     // Followers count
-    Module *moduleLiveRoom = getModule("live_room");
-    connect(moduleLiveRoom, SIGNAL(followersCountUpdated(const int &)), this,
-            SLOT(updateFollowersCount(const int &)));
+    Module* moduleLiveRoom = getModule("live_room");
+    connect(moduleLiveRoom, SIGNAL(followersCountUpdated(int)), this,
+            SLOT(updateFollowersCount(int)));
     QMetaObject::invokeMethod(moduleLiveRoom, "updateFollowersCount");
     Q_ASSERT(updateFollowersCountTimer == nullptr);
     updateFollowersCountTimer = new QTimer(this);  // deleted in stop()
@@ -86,23 +86,15 @@ void DanmuDisplay::startDisplay() {
             SLOT(updateFollowersCount()));
     updateFollowersCountTimer->start(UPDATE_FOLLOWERS_COUNT_INTERVAL_MS);
 
-    QObject *protocol;
+    QObject* protocol;
     QMetaObject::invokeMethod(moduleLiveRoom, "getProtocol",
-                              Q_RETURN_ARG(QObject *, protocol));
-    connect(protocol, SIGNAL(viewersCountUpdated(const int &)), this,
-            SLOT(updateViewersCount(const int &)));
-    connect(protocol,
-            SIGNAL(recvDanmu(const int, const QString &, const QString &,
-                       const bool, const bool, const int)),
-            this,
-            SLOT(recvDanmu(const int, const QString &, const QString &,
-                     const bool, const bool, const int)));
-    connect(
-        protocol,
-        SIGNAL(
-            recvGift(const int, const QString &, const QString &, const int)),
-        this,
-        SLOT(recvGift(const int, const QString &, const QString &, const int)));
+                              Q_RETURN_ARG(QObject*, protocol));
+    connect(protocol, SIGNAL(viewersCountUpdated(int)), this,
+            SLOT(updateViewersCount(int)));
+    connect(protocol, SIGNAL(recvDanmu(int, QString, QString, bool, bool, int)),
+            this, SLOT(recvDanmu(int, QString, QString, bool, bool, int)));
+    connect(protocol, SIGNAL(recvGift(int, QString, QString, int)), this,
+            SLOT(recvGift(int, QString, QString, int)));
 }
 
 void DanmuDisplay::startPanel() {
@@ -120,10 +112,10 @@ void DanmuDisplay::startPanel() {
 void DanmuDisplay::stop() {
     qDebug("Enter stop");
 
-    Module *moduleLiveRoom = getModule("live_room");
-    if (moduleLiveRoom != nullptr) {
-        disconnect(moduleLiveRoom, SIGNAL(followersCountUpdated(const int &)),
-                   this, SLOT(updateFollowersCount(const int &)));
+    if (Module* moduleLiveRoom = getModule("live_room");
+        moduleLiveRoom != nullptr) {
+        disconnect(moduleLiveRoom, SIGNAL(followersCountUpdated(const int&)),
+                   this, SLOT(updateFollowersCount(const int&)));
     }
 
     if (updateFollowersCountTimer != nullptr) {
@@ -154,8 +146,8 @@ void DanmuDisplay::stop() {
     qDebug("Exit stop");
 }
 
-void DanmuDisplay::recvDanmu(const int uid, const QString &username,
-                             const QString &text, const bool isAdmin,
+void DanmuDisplay::recvDanmu(const int uid, const QString& username,
+                             const QString& text, const bool isAdmin,
                              const bool isVIP, const int userGuardLevel) {
     qDebug() << "Display danmu: " << uid << username << text << isAdmin << isVIP
              << userGuardLevel;
@@ -171,7 +163,7 @@ void DanmuDisplay::recvDanmu(const int uid, const QString &username,
         suffix.append("<span style=\"color:yellow\">[房]</span>");
     }
 
-    QLabel *label =
+    auto* label =
         new QLabel(danmuContentFormat.arg(prefix, username, suffix, text),
                    window->ui->list_danmu);  // deleted by QT
 
@@ -179,8 +171,7 @@ void DanmuDisplay::recvDanmu(const int uid, const QString &username,
     label->setFixedWidth(window->ui->list_danmu->width());
     label->setWordWrap(true);
 
-    QListWidgetItem *item =
-        new QListWidgetItem(window->ui->list_danmu);  // deleted by QT
+    auto* item = new QListWidgetItem(window->ui->list_danmu);  // deleted by QT
     window->ui->list_danmu->addItem(item);
     window->ui->list_danmu->setItemWidget(item, label);
     item->setSizeHint(label->sizeHint());
@@ -188,23 +179,23 @@ void DanmuDisplay::recvDanmu(const int uid, const QString &username,
     danmuLoader->loadItem(item);
 }
 
-void DanmuDisplay::recvGift(const int uid, const QString &username,
-                            const QString &giftName, const int giftCount) {
+void DanmuDisplay::recvGift(const int uid, const QString& username,
+                            const QString& giftName, const int giftCount) {
     if (giftLoader.isNull()) {
         return;
     }
 
     qDebug() << "Display gift:" << uid << username << giftName << giftCount;
 
-    QLabel *label = new QLabel(
-        giftContentFormat.arg(username, giftName, QString::number(giftCount)));
+    auto* label = new QLabel(
+        giftContentFormat.arg(username, giftName, QString::number(giftCount)),
+        window->ui->list_gift);
 
     label->setFont(config->font);
     label->setFixedWidth(window->ui->list_gift->width());
     label->setWordWrap(true);
 
-    QListWidgetItem *item =
-        new QListWidgetItem(window->ui->list_gift);  // deleted by QT
+    auto* item = new QListWidgetItem(window->ui->list_gift);  // deleted by QT
     window->ui->list_gift->addItem(item);
     window->ui->list_gift->setItemWidget(item, label);
     item->setSizeHint(label->sizeHint());
@@ -212,27 +203,27 @@ void DanmuDisplay::recvGift(const int uid, const QString &username,
     giftLoader->loadItem(item);
 }
 
-void DanmuDisplay::updateViewersCount(const int &viewersCount) {
+void DanmuDisplay::updateViewersCount(const int& viewersCount) {
     window->ui->label_viewersCount->setText(QString::number(viewersCount));
     qDebug() << "Update viewers count (display):" << viewersCount;
 }
 
-void DanmuDisplay::updateFollowersCount(const int &followersCount) {
+void DanmuDisplay::updateFollowersCount(const int& followersCount) {
     window->ui->label_followersCount->setText(QString::number(followersCount));
     qDebug() << "Update followers count (display):" << followersCount;
 }
 
 void DanmuDisplay::applyConfig() {
     danmuContentFormat = QString(
-        "%1<span style=\"color:%2\">%3</span>%4: <span "
-        "style=\"color:%5\">%6</span>")
-        .arg("%1", config->usernameColor.name(), "%2",
-             "%3", config->contentColor.name(), "%4");
+                             "%1<span style=\"color:%2\">%3</span>%4: <span "
+                             "style=\"color:%5\">%6</span>")
+                             .arg("%1", config->usernameColor.name(), "%2",
+                                  "%3", config->contentColor.name(), "%4");
     giftContentFormat = QString(
-        "<span style=\"color:%1\">%2</span> 送出了礼物 "
-        "<span style=\"color:%3\">%4</span> x%5")
-        .arg(config->usernameColor.name(), "%1",
-             config->contentColor.name(), "%2", "%3");
+                            "<span style=\"color:%1\">%2</span> 送出了礼物 "
+                            "<span style=\"color:%3\">%4</span> x%5")
+                            .arg(config->usernameColor.name(), "%1",
+                                 config->contentColor.name(), "%2", "%3");
     window->setStyleSheet(
         QString("QLabel{color:%1}").arg(config->mainColor.name()));
     window->ui->frame_window->setStyleSheet(
@@ -242,7 +233,7 @@ void DanmuDisplay::applyConfig() {
 
     window->resize(config->windowWidth, config->windowHeight);
     window->ui->frame_window->resize(config->windowWidth, config->windowHeight);
-    window->setWindowOpacity((qreal)config->opacity / 100);
+    window->setWindowOpacity(static_cast<qreal>(config->opacity) / 100);
 
     window->ui->prompt_followersCount->setFont(config->font);
     window->ui->prompt_viewersCount->setFont(config->font);
@@ -254,7 +245,8 @@ void DanmuDisplay::applyConfig() {
     QMetaObject::invokeMethod(danmuLoader, "reload");
 
     // giftLoader
-    if (config->showGift) {  // showGift == true
+    if (config->showGift) {
+        // showGift == true
         if (giftLoader.isNull()) {
             giftLoader = new DanmuLoader(window->ui->list_gift,
                                          this);  // deleted in stop()
@@ -270,8 +262,8 @@ void DanmuDisplay::applyConfig() {
             window->ui->list_danmu, 100 - config->giftHeightRatio);
 
         QMetaObject::invokeMethod(giftLoader, "reload");
-
-    } else {  // showGift == false
+    } else {
+        // showGift == false
         if (!giftLoader.isNull()) {
             giftLoader->deleteLater();
             window->ui->list_gift->hide();
@@ -285,7 +277,7 @@ void DanmuDisplay::toggleLockPosition() {
     setLockPosition(config->lockPosition);
 }
 
-void DanmuDisplay::setLockPosition(const bool &on) {
+void DanmuDisplay::setLockPosition(const bool& on) {
     window->setTransparentForMouseEvents(on);
     btn_toggleLockPosition->setText(on ? tr("锁定窗口 [ON]")
                                        : tr("锁定窗口 [OFF]"));
