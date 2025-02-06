@@ -21,5 +21,6 @@ QWidget *Module::getWidget() const { return widget; }
 
 // for communication with other modules
 Module *Module::getModule(const QString &name) {
+    Q_ASSERT(moduleMetadata.dependencies.contains(name));
     return ((Danmuku *)parent())->getModule(name);
 }

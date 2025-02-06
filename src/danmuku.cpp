@@ -4,22 +4,24 @@
 #include <QGraphicsDropShadowEffect>
 #include <vector>
 
-#include "module.h"
 #include "modules/danmu_display/danmu_display.h"
 #include "modules/live_room/live_room.h"
-#include "ui/ui_danmuku.h"
 
-class Module;
-
-Danmuku::Danmuku(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::Danmuku) {  // deleted in ~Danmuku
-    ui->setupUi(this);
-
+Danmuku::Danmuku(QWidget *parent) : QMainWindow(parent) {  // deleted in ~Danmuku
     qSetMessagePattern(
         "%{if-category}%{category} | %{endif}%{type} | %{file}:%{line} | "
         "%{function} | %{message}");
 
-    layout_modules = new QVBoxLayout(ui->centralWidget);  // deleted by QT
+    // setup UI
+    resize(300, 180);
+    setWindowTitle(tr("Bilibili弹幕库 Developed by Fidel"));
+
+    centralWidget = new QWidget(this);
+    centralWidget->setObjectName("centralWidget");
+    centralWidget->setEnabled(true);
+    setCentralWidget(centralWidget);
+
+    layout_modules = new QVBoxLayout(centralWidget);  // deleted by QT
 
     // TODO: Dynamic modules loader
     loadModule(new LiveRoom(this));      // deleted by Qt
@@ -43,7 +45,6 @@ Danmuku::~Danmuku() {
          module = modules.erase(module)) {
         unloadModule(module->second);
     }
-    delete ui;
     qDebug("Exit ~Danmuku");
 }
 
@@ -64,5 +65,6 @@ void Danmuku::loadModule(Module *module) {
 
 void Danmuku::unloadModule(Module *module) {
     qDebug() << "Unloading module:" << module->moduleMetadata.name << module;
+    layout_modules->removeWidget(module->getWidget());
     delete module;
 }

@@ -5,7 +5,7 @@
 #include "ui/ui_danmu_window.h"
 
 DanmuDisplay::DanmuDisplay(Danmuku *parent)
-    : Module("danmu_display", {}, parent) {
+    : Module("danmu_display", {"live_room"}, parent) {
     config = nullptr;
     updateFollowersCountTimer = nullptr;
 
