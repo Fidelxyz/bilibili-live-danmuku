@@ -1,22 +1,27 @@
 cmake_minimum_required(VERSION 3.16)
-project(bilibili-live-danmuku)
+project(bilibili-live-danmuku
+        VERSION 0.1.1
+        LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
 
 # Compiler options
-add_compile_options(-Wall $<$<CONFIG:DEBUG>:-fsanitize=address>)
-if (NOT MSVC)
+if (MSVC)
     add_compile_options(
-            -Wextra
+            /W4
+            $<$<CONFIG:DEBUG>:/fsanitize=address>)
+    add_link_options(
+            /W4
+            $<$<CONFIG:DEBUG>:/fsanitize=address>)
+else ()
+    add_compile_options(
+            -Wall -Wextra
             $<$<CONFIG:DEBUG>:-fsanitize=address,undefined>
             $<$<CONFIG:DEBUG>:-fsanitize-address-use-after-scope>
     )
-endif ()
-
-add_link_options(-Wall -fsanitize=address)
-if (NOT MSVC)
     add_link_options(
-            -Wextra
+            -Wall -Wextra
             $<$<CONFIG:DEBUG>:-fsanitize=address,undefined>
             $<$<CONFIG:DEBUG>:-fsanitize-address-use-after-scope>
     )
@@ -112,3 +117,6 @@ qt_add_translations(${PROJECT_NAME})
 
 # Install rules
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(FILES $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> DESTINATION bin)
+install(PROGRAMS "$<TARGET_FILE:Qt6::QWindowsIntegrationPlugin>" DESTINATION bin/platforms)
+install(PROGRAMS "$<TARGET_FILE:Qt6::QModernWindowsStylePlugin>" DESTINATION bin/styles)
