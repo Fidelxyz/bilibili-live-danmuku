@@ -47,7 +47,9 @@ jobs:
           submodules: true
 
       - name: Setup Vcpkg
-        run: .\vcpkg\bootstrap-vcpkg.bat
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git 
+          .\vcpkg\bootstrap-vcpkg.bat
 
       - uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -59,6 +61,7 @@ jobs:
           -B ./build
           -G Ninja
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build
         id: build
