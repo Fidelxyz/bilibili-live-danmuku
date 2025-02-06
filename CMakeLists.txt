@@ -127,7 +127,7 @@ qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES zh_CN)
 qt_add_translations(${PROJECT_NAME})
 
 # Install rules
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-install(FILES $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> DESTINATION bin)
-install(PROGRAMS "$<TARGET_FILE:Qt6::QWindowsIntegrationPlugin>" DESTINATION bin/platforms)
-install(PROGRAMS "$<TARGET_FILE:Qt6::QModernWindowsStylePlugin>" DESTINATION bin/styles)
+install(TARGETS ${PROJECT_NAME} DESTINATION .)
+install(FILES $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> DESTINATION .)
+install(PROGRAMS "$<TARGET_FILE:Qt6::QWindowsIntegrationPlugin>" DESTINATION platforms)
+install(PROGRAMS "$<TARGET_FILE:Qt6::QModernWindowsStylePlugin>" DESTINATION styles)

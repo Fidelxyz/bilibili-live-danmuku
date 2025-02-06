@@ -60,31 +60,18 @@ jobs:
           cmake
           -B ./build
           -G Ninja
-          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build
         id: build
-        shell: cmd
-        run: |
-          ninja -C ./build
-          echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
-          echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
-          echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%
-          echo vcToolsRedistDir=%VCToolsRedistDir% >> %GITHUB_ENV%
-
-      - name: Package
-        id: package
-        env:
-          archiveName: ${{ env.qt_arch }}
-          msvcArch: ${{ env.msvc_arch }}
         shell: pwsh
-        run: |
-          & ./scripts/windows-msvc-package.ps1 ${env:archiveName} ${env:targetName}
-           $name = ${env:archiveName}
-           echo "::set-output name=packageName::$name"
+        run: cmake --build ./build --config ${{ env.BUILD_TYPE }} -j 4
+
+      - name: Install
+        run: cmake --install ./build --config ${{ env.BUILD_TYPE }} --prefix ./build/install
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.package.outputs.packageName }}
-          path: ./build/${{ steps.package.outputs.packageName }}
+          name: ${{ env.qt_arch }}-${{ env.msvc_arch }}-${{ env.BUILD_TYPE }}
+          path: ./build/install/
